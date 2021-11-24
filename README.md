@@ -14,4 +14,10 @@ def deps do
 end
 ```
 
-Docs can be found at [https://hexdocs.pm/radixir](https://hexdocs.pm/radixir).
+## Documentation
+
+Check out the docs here [https://hexdocs.pm/radixir](https://hexdocs.pm/radixir).
+
+## License
+
+Radixir is released under the Apache License 2.0 - see the [LICENSE](LICENSE) file.
