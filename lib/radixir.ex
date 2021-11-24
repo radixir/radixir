@@ -3,15 +3,6 @@ defmodule Radixir do
   Documentation for `Radixir`.
   """
 
-  @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> Radixir.hello()
-      :world
-
-  """
   def hello do
     :world
   end
