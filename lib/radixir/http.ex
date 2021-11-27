@@ -3,7 +3,7 @@ defmodule Radixir.HTTP do
 
   @base_url Config.radix_node_url()
 
-  def call(path, method, params, id) when is_integer(id) or is_binary(id) or is_nil(id) do
+  def post(path, method, params, id) when is_integer(id) or is_binary(id) or is_nil(id) do
     Req.post!(
       @base_url <> path,
       {:json,
@@ -20,6 +20,17 @@ defmodule Radixir.HTTP do
 
       %{body: %{"error" => error, "id" => id}} ->
         {:error, id, error}
+
+      %{status: status} ->
+        {:error, "HTTP response status code #{status}"}
+    end
+  end
+
+  def get(path) do
+    Req.get!(@base_url <> path)
+    |> case do
+      %{body: result, status: 200} ->
+        {:ok, result}
 
       %{status: status} ->
         {:error, "HTTP response status code #{status}"}
