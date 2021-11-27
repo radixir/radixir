@@ -3,7 +3,7 @@ defmodule Radixir.HTTP do
 
   @base_url Config.radix_node_url()
 
-  def post(path, method, params, id) when is_integer(id) or is_binary(id) or is_nil(id) do
+  def post(path, method, params, id) do
     Req.post!(
       @base_url <> path,
       {:json,
