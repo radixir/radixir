@@ -2,7 +2,7 @@ defmodule Radixir.MixProject do
   use Mix.Project
 
   @source_url "https://github.com/radixir/radixir"
-  @version "0.0.1"
+  @version "0.0.2"
 
   def project do
     [
@@ -26,7 +26,9 @@ defmodule Radixir.MixProject do
 
   defp deps do
     [
-      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false}
+      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
+      {:req, "~> 0.2.0"},
+      {:uuid, "~> 1.1"}
     ]
   end
 

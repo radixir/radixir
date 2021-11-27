@@ -1,9 +1,11 @@
 defmodule Radixir do
-  @moduledoc """
-  Documentation for `Radixir`.
-  """
+  alias Radixir.HTTP
 
-  def hello do
-    :world
+  def get_native_token(id \\ nil) do
+    HTTP.call("/archive", "tokens.get_native_token", %{}, id)
+  end
+
+  def get_token_info(rri, id \\ nil) do
+    HTTP.call("/archive", "tokens.get_info", %{rri: rri}, id)
   end
 end
