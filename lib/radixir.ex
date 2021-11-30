@@ -1,5 +1,34 @@
 defmodule Radixir do
   alias Radixir.HTTP
+  alias Radixir.Keypair
+
+  def send_xrd(from, to, amount, private_key) do
+    {:ok, _, %{"rri" => rri}} = get_native_token()
+
+    actions = [
+      %{
+        amount: amount,
+        from: from,
+        rri: rri,
+        to: to,
+        type: "TokenTransfer"
+      }
+    ]
+
+    {:ok, _, %{"transaction" => %{"blob" => blob, "hashOfBlobToSign" => hash_of_blob_to_sign}}} =
+      build_transaction(actions, from)
+
+    signature_der = Keypair.sign(hash_of_blob_to_sign, private_key)
+    %{public_key: public_key_of_signer} = Keypair.from_private_key(private_key)
+    finalize_transaction(blob, signature_der, public_key_of_signer, true)
+  end
+
+  def helper_send_xrd() do
+    %{radix_address: from, private_key: private_key} = Keypair.get(0)
+    %{radix_address: to} = Keypair.get(1)
+    amount = "5000000000000000000"
+    send_xrd(from, to, amount, private_key)
+  end
 
   def get_native_token(id \\ nil) do
     HTTP.post("/archive", "tokens.get_native_token", %{}, id)
