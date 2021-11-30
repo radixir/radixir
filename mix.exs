@@ -4,7 +4,7 @@ defmodule Radixir.MixProject do
   @source_url "https://github.com/radixir/radixir"
   @version "0.0.2"
 
-  def project do
+  def project() do
     [
       app: :radixir,
       version: @version,
@@ -18,14 +18,16 @@ defmodule Radixir.MixProject do
     ]
   end
 
-  def application do
+  def application() do
     [
       extra_applications: [:logger]
     ]
   end
 
-  defp deps do
+  defp deps() do
     [
+      {:bech32, "~> 1.0"},
+      {:curvy, "~> 0.3.0"},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
       {:req, "~> 0.2.0"},
       {:uuid, "~> 1.1"}
