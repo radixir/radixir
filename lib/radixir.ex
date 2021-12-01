@@ -3,7 +3,7 @@ defmodule Radixir do
   alias Radixir.Keypair
 
   def send_xrd(from, to, amount) do
-    with {:ok, %{private_key: private_key}} <- Keypair.find(from) do
+    with {:ok, %{private_key: private_key}} <- Keypair.get(from) do
       {:ok, _, %{"rri" => rri}} = get_native_token()
 
       actions = [
