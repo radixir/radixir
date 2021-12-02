@@ -20,17 +20,15 @@ defmodule Radixir.MixProject do
 
   def application() do
     [
-      extra_applications: [:logger]
+      extra_applications: [:logger, :crypto]
     ]
   end
 
   defp deps() do
     [
-      {:bech32, "~> 1.0"},
       {:curvy, "~> 0.3.0"},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
-      {:req, "~> 0.2.0"},
-      {:uuid, "~> 1.1"}
+      {:req, "~> 0.2.0"}
     ]
   end
 

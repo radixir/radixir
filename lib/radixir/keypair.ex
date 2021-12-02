@@ -1,4 +1,6 @@
 defmodule Radixir.Keypair do
+  alias Radixir.Bech32
+
   def new(options \\ []) do
     save = Keyword.get(options, :save, false)
 

@@ -1,17 +1,15 @@
 defmodule Radixir.HTTP do
   alias Radixir.Config
 
-  @base_url Config.radix_node_url()
-
   def post(path, method, params, id) do
     Req.post!(
-      @base_url <> path,
+      Config.radix_node_url() <> path,
       {:json,
        %{
          jsonrpc: "2.0",
          method: method,
          params: params,
-         id: if(id, do: id, else: UUID.uuid1())
+         id: if(id, do: id, else: :crypto.strong_rand_bytes(7) |> Base.encode16(case: :lower))
        }}
     )
     |> case do
@@ -27,7 +25,7 @@ defmodule Radixir.HTTP do
   end
 
   def get(path) do
-    Req.get!(@base_url <> path)
+    Req.get!(Config.radix_node_url() <> path)
     |> case do
       %{body: result, status: 200} ->
         {:ok, result}

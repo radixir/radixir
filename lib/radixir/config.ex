@@ -1,5 +1,7 @@
 defmodule Radixir.Config do
   def radix_node_url do
-    Application.fetch_env!(:radixir, :radix_node_url)
+    :radixir
+    |> Application.fetch_env!(__MODULE__)
+    |> Keyword.fetch!(:radix_node_url)
   end
 end
