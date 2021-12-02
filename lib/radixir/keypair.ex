@@ -25,12 +25,12 @@ defmodule Radixir.Keypair do
     keypair
   end
 
-  def get(index) when is_integer(index) do
+  def at(index) do
     get_keypairs()
     |> Enum.at(index)
   end
 
-  def get(value) when is_binary(value) do
+  def find(value) do
     get_keypairs()
     |> do_find(value)
   end
