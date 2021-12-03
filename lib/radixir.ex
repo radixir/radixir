@@ -253,14 +253,6 @@ defmodule Radixir do
     HTTP.post("/archive", "network.get_throughput", %{}, id)
   end
 
-  def get_account_info(id \\ nil) do
-    HTTP.post("/account", "account.get_info", %{}, id)
-  end
-
-  def submit_transaction_single_step(actions, id \\ nil) do
-    HTTP.post("/account", "account.submit_transaction_single_step", %{actions: actions}, id)
-  end
-
   def build_transaction(actions, fee_payer, id \\ nil) do
     HTTP.post(
       "/construction",
@@ -294,89 +286,5 @@ defmodule Radixir do
       },
       id
     )
-  end
-
-  def get_api_configuration(id \\ nil) do
-    HTTP.post("/system", "api.get_configuration", %{}, id)
-  end
-
-  def get_api_data(id \\ nil) do
-    HTTP.post("/system", "api.get_data", %{}, id)
-  end
-
-  def get_bft_configuration(id \\ nil) do
-    HTTP.post("/system", "bft.get_configuration", %{}, id)
-  end
-
-  def get_bft_data(id \\ nil) do
-    HTTP.post("/system", "bft.get_data", %{}, id)
-  end
-
-  def get_mempool_configuration(id \\ nil) do
-    HTTP.post("/system", "mempool.get_configuration", %{}, id)
-  end
-
-  def get_mempool_data(id \\ nil) do
-    HTTP.post("/system", "mempool.get_data", %{}, id)
-  end
-
-  def get_latest_ledger_proof(id \\ nil) do
-    HTTP.post("/system", "ledger.get_latest_proof", %{}, id)
-  end
-
-  def get_latest_ledger_epoch_proof(id \\ nil) do
-    HTTP.post("/system", "ledger.get_latest_epoch_proof", %{}, id)
-  end
-
-  def get_radix_engine_configuration(id \\ nil) do
-    HTTP.post("/system", "radix_engine.get_configuration", %{}, id)
-  end
-
-  def get_radix_engine_data(id \\ nil) do
-    HTTP.post("/system", "radix_engine.get_data", %{}, id)
-  end
-
-  def get_sync_configuration(id \\ nil) do
-    HTTP.post("/system", "sync.get_configuration", %{}, id)
-  end
-
-  def get_sync_data(id \\ nil) do
-    HTTP.post("/system", "sync.get_data", %{}, id)
-  end
-
-  def get_networking_configuration(id \\ nil) do
-    HTTP.post("/system", "networking.get_configuration", %{}, id)
-  end
-
-  def get_networking_data(id \\ nil) do
-    HTTP.post("/system", "networking.get_data", %{}, id)
-  end
-
-  def get_networking_peers(id \\ nil) do
-    HTTP.post("/system", "networking.get_peers", %{}, id)
-  end
-
-  def get_checkpoints(id \\ nil) do
-    HTTP.post("/system", "checkpoints.get_checkpoints", %{}, id)
-  end
-
-  def get_node_info(id \\ nil) do
-    HTTP.post("/validation", "validation.get_node_info", %{}, id)
-  end
-
-  def get_current_epoch_data(id \\ nil) do
-    HTTP.post("/validation", "validation.get_current_epoch_data", %{}, id)
-  end
-
-  def get_node_health() do
-    HTTP.get("/health")
-  end
-
-  def get_node_version() do
-    HTTP.get("/version")
-  end
-
-  def get_node_metrics() do
-    HTTP.get("/metrics")
   end
 end
