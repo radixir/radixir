@@ -196,6 +196,10 @@ defmodule Radixir do
     end
   end
 
+  def get_network_id(id \\ nil) do
+    HTTP.post("/archive", "network.get_id", %{}, id)
+  end
+
   def get_native_token(id \\ nil) do
     HTTP.post("/archive", "tokens.get_native_token", %{}, id)
   end
@@ -239,10 +243,6 @@ defmodule Radixir do
 
   def get_unstake_positions(address, id \\ nil) do
     HTTP.post("/archive", "account.get_unstake_positions", %{address: address}, id)
-  end
-
-  def get_network_id(id \\ nil) do
-    HTTP.post("/archive", "network.get_id", %{}, id)
   end
 
   def get_transaction_demand(id \\ nil) do
