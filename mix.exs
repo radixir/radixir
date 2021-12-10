@@ -8,7 +8,7 @@ defmodule Radixir.MixProject do
     [
       app: :radixir,
       version: @version,
-      elixir: "~> 1.13.0-rc.1",
+      elixir: "~> 1.13",
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
       description: description(),
