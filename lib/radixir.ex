@@ -1,5 +1,6 @@
 defmodule Radixir do
   alias Radixir.Bech32
+  alias Radixir.Config
   alias Radixir.HTTP
 
   def new_keypair(options \\ []) do
@@ -111,7 +112,9 @@ defmodule Radixir do
   end
 
   defp get_keypairs() do
-    with {:ok, body} <- File.read("keypairs.json"), {:ok, json} <- Jason.decode(body) do
+    keypairs_file_name = Config.keypairs_file_name()
+
+    with {:ok, body} <- File.read(keypairs_file_name), {:ok, json} <- Jason.decode(body) do
       keypairs =
         Enum.map(json, fn keypair ->
           %{
@@ -127,15 +130,15 @@ defmodule Radixir do
       {:ok, keypairs}
     else
       {:error, :enoent} ->
-        {:error, "could not find keypairs.json"}
+        {:error, "could not find #{keypairs_file_name}"}
 
       {:error, %Jason.DecodeError{}} ->
-        {:error, "could not parse keypairs.json"}
+        {:error, "could not parse #{keypairs_file_name}"}
     end
   end
 
   defp save_keypairs(keypairs) do
-    File.write!("./keypairs.json", Jason.encode!(keypairs, pretty: true))
+    File.write!("#{Config.keypairs_file_name()}", Jason.encode!(keypairs, pretty: true))
   end
 
   defp do_find(keypairs, value) do
@@ -147,7 +150,7 @@ defmodule Radixir do
     end)
     |> case do
       nil ->
-        {:error, "not found in keypairs.json"}
+        {:error, "not found in #{Config.keypairs_file_name()}"}
 
       keypair ->
         {:ok, keypair}
