@@ -1,5 +1,5 @@
 import Config
 
 config :radixir, Radixir.Config,
-  radix_node_url: System.fetch_env!("RADIX_NODE_URL"),
-  keypairs_file_name: System.get_env("KEYPAIRS_FILE_NAME", "keypairs")
+  radix_gateway_api_url: System.fetch_env!("RADIX_GATEWAY_API_URL"),
+  radix_core_api_url: System.fetch_env!("RADIX_CORE_API_URL")

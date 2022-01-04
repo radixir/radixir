@@ -1,16 +1,13 @@
 defmodule Radixir.Config do
-  def radix_node_url do
+  def radix_gateway_api_url do
     :radixir
     |> Application.fetch_env!(__MODULE__)
-    |> Keyword.fetch!(:radix_node_url)
+    |> Keyword.fetch!(:radix_gateway_api_url)
   end
 
-  def keypairs_file_name do
-    file_name =
-      :radixir
-      |> Application.fetch_env!(__MODULE__)
-      |> Keyword.fetch!(:keypairs_file_name)
-
-    file_name <> ".json"
+  def radix_core_api_url do
+    :radixir
+    |> Application.fetch_env!(__MODULE__)
+    |> Keyword.fetch!(:radix_core_api_url)
   end
 end
