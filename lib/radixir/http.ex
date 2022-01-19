@@ -18,7 +18,7 @@ defmodule Radixir.HTTP do
         {:error, id, error}
 
       %{status: status} ->
-        {:error, "HTTP response status code #{status}"}
+        {:error, %{"status" => status}}
     end
   end
 

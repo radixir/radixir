@@ -29,6 +29,7 @@ defmodule Radixir.MixProject do
       {:curvy, "~> 0.3.0"},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
       {:req, "~> 0.2.0"}
+      # {:websockex, "~> 0.4"}
     ]
   end
 
