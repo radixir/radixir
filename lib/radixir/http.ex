@@ -6,7 +6,16 @@ defmodule Radixir.HTTP do
       # TODO: remove once archive api is no longer supported
       headers: ["X-Radixdlt-Target-Gw-Api": "1.0.0"]
     )
-    |> case do
+    |> handle_response()
+  end
+
+  def get(url, path) do
+    Req.get!(url <> path)
+    |> handle_response()
+  end
+
+  defp handle_response(response) do
+    case response do
       %{body: body, status: 200} ->
         {:ok, body}
 

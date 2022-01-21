@@ -2,7 +2,7 @@ defmodule Radixir.GatewayAPI do
   alias Radixir.Config
   alias Radixir.HTTP
 
-  def get_gateway_info() do
+  def get_info() do
     HTTP.post(Config.radix_gateway_api_url(), "/gateway", %{})
   end
 
