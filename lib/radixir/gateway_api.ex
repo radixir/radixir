@@ -132,13 +132,16 @@ defmodule Radixir.GatewayAPI do
     })
   end
 
-  def build_transaction(actions, fee_payer_address) do
+  def build_transaction(actions, fee_payer_address, options \\ []) do
+    disable_token_mint_and_burn = Keyword.get(options, :disable_token_mint_and_burn, true)
+
     HTTP.post(Config.radix_gateway_api_url(), "/transaction/build", %{
       network_identifier: %{
         network: Config.network()
       },
       actions: actions,
-      fee_payer: %{address: fee_payer_address}
+      fee_payer: %{address: fee_payer_address},
+      disable_token_mint_and_burn: disable_token_mint_and_burn
     })
   end
 
