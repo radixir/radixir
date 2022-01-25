@@ -17,6 +17,24 @@ defmodule Radixir.Config do
     |> Keyword.fetch!(:radix_system_api_url)
   end
 
+  def radix_admin_password do
+    :radixir
+    |> Application.fetch_env!(__MODULE__)
+    |> Keyword.fetch!(:radix_admin_password)
+  end
+
+  def radix_superadmin_password do
+    :radixir
+    |> Application.fetch_env!(__MODULE__)
+    |> Keyword.fetch!(:radix_superadmin_password)
+  end
+
+  def radix_metrics_password do
+    :radixir
+    |> Application.fetch_env!(__MODULE__)
+    |> Keyword.fetch!(:radix_metrics_password)
+  end
+
   def radix_testnet? do
     :radixir
     |> Application.fetch_env!(__MODULE__)
