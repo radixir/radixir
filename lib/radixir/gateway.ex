@@ -1,13 +1,11 @@
-defmodule Radixir do
+defmodule Radixir.Gateway do
   alias Radixir.GatewayAPI
   alias Radixir.Keypair
   alias Radixir.Utils
 
-  def send_xrd(from, to, amount, private_key) do
+  def transfer_tokens(from, to, amount, rri, private_key) do
     with {:ok, %{private_key: private_key, public_key: public_key}} <-
            Keypair.from_private_key(private_key),
-         {:ok, %{"token" => %{"token_identifier" => %{"rri" => rri}}}} <-
-           GatewayAPI.get_native_token_info(),
          actions <- [
            %{
              type: "TransferTokens",
@@ -37,5 +35,30 @@ defmodule Radixir do
       signature_bytes = Keypair.sign_data(payload_to_sign, private_key)
       GatewayAPI.finalize_transaction(unsigned_transaction, signature_bytes, public_key, true)
     end
+  end
+
+  def transfer_xrd(from, to, amount, private_key) do
+    with {:ok, %{"token" => %{"token_identifier" => %{"rri" => rri}}}} <-
+           GatewayAPI.get_native_token_info() do
+      transfer_tokens(from, to, amount, rri, private_key)
+    end
+  end
+
+  def build_create_tokens_action() do
+  end
+
+  def build_transfer_tokens_action() do
+  end
+
+  def build_stake_tokens_action() do
+  end
+
+  def build_unstake_tokens_action() do
+  end
+
+  def build_mint_tokens_action() do
+  end
+
+  def build_burn_tokens_action() do
   end
 end

@@ -1,6 +1,7 @@
 defmodule Radixir.GatewayAPI do
   alias Radixir.Config
   alias Radixir.HTTP
+  alias Radixir.Utils
 
   def get_info() do
     HTTP.post(Config.radix_gateway_api_url(), "/gateway", %{})
@@ -17,69 +18,107 @@ defmodule Radixir.GatewayAPI do
     })
   end
 
-  def get_account_balances(address) do
-    HTTP.post(Config.radix_gateway_api_url(), "/account/balances", %{
-      network_identifier: %{
-        network: Config.network()
-      },
-      account_identifier: %{
-        address: address
+  def get_account_balances(account_identifier_address, options \\ []) do
+    at_state_identifier = Keyword.get(options, :at_state_identifier, nil)
+
+    body =
+      %{
+        network_identifier: %{
+          network: Config.network()
+        },
+        account_identifier: %{
+          address: account_identifier_address
+        }
       }
-    })
+      |> Utils.maybe_put(:at_state_identifier, at_state_identifier)
+
+    HTTP.post(Config.radix_gateway_api_url(), "/account/balances", body)
   end
 
-  def get_stake_positions(address) do
-    HTTP.post(Config.radix_gateway_api_url(), "/account/stakes", %{
-      network_identifier: %{
-        network: Config.network()
-      },
-      account_identifier: %{
-        address: address
+  def get_stake_positions(account_identifier_address, options \\ []) do
+    at_state_identifier = Keyword.get(options, :at_state_identifier, nil)
+
+    body =
+      %{
+        network_identifier: %{
+          network: Config.network()
+        },
+        account_identifier: %{
+          address: account_identifier_address
+        }
       }
-    })
+      |> Utils.maybe_put(:at_state_identifier, at_state_identifier)
+
+    HTTP.post(Config.radix_gateway_api_url(), "/account/stakes", body)
   end
 
-  def get_unstake_positions(address) do
-    HTTP.post(Config.radix_gateway_api_url(), "/account/unstakes", %{
-      network_identifier: %{
-        network: Config.network()
-      },
-      account_identifier: %{
-        address: address
+  def get_unstake_positions(account_identifier_address, options \\ []) do
+    at_state_identifier = Keyword.get(options, :at_state_identifier, nil)
+
+    body =
+      %{
+        network_identifier: %{
+          network: Config.network()
+        },
+        account_identifier: %{
+          address: account_identifier_address
+        }
       }
-    })
+      |> Utils.maybe_put(:at_state_identifier, at_state_identifier)
+
+    HTTP.post(Config.radix_gateway_api_url(), "/account/unstakes", body)
   end
 
-  def get_account_transactions(address, cursor, limit) do
-    HTTP.post(Config.radix_gateway_api_url(), "/account/transactions", %{
-      network_identifier: %{
-        network: Config.network()
-      },
-      account_identifier: %{
-        address: address
-      },
-      cursor: cursor,
-      limit: limit
-    })
+  def get_account_transactions(account_identifier_address, options \\ []) do
+    at_state_identifier = Keyword.get(options, :at_state_identifier, nil)
+    cursor = Keyword.get(options, :cursor, nil)
+    limit = Keyword.get(options, :limit, nil)
+
+    body =
+      %{
+        network_identifier: %{
+          network: Config.network()
+        },
+        account_identifier: %{
+          address: account_identifier_address
+        }
+      }
+      |> Utils.maybe_put(:at_state_identifier, at_state_identifier)
+      |> Utils.maybe_put(:cursor, cursor)
+      |> Utils.maybe_put(:limit, limit)
+
+    HTTP.post(Config.radix_gateway_api_url(), "/account/transactions", body)
   end
 
-  def get_native_token_info() do
-    HTTP.post(Config.radix_gateway_api_url(), "/token/native", %{
-      network_identifier: %{
-        network: Config.network()
+  def get_native_token_info(options \\ []) do
+    at_state_identifier = Keyword.get(options, :at_state_identifier, nil)
+
+    body =
+      %{
+        network_identifier: %{
+          network: Config.network()
+        }
       }
-    })
+      |> Utils.maybe_put(:at_state_identifier, at_state_identifier)
+
+    HTTP.post(Config.radix_gateway_api_url(), "/token/native", body)
   end
 
-  def get_token_info(rri) do
-    HTTP.post(Config.radix_gateway_api_url(), "/token", %{
-      network_identifier: %{
-        network: Config.network()
-      },
-      token_identifier: %{
-        rri: rri
+  def get_token_info(token_identifier_rri, options \\ []) do
+    at_state_identifier = Keyword.get(options, :at_state_identifier, nil)
+
+    body =
+      %{
+        network_identifier: %{
+          network: Config.network()
+        },
+        token_identifier: %{
+          rri: token_identifier_rri
+        }
       }
-    })
+      |> Utils.maybe_put(:at_state_identifier, at_state_identifier)
+
+    HTTP.post(Config.radix_gateway_api_url(), "/token", body)
   end
 
   def derive_token_identifier(public_key_hex, symbol) do
@@ -94,15 +133,21 @@ defmodule Radixir.GatewayAPI do
     })
   end
 
-  def get_validator(address) do
-    HTTP.post(Config.radix_gateway_api_url(), "/validator", %{
-      network_identifier: %{
-        network: Config.network()
-      },
-      validator_identifier: %{
-        address: address
+  def get_validator(validator_identifier_address, options \\ []) do
+    at_state_identifier = Keyword.get(options, :at_state_identifier, nil)
+
+    body =
+      %{
+        network_identifier: %{
+          network: Config.network()
+        },
+        validator_identifier: %{
+          address: validator_identifier_address
+        }
       }
-    })
+      |> Utils.maybe_put(:at_state_identifier, at_state_identifier)
+
+    HTTP.post(Config.radix_gateway_api_url(), "/validator", body)
   end
 
   def derive_validator_identifier(public_key_hex) do
@@ -116,44 +161,68 @@ defmodule Radixir.GatewayAPI do
     })
   end
 
-  def get_validators() do
-    HTTP.post(Config.radix_gateway_api_url(), "/validators", %{
-      network_identifier: %{
-        network: Config.network()
+  def get_validators(options \\ []) do
+    at_state_identifier = Keyword.get(options, :at_state_identifier, nil)
+
+    body =
+      %{
+        network_identifier: %{
+          network: Config.network()
+        }
       }
-    })
+      |> Utils.maybe_put(:at_state_identifier, at_state_identifier)
+
+    HTTP.post(Config.radix_gateway_api_url(), "/validators", body)
   end
 
-  def get_transaction_rules() do
-    HTTP.post(Config.radix_gateway_api_url(), "/transaction/rules", %{
-      network_identifier: %{
-        network: Config.network()
+  def get_transaction_rules(options \\ []) do
+    at_state_identifier = Keyword.get(options, :at_state_identifier, nil)
+
+    body =
+      %{
+        network_identifier: %{
+          network: Config.network()
+        }
       }
-    })
+      |> Utils.maybe_put(:at_state_identifier, at_state_identifier)
+
+    HTTP.post(Config.radix_gateway_api_url(), "/transaction/rules", body)
   end
 
   def build_transaction(actions, fee_payer_address, options \\ []) do
-    disable_token_mint_and_burn = Keyword.get(options, :disable_token_mint_and_burn, true)
+    at_state_identifier = Keyword.get(options, :at_state_identifier, nil)
+    message = Keyword.get(options, :message, nil)
+    disable_token_mint_and_burn = Keyword.get(options, :disable_token_mint_and_burn, nil)
 
-    HTTP.post(Config.radix_gateway_api_url(), "/transaction/build", %{
-      network_identifier: %{
-        network: Config.network()
-      },
-      actions: actions,
-      fee_payer: %{address: fee_payer_address},
-      disable_token_mint_and_burn: disable_token_mint_and_burn
-    })
+    body =
+      %{
+        network_identifier: %{
+          network: Config.network()
+        },
+        actions: actions,
+        fee_payer: %{address: fee_payer_address}
+      }
+      |> Utils.maybe_put(:at_state_identifier, at_state_identifier)
+      |> Utils.maybe_put(:message, message)
+      |> Utils.maybe_put(:disable_token_mint_and_burn, disable_token_mint_and_burn)
+
+    HTTP.post(Config.radix_gateway_api_url(), "/transaction/build", body)
   end
 
-  def finalize_transaction(unsigned_transaction, signature_bytes, public_key_hex, submit) do
-    HTTP.post(Config.radix_gateway_api_url(), "/transaction/finalize", %{
-      network_identifier: %{
-        network: Config.network()
-      },
-      unsigned_transaction: unsigned_transaction,
-      signature: %{bytes: signature_bytes, public_key: %{hex: public_key_hex}},
-      submit: submit
-    })
+  def finalize_transaction(unsigned_transaction, signature_bytes, public_key_hex, options \\ []) do
+    submit = Keyword.get(options, :submit, nil)
+
+    body =
+      %{
+        network_identifier: %{
+          network: Config.network()
+        },
+        unsigned_transaction: unsigned_transaction,
+        signature: %{bytes: signature_bytes, public_key: %{hex: public_key_hex}}
+      }
+      |> Utils.maybe_put(:submit, submit)
+
+    HTTP.post(Config.radix_gateway_api_url(), "/transaction/finalize", body)
   end
 
   def submit_transaction(signed_transaction) do
@@ -165,12 +234,18 @@ defmodule Radixir.GatewayAPI do
     })
   end
 
-  def get_transaction_status(transaction_identifier_hash) do
-    HTTP.post(Config.radix_gateway_api_url(), "/transaction/status", %{
-      network_identifier: %{
-        network: Config.network()
-      },
-      transaction_identifier: %{hash: transaction_identifier_hash}
-    })
+  def get_transaction_status(transaction_identifier_hash, options \\ []) do
+    at_state_identifier = Keyword.get(options, :at_state_identifier, nil)
+
+    body =
+      %{
+        network_identifier: %{
+          network: Config.network()
+        },
+        transaction_identifier: %{hash: transaction_identifier_hash}
+      }
+      |> Utils.maybe_put(:at_state_identifier, at_state_identifier)
+
+    HTTP.post(Config.radix_gateway_api_url(), "/transaction/status", body)
   end
 end
