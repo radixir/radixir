@@ -7,7 +7,7 @@ defmodule Radixir.CoreAPI do
       Config.radix_core_api_url(),
       "/network/configuration",
       %{},
-      {"admin", Config.radix_admin_password()}
+      auth: {"admin", Config.radix_admin_password()}
     )
   end
 
@@ -20,7 +20,7 @@ defmodule Radixir.CoreAPI do
           network: Config.network()
         }
       },
-      {"admin", Config.radix_admin_password()}
+      auth: {"admin", Config.radix_admin_password()}
     )
   end
 
@@ -36,7 +36,7 @@ defmodule Radixir.CoreAPI do
           address: address
         }
       },
-      {"admin", Config.radix_admin_password()}
+      auth: {"admin", Config.radix_admin_password()}
     )
   end
 
@@ -49,7 +49,7 @@ defmodule Radixir.CoreAPI do
           network: Config.network()
         }
       },
-      {"admin", Config.radix_admin_password()}
+      auth: {"admin", Config.radix_admin_password()}
     )
   end
 
@@ -65,7 +65,7 @@ defmodule Radixir.CoreAPI do
           hash: transaction_identifier_hash
         }
       },
-      {"admin", Config.radix_admin_password()}
+      auth: {"admin", Config.radix_admin_password()}
     )
   end
 
@@ -82,7 +82,7 @@ defmodule Radixir.CoreAPI do
         },
         limit: limit
       },
-      {"admin", Config.radix_admin_password()}
+      auth: {"admin", Config.radix_admin_password()}
     )
   end
 
@@ -99,7 +99,7 @@ defmodule Radixir.CoreAPI do
         },
         metatdata: metatdata
       },
-      {"admin", Config.radix_admin_password()}
+      auth: {"admin", Config.radix_admin_password()}
     )
   end
 
@@ -123,7 +123,7 @@ defmodule Radixir.CoreAPI do
         message: message,
         disable_resource_allocate_and_destroy: disable_resource_allocate_and_destroy
       },
-      {"admin", Config.radix_admin_password()}
+      auth: {"admin", Config.radix_admin_password()}
     )
   end
 
@@ -138,7 +138,7 @@ defmodule Radixir.CoreAPI do
         transaction: transaction,
         signed: signed
       },
-      {"admin", Config.radix_admin_password()}
+      auth: {"admin", Config.radix_admin_password()}
     )
   end
 
@@ -153,7 +153,7 @@ defmodule Radixir.CoreAPI do
         unsigned_transaction: unsigned_transaction,
         signature: %{public_key: %{hex: public_key_hex}, bytes: signature_bytes}
       },
-      {"admin", Config.radix_admin_password()}
+      auth: {"admin", Config.radix_admin_password()}
     )
   end
 
@@ -167,7 +167,7 @@ defmodule Radixir.CoreAPI do
         },
         signed_transaction: signed_transaction
       },
-      {"admin", Config.radix_admin_password()}
+      auth: {"admin", Config.radix_admin_password()}
     )
   end
 
@@ -181,7 +181,7 @@ defmodule Radixir.CoreAPI do
         },
         signed_transaction: signed_transaction
       },
-      {"admin", Config.radix_admin_password()}
+      auth: {"admin", Config.radix_admin_password()}
     )
   end
 

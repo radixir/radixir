@@ -6,7 +6,7 @@ defmodule Radixir.SystemAPI do
     HTTP.get(
       Config.radix_system_api_url(),
       "/system/version",
-      {"admin", Config.radix_admin_password()}
+      auth: {"admin", Config.radix_admin_password()}
     )
   end
 
@@ -14,7 +14,7 @@ defmodule Radixir.SystemAPI do
     HTTP.get(
       Config.radix_system_api_url(),
       "/system/health",
-      {"admin", Config.radix_admin_password()}
+      auth: {"admin", Config.radix_admin_password()}
     )
   end
 
@@ -22,7 +22,7 @@ defmodule Radixir.SystemAPI do
     HTTP.get(
       Config.radix_system_api_url(),
       "/system/configuration",
-      {"admin", Config.radix_admin_password()}
+      auth: {"admin", Config.radix_admin_password()}
     )
   end
 
@@ -30,7 +30,7 @@ defmodule Radixir.SystemAPI do
     HTTP.get(
       Config.radix_system_api_url(),
       "/system/peers",
-      {"admin", Config.radix_admin_password()}
+      auth: {"admin", Config.radix_admin_password()}
     )
   end
 
@@ -38,7 +38,7 @@ defmodule Radixir.SystemAPI do
     HTTP.get(
       Config.radix_system_api_url(),
       "/system/addressbook",
-      {"admin", Config.radix_admin_password()}
+      auth: {"admin", Config.radix_admin_password()}
     )
   end
 
@@ -46,7 +46,7 @@ defmodule Radixir.SystemAPI do
     HTTP.get(
       Config.radix_system_api_url(),
       "/system/metrics",
-      {"admin", Config.radix_admin_password()}
+      auth: {"admin", Config.radix_admin_password()}
     )
   end
 
@@ -54,7 +54,7 @@ defmodule Radixir.SystemAPI do
     HTTP.get(
       Config.radix_system_api_url(),
       "/prometheus/metrics",
-      {"metrics", Config.radix_metrics_password()}
+      auth: {"metrics", Config.radix_metrics_password()}
     )
   end
 end

@@ -1,17 +1,19 @@
 defmodule Radixir.HTTP do
-  def post(url, path, params, auth \\ {}) do
+  def post(url, path, params, options \\ []) do
     Req.post!(
       url <> path,
       {:json, params},
-      # TODO: remove once archive api is no longer supported
-      headers: ["X-Radixdlt-Target-Gw-Api": "1.0.0"],
-      auth: auth
+      options
     )
     |> handle_response()
   end
 
-  def get(url, path, auth \\ {}) do
-    Req.get!(url <> path, headers: ["content-ype": "application/json"], auth: auth)
+  def get(url, path, options \\ []) do
+    options =
+      [headers: ["content-ype": "application/json"]]
+      |> Keyword.merge(options)
+
+    Req.get!(url <> path, options)
     |> handle_response()
   end
 

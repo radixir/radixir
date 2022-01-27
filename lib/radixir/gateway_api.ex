@@ -4,18 +4,25 @@ defmodule Radixir.GatewayAPI do
   alias Radixir.Utils
 
   def get_info() do
-    HTTP.post(Config.radix_gateway_api_url(), "/gateway", %{})
+    HTTP.post(Config.radix_gateway_api_url(), "/gateway", %{},
+      headers: ["X-Radixdlt-Target-Gw-Api": "1.0.0"]
+    )
   end
 
   def derive_account_identifier(public_key_hex) do
-    HTTP.post(Config.radix_gateway_api_url(), "/account/derive", %{
-      network_identifier: %{
-        network: Config.network()
+    HTTP.post(
+      Config.radix_gateway_api_url(),
+      "/account/derive",
+      %{
+        network_identifier: %{
+          network: Config.network()
+        },
+        public_key: %{
+          hex: public_key_hex
+        }
       },
-      public_key: %{
-        hex: public_key_hex
-      }
-    })
+      headers: ["X-Radixdlt-Target-Gw-Api": "1.0.0"]
+    )
   end
 
   def get_account_balances(account_identifier_address, options \\ []) do
@@ -32,7 +39,9 @@ defmodule Radixir.GatewayAPI do
       }
       |> Utils.maybe_put(:at_state_identifier, at_state_identifier)
 
-    HTTP.post(Config.radix_gateway_api_url(), "/account/balances", body)
+    HTTP.post(Config.radix_gateway_api_url(), "/account/balances", body,
+      headers: ["X-Radixdlt-Target-Gw-Api": "1.0.0"]
+    )
   end
 
   def get_stake_positions(account_identifier_address, options \\ []) do
@@ -49,7 +58,9 @@ defmodule Radixir.GatewayAPI do
       }
       |> Utils.maybe_put(:at_state_identifier, at_state_identifier)
 
-    HTTP.post(Config.radix_gateway_api_url(), "/account/stakes", body)
+    HTTP.post(Config.radix_gateway_api_url(), "/account/stakes", body,
+      headers: ["X-Radixdlt-Target-Gw-Api": "1.0.0"]
+    )
   end
 
   def get_unstake_positions(account_identifier_address, options \\ []) do
@@ -66,7 +77,9 @@ defmodule Radixir.GatewayAPI do
       }
       |> Utils.maybe_put(:at_state_identifier, at_state_identifier)
 
-    HTTP.post(Config.radix_gateway_api_url(), "/account/unstakes", body)
+    HTTP.post(Config.radix_gateway_api_url(), "/account/unstakes", body,
+      headers: ["X-Radixdlt-Target-Gw-Api": "1.0.0"]
+    )
   end
 
   def get_account_transactions(account_identifier_address, options \\ []) do
@@ -87,7 +100,9 @@ defmodule Radixir.GatewayAPI do
       |> Utils.maybe_put(:cursor, cursor)
       |> Utils.maybe_put(:limit, limit)
 
-    HTTP.post(Config.radix_gateway_api_url(), "/account/transactions", body)
+    HTTP.post(Config.radix_gateway_api_url(), "/account/transactions", body,
+      headers: ["X-Radixdlt-Target-Gw-Api": "1.0.0"]
+    )
   end
 
   def get_native_token_info(options \\ []) do
@@ -101,7 +116,9 @@ defmodule Radixir.GatewayAPI do
       }
       |> Utils.maybe_put(:at_state_identifier, at_state_identifier)
 
-    HTTP.post(Config.radix_gateway_api_url(), "/token/native", body)
+    HTTP.post(Config.radix_gateway_api_url(), "/token/native", body,
+      headers: ["X-Radixdlt-Target-Gw-Api": "1.0.0"]
+    )
   end
 
   def get_token_info(token_identifier_rri, options \\ []) do
@@ -118,19 +135,26 @@ defmodule Radixir.GatewayAPI do
       }
       |> Utils.maybe_put(:at_state_identifier, at_state_identifier)
 
-    HTTP.post(Config.radix_gateway_api_url(), "/token", body)
+    HTTP.post(Config.radix_gateway_api_url(), "/token", body,
+      headers: ["X-Radixdlt-Target-Gw-Api": "1.0.0"]
+    )
   end
 
   def derive_token_identifier(public_key_hex, symbol) do
-    HTTP.post(Config.radix_gateway_api_url(), "/token/derive", %{
-      network_identifier: %{
-        network: Config.network()
+    HTTP.post(
+      Config.radix_gateway_api_url(),
+      "/token/derive",
+      %{
+        network_identifier: %{
+          network: Config.network()
+        },
+        public_key: %{
+          hex: public_key_hex
+        },
+        symbol: symbol
       },
-      public_key: %{
-        hex: public_key_hex
-      },
-      symbol: symbol
-    })
+      headers: ["X-Radixdlt-Target-Gw-Api": "1.0.0"]
+    )
   end
 
   def get_validator(validator_identifier_address, options \\ []) do
@@ -147,18 +171,25 @@ defmodule Radixir.GatewayAPI do
       }
       |> Utils.maybe_put(:at_state_identifier, at_state_identifier)
 
-    HTTP.post(Config.radix_gateway_api_url(), "/validator", body)
+    HTTP.post(Config.radix_gateway_api_url(), "/validator", body,
+      headers: ["X-Radixdlt-Target-Gw-Api": "1.0.0"]
+    )
   end
 
   def derive_validator_identifier(public_key_hex) do
-    HTTP.post(Config.radix_gateway_api_url(), "/validator/derive", %{
-      network_identifier: %{
-        network: Config.network()
+    HTTP.post(
+      Config.radix_gateway_api_url(),
+      "/validator/derive",
+      %{
+        network_identifier: %{
+          network: Config.network()
+        },
+        public_key: %{
+          hex: public_key_hex
+        }
       },
-      public_key: %{
-        hex: public_key_hex
-      }
-    })
+      headers: ["X-Radixdlt-Target-Gw-Api": "1.0.0"]
+    )
   end
 
   def get_validators(options \\ []) do
@@ -172,7 +203,9 @@ defmodule Radixir.GatewayAPI do
       }
       |> Utils.maybe_put(:at_state_identifier, at_state_identifier)
 
-    HTTP.post(Config.radix_gateway_api_url(), "/validators", body)
+    HTTP.post(Config.radix_gateway_api_url(), "/validators", body,
+      headers: ["X-Radixdlt-Target-Gw-Api": "1.0.0"]
+    )
   end
 
   def get_transaction_rules(options \\ []) do
@@ -186,7 +219,9 @@ defmodule Radixir.GatewayAPI do
       }
       |> Utils.maybe_put(:at_state_identifier, at_state_identifier)
 
-    HTTP.post(Config.radix_gateway_api_url(), "/transaction/rules", body)
+    HTTP.post(Config.radix_gateway_api_url(), "/transaction/rules", body,
+      headers: ["X-Radixdlt-Target-Gw-Api": "1.0.0"]
+    )
   end
 
   def build_transaction(actions, fee_payer_address, options \\ []) do
@@ -206,7 +241,9 @@ defmodule Radixir.GatewayAPI do
       |> Utils.maybe_put(:message, message)
       |> Utils.maybe_put(:disable_token_mint_and_burn, disable_token_mint_and_burn)
 
-    HTTP.post(Config.radix_gateway_api_url(), "/transaction/build", body)
+    HTTP.post(Config.radix_gateway_api_url(), "/transaction/build", body,
+      headers: ["X-Radixdlt-Target-Gw-Api": "1.0.0"]
+    )
   end
 
   def finalize_transaction(unsigned_transaction, signature_bytes, public_key_hex, options \\ []) do
@@ -222,16 +259,23 @@ defmodule Radixir.GatewayAPI do
       }
       |> Utils.maybe_put(:submit, submit)
 
-    HTTP.post(Config.radix_gateway_api_url(), "/transaction/finalize", body)
+    HTTP.post(Config.radix_gateway_api_url(), "/transaction/finalize", body,
+      headers: ["X-Radixdlt-Target-Gw-Api": "1.0.0"]
+    )
   end
 
   def submit_transaction(signed_transaction) do
-    HTTP.post(Config.radix_gateway_api_url(), "/transaction/submit", %{
-      network_identifier: %{
-        network: Config.network()
+    HTTP.post(
+      Config.radix_gateway_api_url(),
+      "/transaction/submit",
+      %{
+        network_identifier: %{
+          network: Config.network()
+        },
+        signed_transaction: signed_transaction
       },
-      signed_transaction: signed_transaction
-    })
+      headers: ["X-Radixdlt-Target-Gw-Api": "1.0.0"]
+    )
   end
 
   def get_transaction_status(transaction_identifier_hash, options \\ []) do
@@ -246,6 +290,8 @@ defmodule Radixir.GatewayAPI do
       }
       |> Utils.maybe_put(:at_state_identifier, at_state_identifier)
 
-    HTTP.post(Config.radix_gateway_api_url(), "/transaction/status", body)
+    HTTP.post(Config.radix_gateway_api_url(), "/transaction/status", body,
+      headers: ["X-Radixdlt-Target-Gw-Api": "1.0.0"]
+    )
   end
 end
