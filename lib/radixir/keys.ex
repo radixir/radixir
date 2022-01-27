@@ -11,9 +11,10 @@ defmodule Radixir.Keys do
     end
   end
 
-  # def address_to_public_key(address) do
-  ## TODO
-  # end
+  def address_to_public_key(address) do
+    {:ok, _hrp, <<4>> <> public_key} = Bech32.decode(address)
+    Curvy.Util.encode(public_key, :hex)
+  end
 
   def sign_data(data, private_key)
       when is_binary(data)
