@@ -2,6 +2,30 @@ defmodule Radixir.Gateway do
   alias Radixir.GatewayAPI
   alias Radixir.Utils
 
+  def build_transaction(actions, fee_payer_address, options \\ []) do
+    with {:ok,
+          %{
+            "transaction_build" => %{
+              "payload_to_sign" => payload_to_sign,
+              "unsigned_transaction" => unsigned_transaction
+            }
+          }} = results <-
+           GatewayAPI.build_transaction(actions, fee_payer_address, options),
+         :ok <- Utils.verify_hash(unsigned_transaction, payload_to_sign) do
+      results
+    end
+  end
+
+  defdelegate finalize_transaction(
+                unsigned_transaction,
+                signature_bytes,
+                public_key_hex,
+                options \\ []
+              ),
+              to: GatewayAPI
+
+  defdelegate submit_transaction(signed_transaction), to: GatewayAPI
+
   def build_transfer_tokens_transaction(from, to, value, rri) do
     actions = [
       build_transfer_tokens_action(%{
@@ -12,17 +36,7 @@ defmodule Radixir.Gateway do
       })
     ]
 
-    with {:ok,
-          %{
-            "transaction_build" => %{
-              "payload_to_sign" => payload_to_sign,
-              "unsigned_transaction" => unsigned_transaction
-            }
-          }} = results <-
-           GatewayAPI.build_transaction(actions, from),
-         :ok <- Utils.verify_hash(unsigned_transaction, payload_to_sign) do
-      results
-    end
+    build_transaction(actions, from)
   end
 
   def build_transfer_xrd_transaction(from, to, value) do
