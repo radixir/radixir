@@ -194,7 +194,7 @@ defmodule Radixir.CoreAPI do
           network: Config.network()
         }
       },
-      {"superadmin", Config.radix_superadmin_password()}
+      auth: {"superadmin", Config.radix_superadmin_password()}
     )
   end
 
@@ -209,7 +209,7 @@ defmodule Radixir.CoreAPI do
         unsigned_transaction: unsigned_transaction,
         public_key: %{hex: public_key_hex}
       },
-      {"superadmin", Config.radix_superadmin_password()}
+      auth: {"superadmin", Config.radix_superadmin_password()}
     )
   end
 end

@@ -226,7 +226,7 @@ defmodule Radixir.GatewayAPI do
 
   def build_transaction(actions, fee_payer_address, options \\ []) do
     at_state_identifier = Keyword.get(options, :at_state_identifier, nil)
-    message = Keyword.get(options, :message, nil)
+    message = Keyword.get(options, :message, nil) |> Utils.encode_message()
     disable_token_mint_and_burn = Keyword.get(options, :disable_token_mint_and_burn, nil)
 
     body =

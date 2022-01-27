@@ -1,15 +1,19 @@
-defmodule Radixir.Keypair do
+defmodule Radixir.Keys do
   alias Radixir.Bech32
 
-  def new() do
+  def new_keypair() do
     Curvy.generate_key() |> format_keys()
   end
 
-  def from_private_key(private_key) when is_binary(private_key) do
+  def keypair_from_private_key(private_key) when is_binary(private_key) do
     with {:ok, keypair} <- private_key_to_keypair(private_key) do
       {:ok, format_keys(keypair)}
     end
   end
+
+  # def address_to_public_key(address) do
+  ## TODO
+  # end
 
   def sign_data(data, private_key)
       when is_binary(data)

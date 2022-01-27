@@ -19,6 +19,54 @@ defmodule Radixir.Utils do
     end
   end
 
+  def encode_message(nil) do
+    nil
+  end
+
+  def encode_message(contents: contents, encrypted: encrypted) do
+    encode_message(contents, encrypted)
+  end
+
+  def encode_message(contents: contents) do
+    encode_message(contents, false)
+  end
+
+  # def encode_message(message, true = _encrypted) do
+  #   # TODO
+  # end
+
+  def encode_message(message, false = _encrypted) do
+    message
+    |> Base.encode16()
+    |> String.replace_prefix("", "0000")
+  end
+
+  def decode_message(nil) do
+    nil
+  end
+
+  def decode_message(contents: contents, encrypted: encrypted) do
+    decode_message(contents, encrypted)
+  end
+
+  def decode_message(contents: contents) do
+    decode_message(contents, false)
+  end
+
+  # def decode_message(message, true = _encrypted) do
+  ## TODO
+  # end
+
+  def decode_message("0000" <> message, false = _encrypted) do
+    Base.decode16!(message)
+  end
+
+  def decode_message("30303030" <> message, false = _encrypted) do
+    message
+    |> Base.decode16!()
+    |> Base.decode16!()
+  end
+
   def maybe_put(map, _key, nil), do: map
   def maybe_put(map, key, value), do: Map.put(map, key, value)
 end
