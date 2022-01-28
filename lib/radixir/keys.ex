@@ -13,7 +13,7 @@ defmodule Radixir.Keys do
 
   def address_to_public_key(address) do
     with {:ok, _hrp, <<4>> <> public_key} <- Bech32.decode(address) do
-      Curvy.Util.encode(public_key, :hex)
+      {:ok, Curvy.Util.encode(public_key, :hex)}
     end
   end
 
