@@ -1,12 +1,12 @@
 defmodule Radixir.Keys do
   alias Radixir.Bech32
 
-  def new_keypair() do
+  def new() do
     Curvy.generate_key() |> format_keys()
   end
 
-  def keypair_from_private_key(private_key) when is_binary(private_key) do
-    with {:ok, keypair} <- private_key_to_keypair(private_key) do
+  def from_private_key(private_key_hex) do
+    with {:ok, keypair} <- private_key_to_keypair(private_key_hex) do
       {:ok, format_keys(keypair)}
     end
   end
@@ -17,26 +17,35 @@ defmodule Radixir.Keys do
     end
   end
 
-  def sign_data(data, private_key)
-      when is_binary(data)
-      when is_binary(private_key) do
-    with {:ok, keypair} <- private_key_to_keypair(private_key),
-         {:ok, data} <- validate_data(data) do
-      Curvy.sign(data, Curvy.Key.to_privkey(keypair), encoding: :hex, hash: :none)
+  def private_key_to_secret(private_key_hex) do
+    with {:ok, keypair} <- private_key_to_keypair(private_key_hex) do
+      {:ok, :binary.decode_unsigned(keypair.privkey)}
     end
   end
 
-  defp private_key_to_keypair(private_key) do
-    with {:ok, private_key} <- Curvy.Util.decode(private_key, :hex),
-         <<private_key::binary-size(32)>> <- private_key do
+  def sign_data(data, private_key_hex) do
+    with {:ok, keypair} <- private_key_to_keypair(private_key_hex),
+         {:ok, data} <- decode_data(data) do
+      {:ok, Curvy.sign(data, Curvy.Key.to_privkey(keypair), encoding: :hex, hash: :none)}
+    end
+  end
+
+  defp check_private_key_size(<<private_key::binary-size(32)>>) do
+    {:ok, private_key}
+  end
+
+  defp check_private_key_size(_) do
+    {:error, "invalid private key format"}
+  end
+
+  defp private_key_to_keypair(private_key_hex) do
+    with {:ok, private_key} <- decode_data(private_key_hex),
+         {:ok, private_key} <- check_private_key_size(private_key) do
       {:ok, Curvy.Key.from_privkey(private_key)}
-    else
-      _ ->
-        {:error, "invalid private key format"}
     end
   end
 
-  defp validate_data(data) do
+  defp decode_data(data) do
     with {:ok, data} <- Curvy.Util.decode(data, :hex) do
       {:ok, data}
     else
