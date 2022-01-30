@@ -1,5 +1,6 @@
 defmodule Radixir.Keys do
   alias Radixir.Bech32
+  alias Radixir.Utils
 
   def new() do
     Curvy.generate_key() |> format_keys()
@@ -13,7 +14,7 @@ defmodule Radixir.Keys do
 
   def address_to_public_key(address) do
     with {:ok, _hrp, <<4>> <> public_key} <- Bech32.decode(address) do
-      {:ok, Curvy.Util.encode(public_key, :hex)}
+      {:ok, Utils.encode_data(public_key)}
     end
   end
 
@@ -25,7 +26,7 @@ defmodule Radixir.Keys do
 
   def sign_data(data, private_key_hex) do
     with {:ok, keypair} <- private_key_to_keypair(private_key_hex),
-         {:ok, data} <- decode_data(data) do
+         {:ok, data} <- Utils.decode_data(data) do
       {:ok, Curvy.sign(data, Curvy.Key.to_privkey(keypair), encoding: :hex, hash: :none)}
     end
   end
@@ -39,18 +40,9 @@ defmodule Radixir.Keys do
   end
 
   defp private_key_to_keypair(private_key_hex) do
-    with {:ok, private_key} <- decode_data(private_key_hex),
+    with {:ok, private_key} <- Utils.decode_data(private_key_hex),
          {:ok, private_key} <- check_private_key_size(private_key) do
       {:ok, Curvy.Key.from_privkey(private_key)}
-    end
-  end
-
-  defp decode_data(data) do
-    with {:ok, data} <- Curvy.Util.decode(data, :hex) do
-      {:ok, data}
-    else
-      _ ->
-        {:error, "invalid data format"}
     end
   end
 
