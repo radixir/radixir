@@ -29,7 +29,8 @@ defmodule Radixir.MixProject do
       {:curvy, "~> 0.3.0"},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
       {:req, "~> 0.2.0"},
-      {:scrypt, "~> 2.1"}
+      {:scrypt, "~> 2.1"},
+      {:ex_crypto, git: "git@github.com:ntrepid8/ex_crypto.git", branch: "master"}
       # {:websockex, "~> 0.4"}
     ]
   end

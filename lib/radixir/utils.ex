@@ -40,7 +40,7 @@ defmodule Radixir.Utils do
   end
 
   def encode_message(_message, _private_key_hex, _address) do
-    _message = "Hey Bob, this is Alice, you and I can read this message, but no one else."
+    message = "Hey Bob, this is Alice, you and I can read this message, but no one else."
     private_key_hex = "8ef36a3c732f65deeb5c2ee59aaa90d3571c0149c63fe97ad4ed971155804947"
     address = "rdx1qspvvprlj3q76ltdxpz5qm54cp7dshrh3e9cemeu5746czdet3cfaegp8alwf"
     {:ok, public_key_hex} = Keys.address_to_public_key(address)
@@ -69,7 +69,12 @@ defmodule Radixir.Utils do
     IO.inspect(Base.encode16(nonce_bytes), label: "nonce: ")
     salt = :crypto.hash(:sha256, nonce_bytes)
     IO.inspect(Base.encode16(salt), label: "salt: ")
-    :scrypt.scrypt(shared_secret, salt, 32, 8192, 8, 32) |> encode_data()
+    key = :scrypt.scrypt(shared_secret, salt, 32, 8192, 8, 32)
+    {:ok, {_ad, payload}} = ExCrypto.encrypt(key, ephemeral_public_key, nonce_bytes, message)
+    {_iv, cipher_text, cipher_tag} = payload
+
+    (<<1>> <> <<255>> <> ephemeral_public_key <> nonce_bytes <> cipher_tag <> cipher_text)
+    |> encode_data()
   end
 
   def decode_message(nil) do
