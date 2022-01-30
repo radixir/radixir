@@ -25,8 +25,8 @@ defmodule Radixir.Utils do
     nil
   end
 
-  def encode_message(contents: contents, private_key: private_key, address: address) do
-    encode_message(contents, private_key, address)
+  def encode_message(contents: contents, private_key_hex: private_key_hex, address: address) do
+    encode_message(contents, private_key_hex, address)
   end
 
   def encode_message(contents: contents) do
@@ -39,69 +39,83 @@ defmodule Radixir.Utils do
     |> String.replace_prefix("", "0000")
   end
 
-  def encode_message(_message, _private_key_hex, _address) do
-    message = "Hey Bob, this is Alice, you and I can read this message, but no one else."
-    private_key_hex = "8ef36a3c732f65deeb5c2ee59aaa90d3571c0149c63fe97ad4ed971155804947"
-    address = "rdx1qspvvprlj3q76ltdxpz5qm54cp7dshrh3e9cemeu5746czdet3cfaegp8alwf"
+  def encode_message(message, private_key_hex, address) do
     {:ok, public_key_hex} = Keys.address_to_public_key(address)
-    IO.inspect(public_key_hex, label: "public key: ")
     {:ok, public_key_binary} = decode_data(public_key_hex)
     public_keypair = Curvy.Key.from_pubkey(public_key_binary)
     {:ok, private_key_secret} = Keys.private_key_to_secret(private_key_hex)
     dh = Curvy.Point.mul(public_keypair.point, private_key_secret)
-    IO.inspect(dh.x, label: "dh x: ")
-    IO.inspect(dh.y, label: "dh y: ")
-    ephemeral_private_key_hex = "b1392c49f676fd48fcb206f2b1233cb1fc88c38321383f4acd6b4293539d036c"
-
-    ephemeral_keypair =
-      Curvy.Key.from_privkey(Base.decode16!(ephemeral_private_key_hex, case: :mixed))
-
+    ephemeral_keypair = Curvy.generate_key()
     ephemeral_public_key = Curvy.Key.to_pubkey(ephemeral_keypair)
-    IO.inspect(Base.encode16(ephemeral_public_key, case: :lower), label: "ephemeral public key: ")
-    IO.inspect(ephemeral_keypair.point.x, label: "ephemeral point x: ")
-    IO.inspect(ephemeral_keypair.point.y, label: "ephemeral point y: ")
     shared_secret_point = Curvy.Point.add(ephemeral_keypair.point, dh)
     shared_secret_integer = shared_secret_point.x
-    IO.inspect(shared_secret_integer, label: "shared secret integer: ")
     shared_secret = :binary.encode_unsigned(shared_secret_integer, :big)
-    IO.inspect(encode_data(shared_secret), label: "shared secret: ")
     nonce_bytes = :crypto.strong_rand_bytes(12)
-    IO.inspect(Base.encode16(nonce_bytes), label: "nonce: ")
     salt = :crypto.hash(:sha256, nonce_bytes)
-    IO.inspect(Base.encode16(salt), label: "salt: ")
     key = :scrypt.scrypt(shared_secret, salt, 32, 8192, 8, 32)
     {:ok, {_ad, payload}} = ExCrypto.encrypt(key, ephemeral_public_key, nonce_bytes, message)
     {_iv, cipher_text, cipher_tag} = payload
 
-    (<<1>> <> <<255>> <> ephemeral_public_key <> nonce_bytes <> cipher_tag <> cipher_text)
-    |> encode_data()
+    {:ok,
+     (<<1>> <> <<255>> <> ephemeral_public_key <> nonce_bytes <> cipher_tag <> cipher_text)
+     |> encode_data()}
   end
 
   def decode_message(nil) do
     nil
   end
 
-  def decode_message(contents: contents, encrypted: encrypted) do
-    decode_message(contents, encrypted)
+  def decode_message(contents: contents, private_key_hex: private_key_hex, address: address) do
+    decode_message(contents, private_key_hex, address)
   end
 
   def decode_message(contents: contents) do
-    decode_message(contents, false)
+    decode_message(contents)
   end
 
-  # def decode_message(message, true = _encrypted) do
-  ## TODO
-  # end
-
-  def decode_message("0000" <> message, false = _encrypted) do
+  def decode_message("0000" <> message) do
     decode_data(message)
   end
 
-  def decode_message("30303030" <> message, false = _encrypted) do
+  def decode_message("30303030" <> message) do
     with {:ok, result} <- decode_data(message),
          {:ok, result} <- decode_data(result) do
       {:ok, result}
     end
+  end
+
+  def decode_message(message, private_key_hex, address) do
+    {:ok, public_key_hex} = Keys.address_to_public_key(address)
+    {:ok, public_key_binary} = decode_data(public_key_hex)
+    public_keypair = Curvy.Key.from_pubkey(public_key_binary)
+    {:ok, private_key_secret} = Keys.private_key_to_secret(private_key_hex)
+    dh = Curvy.Point.mul(public_keypair.point, private_key_secret)
+
+    ephemeral_public_key_hex = String.slice(message, 4..69)
+
+    ephemeral_keypair =
+      Curvy.Key.from_pubkey(Base.decode16!(ephemeral_public_key_hex, case: :mixed))
+
+    ephemeral_public_key_bytes = Curvy.Key.to_pubkey(ephemeral_keypair)
+    nonce = String.slice(message, 70..93)
+    nonce_bytes = Base.decode16!(nonce, case: :mixed)
+    cipher_tag = String.slice(message, 94..125)
+    cipher_tag_bytes = Base.decode16!(cipher_tag, case: :mixed)
+    cipher_text = String.slice(message, 126..-1)
+    cipher_text_bytes = Base.decode16!(cipher_text, case: :mixed)
+    shared_secret_point = Curvy.Point.add(ephemeral_keypair.point, dh)
+    shared_secret_integer = shared_secret_point.x
+    shared_secret = :binary.encode_unsigned(shared_secret_integer, :big)
+    salt = :crypto.hash(:sha256, nonce_bytes)
+    key = :scrypt.scrypt(shared_secret, salt, 32, 8192, 8, 32)
+
+    ExCrypto.decrypt(
+      key,
+      ephemeral_public_key_bytes,
+      nonce_bytes,
+      cipher_text_bytes,
+      cipher_tag_bytes
+    )
   end
 
   def decode_data(data_hex) do
