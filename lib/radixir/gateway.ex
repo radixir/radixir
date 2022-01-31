@@ -55,7 +55,7 @@ defmodule Radixir.Gateway do
 
   # TRANSFER TOKENS
   def build_transfer_tokens_transaction(from, to, value, rri) do
-    actions = [
+    [
       build_transfer_tokens_action(%{
         from_address: from,
         to_address: to,
@@ -63,8 +63,7 @@ defmodule Radixir.Gateway do
         rri: rri
       })
     ]
-
-    build_transaction(actions, from)
+    |> build_transaction(from)
   end
 
   def build_transfer_xrd_transaction(from, to, value) do
@@ -94,7 +93,7 @@ defmodule Radixir.Gateway do
 
   # STAKE TOKENS
   def build_stake_tokens_transaction(from, validator, value, rri) do
-    actions = [
+    [
       build_stake_tokens_action(%{
         from_address: from,
         validator_address: validator,
@@ -102,8 +101,7 @@ defmodule Radixir.Gateway do
         rri: rri
       })
     ]
-
-    build_transaction(actions, from)
+    |> build_transaction(from)
   end
 
   def build_stake_xrd_transaction(from, validator, value) do
@@ -133,7 +131,7 @@ defmodule Radixir.Gateway do
 
   # UNSTAKE TOKENS
   def build_unstake_tokens_transaction(validator, to, value, rri) do
-    actions = [
+    [
       build_unstake_tokens_action(%{
         validator_address: validator,
         to_address: to,
@@ -141,8 +139,7 @@ defmodule Radixir.Gateway do
         rri: rri
       })
     ]
-
-    build_transaction(actions, to)
+    |> build_transaction(to)
   end
 
   def build_unstake_xrd_transaction(validator, to, value) do
@@ -175,15 +172,14 @@ defmodule Radixir.Gateway do
 
   # MINT TOKENS
   def build_mint_tokens_transaction(to, value, rri) do
-    actions = [
+    [
       build_mint_tokens_action(%{
         to_address: to,
         value: value,
         rri: rri
       })
     ]
-
-    build_transaction(actions, to)
+    |> build_transaction(to)
   end
 
   def build_mint_tokens_action(params) do
@@ -203,15 +199,14 @@ defmodule Radixir.Gateway do
 
   # BURN TOKENS
   def build_burn_tokens_transaction(from, value, rri) do
-    actions = [
+    [
       build_burn_tokens_action(%{
         from_address: from,
         value: value,
         rri: rri
       })
     ]
-
-    build_transaction(actions, from)
+    |> build_transaction(from)
   end
 
   def build_burn_tokens_action(params) do

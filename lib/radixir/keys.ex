@@ -2,9 +2,7 @@ defmodule Radixir.Keys do
   alias Radixir.Bech32
   alias Radixir.Utils
 
-  def new() do
-    Curvy.generate_key() |> format_keys()
-  end
+  def new(), do: Curvy.generate_key() |> format_keys()
 
   def from_private_key(private_key_hex) do
     with {:ok, keypair} <- private_key_to_keypair(private_key_hex) do
@@ -31,13 +29,9 @@ defmodule Radixir.Keys do
     end
   end
 
-  defp check_private_key_size(<<private_key::binary-size(32)>>) do
-    {:ok, private_key}
-  end
+  defp check_private_key_size(<<private_key::binary-size(32)>>), do: {:ok, private_key}
 
-  defp check_private_key_size(_) do
-    {:error, "invalid format for private_key_hex"}
-  end
+  defp check_private_key_size(_), do: {:error, "invalid format for private_key_hex"}
 
   defp private_key_to_keypair(private_key_hex) do
     with {:ok, private_key} <- Utils.decode16(private_key_hex, "private_key_hex"),

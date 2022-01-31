@@ -1,16 +1,14 @@
 defmodule Radixir.Utils do
   alias Radixir.Keys
 
-  def double_hash(data) do
-    result = :crypto.hash(:sha256, data)
-    :crypto.hash(:sha256, result)
-  end
+  def hash(data), do: :crypto.hash(:sha256, data)
 
   def verify_hash(unsigned_transaction, payload_to_sign) do
     with {:ok, binary_unsigned_transaction} <- decode16(unsigned_transaction) do
       double_hash_hex =
         binary_unsigned_transaction
-        |> double_hash()
+        |> hash()
+        |> hash()
         |> encode16()
 
       if double_hash_hex == payload_to_sign do
@@ -21,17 +19,12 @@ defmodule Radixir.Utils do
     end
   end
 
-  def encode_message(nil) do
-    nil
-  end
+  def encode_message(nil), do: nil
 
-  def encode_message(contents: contents, private_key_hex: private_key_hex, address: address) do
-    encode_message(contents, private_key_hex, address)
-  end
+  def encode_message(contents: contents, private_key_hex: private_key_hex, address: address),
+    do: encode_message(contents, private_key_hex, address)
 
-  def encode_message(contents: contents) do
-    encode_message(contents)
-  end
+  def encode_message(contents: contents), do: encode_message(contents)
 
   def encode_message(message) do
     message
@@ -54,21 +47,14 @@ defmodule Radixir.Utils do
     end
   end
 
-  def decode_message(nil) do
-    nil
-  end
+  def decode_message(nil), do: nil
 
-  def decode_message(contents: contents, private_key_hex: private_key_hex, address: address) do
-    decode_message(contents, private_key_hex, address)
-  end
+  def decode_message(contents: contents, private_key_hex: private_key_hex, address: address),
+    do: decode_message(contents, private_key_hex, address)
 
-  def decode_message(contents: contents) do
-    decode_message(contents)
-  end
+  def decode_message(contents: contents), do: decode_message(contents)
 
-  def decode_message("0000" <> message) do
-    decode16(message)
-  end
+  def decode_message("0000" <> message), do: decode16(message)
 
   def decode_message("30303030" <> message) do
     with {:ok, result} <- decode16(message),
@@ -101,9 +87,7 @@ defmodule Radixir.Utils do
     end
   end
 
-  def encode16(data) do
-    Base.encode16(data, case: :lower)
-  end
+  def encode16(data), do: Base.encode16(data, case: :lower)
 
   def maybe_put(map, _key, nil), do: map
   def maybe_put(map, key, value), do: Map.put(map, key, value)
