@@ -9,10 +9,6 @@ defmodule Radixir.HTTP do
   end
 
   def get(url, path, options \\ []) do
-    options =
-      [headers: ["content-ype": "application/json"]]
-      |> Keyword.merge(options)
-
     Req.get!(url <> path, options)
     |> handle_response()
   end
