@@ -7,17 +7,17 @@ defmodule Radixir.Utils do
   end
 
   def verify_hash(unsigned_transaction, payload_to_sign) do
-    binary_unsigned_transaction = decode16(unsigned_transaction)
+    with {:ok, binary_unsigned_transaction} <- decode16(unsigned_transaction) do
+      double_hash_hex =
+        binary_unsigned_transaction
+        |> double_hash()
+        |> encode16()
 
-    double_hash_hex =
-      binary_unsigned_transaction
-      |> double_hash()
-      |> encode16()
-
-    if double_hash_hex == payload_to_sign do
-      :ok
-    else
-      {:error, "double hash of unsigned_transaction does not match payload_to_sign"}
+      if double_hash_hex == payload_to_sign do
+        :ok
+      else
+        {:error, "double hash of unsigned_transaction does not match payload_to_sign"}
+      end
     end
   end
 
