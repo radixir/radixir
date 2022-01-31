@@ -1,6 +1,7 @@
 defmodule Radixir.CoreAPI do
   alias Radixir.Config
   alias Radixir.HTTP
+  alias Radixir.Utils
 
   def get_network_configuration() do
     HTTP.post(
@@ -104,14 +105,12 @@ defmodule Radixir.CoreAPI do
   end
 
   def build_transaction(operation_groups, fee_payer_address, options \\ []) do
-    message = Keyword.get(options, :message, "")
+    message = Keyword.get(options, :message, nil) |> Utils.encode_message()
 
     disable_resource_allocate_and_destroy =
-      Keyword.get(options, :disable_resource_allocate_and_destroy, true)
+      Keyword.get(options, :disable_resource_allocate_and_destroy, nil)
 
-    HTTP.post(
-      Config.radix_core_api_url(),
-      "/construction/build",
+    body =
       %{
         network_identifier: %{
           network: Config.network()
@@ -119,10 +118,18 @@ defmodule Radixir.CoreAPI do
         operation_groups: operation_groups,
         fee_payer: %{
           address: fee_payer_address
-        },
-        message: message,
-        disable_resource_allocate_and_destroy: disable_resource_allocate_and_destroy
-      },
+        }
+      }
+      |> Utils.maybe_put(:message, message)
+      |> Utils.maybe_put(
+        :disable_resource_allocate_and_destroy,
+        disable_resource_allocate_and_destroy
+      )
+
+    HTTP.post(
+      Config.radix_core_api_url(),
+      "/construction/build",
+      body,
       auth: {"admin", Config.radix_admin_password()}
     )
   end

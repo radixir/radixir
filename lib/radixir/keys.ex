@@ -10,9 +10,9 @@ defmodule Radixir.Keys do
     end
   end
 
-  def address_to_public_key(address) do
-    with {:ok, _hrp, <<4>> <> public_key} <- Bech32.decode(address) do
-      {:ok, Utils.encode16(public_key)}
+  def address_to_public_key(radix_address) do
+    with {:ok, _hrp, <<4>> <> public_key_bytes} <- Bech32.decode(radix_address) do
+      {:ok, Utils.encode16(public_key_bytes)}
     end
   end
 
@@ -29,7 +29,8 @@ defmodule Radixir.Keys do
     end
   end
 
-  defp check_private_key_size(<<private_key::binary-size(32)>>), do: {:ok, private_key}
+  defp check_private_key_size(<<private_key_bytes::binary-size(32)>>),
+    do: {:ok, private_key_bytes}
 
   defp check_private_key_size(_), do: {:error, "invalid format for private_key_hex"}
 
