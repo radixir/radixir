@@ -1,5 +1,5 @@
 defmodule Radixir.Utils do
-  alias Radixir.Keys
+  alias Radixir.Key
 
   def hash(data), do: :crypto.hash(:sha256, data)
 
@@ -101,8 +101,8 @@ defmodule Radixir.Utils do
   def maybe_put(map, key, value), do: Map.put(map, key, value)
 
   defp get_dh(private_key_hex, radix_address) do
-    with {:ok, private_key_secret} <- Keys.private_key_to_secret(private_key_hex),
-         {:ok, public_key_hex} <- Keys.address_to_public_key(radix_address),
+    with {:ok, private_key_secret} <- Key.private_key_to_secret(private_key_hex),
+         {:ok, public_key_hex} <- Key.address_to_public_key(radix_address),
          {:ok, public_key_binary} <- decode16(public_key_hex, "public_key_hex"),
          public_keypair <- Curvy.Key.from_pubkey(public_key_binary) do
       {:ok, Curvy.Point.mul(public_keypair.point, private_key_secret)}

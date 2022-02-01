@@ -1,8 +1,8 @@
-defmodule Radixir.Keys do
+defmodule Radixir.Key do
   alias Radixir.Bech32
   alias Radixir.Utils
 
-  def new(), do: Curvy.generate_key() |> format_keys()
+  def generate(), do: Curvy.generate_key() |> format_keys()
 
   def from_private_key(private_key_hex) do
     with {:ok, keypair} <- private_key_to_keypair(private_key_hex) do
