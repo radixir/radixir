@@ -4,10 +4,10 @@ defmodule Radixir.Utils do
   def hash(data), do: :crypto.hash(:sha256, data)
 
   def verify_hash(unsigned_transaction, payload_to_sign) do
-    with {:ok, binary_unsigned_transaction} <-
+    with {:ok, unsigned_transaction_binary} <-
            decode16(unsigned_transaction, "unsigned_transaction") do
       double_hash_hex =
-        binary_unsigned_transaction
+        unsigned_transaction_binary
         |> hash()
         |> hash()
         |> encode16()
@@ -99,6 +99,9 @@ defmodule Radixir.Utils do
 
   def maybe_put(map, _key, nil), do: map
   def maybe_put(map, key, value), do: Map.put(map, key, value)
+
+  def maybe_put_in(map, _key, nil), do: map
+  def maybe_put_in(map, keys_list, value), do: put_in(map, keys_list, value)
 
   defp get_dh(private_key_hex, radix_address) do
     with {:ok, private_key_secret} <- Key.private_key_to_secret(private_key_hex),

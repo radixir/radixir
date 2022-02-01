@@ -25,10 +25,10 @@ defmodule Radixir.CoreAPI do
     )
   end
 
-  def get_entity_information(address) do
-    HTTP.post(
-      Config.radix_core_api_url(),
-      "/entity",
+  def get_entity_information(address, options \\ []) do
+    sub_entity = Keyword.get(options, :sub_entity, nil)
+
+    body =
       %{
         network_identifier: %{
           network: Config.network()
@@ -36,7 +36,13 @@ defmodule Radixir.CoreAPI do
         entity_identifier: %{
           address: address
         }
-      },
+      }
+      |> Utils.maybe_put_in([:entity_indentifier, :sub_entity], sub_entity)
+
+    HTTP.post(
+      Config.radix_core_api_url(),
+      "/entity",
+      body,
       auth: {"admin", Config.radix_admin_password()}
     )
   end
@@ -70,19 +76,29 @@ defmodule Radixir.CoreAPI do
     )
   end
 
-  def get_committed_transactions(state_version, limit) do
-    HTTP.post(
-      Config.radix_core_api_url(),
-      "/transactions",
+  def get_committed_transactions(state_version, options \\ []) do
+    transaction_accumulator = Keyword.get(options, :transaction_accumulator, nil)
+    limit = Keyword.get(options, :limit, nil)
+
+    body =
       %{
         network_identifier: %{
           network: Config.network()
         },
         state_identifier: %{
           state_version: state_version
-        },
-        limit: limit
-      },
+        }
+      }
+      |> Utils.maybe_put(:limit, limit)
+      |> Utils.maybe_put_in(
+        [:state_indentifier, :transaction_accumulator],
+        transaction_accumulator
+      )
+
+    HTTP.post(
+      Config.radix_core_api_url(),
+      "/transactions",
+      body,
       auth: {"admin", Config.radix_admin_password()}
     )
   end
@@ -104,7 +120,7 @@ defmodule Radixir.CoreAPI do
     )
   end
 
-  def build_transaction(operation_groups, fee_payer_address, options \\ []) do
+  def build_transaction(operation_groups, fee_payer, options \\ []) do
     message = Keyword.get(options, :message, nil) |> Utils.encode_message()
 
     disable_resource_allocate_and_destroy =
@@ -116,9 +132,7 @@ defmodule Radixir.CoreAPI do
           network: Config.network()
         },
         operation_groups: operation_groups,
-        fee_payer: %{
-          address: fee_payer_address
-        }
+        fee_payer: fee_payer
       }
       |> Utils.maybe_put(:message, message)
       |> Utils.maybe_put(
