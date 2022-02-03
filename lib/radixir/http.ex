@@ -1,8 +1,8 @@
 defmodule Radixir.HTTP do
-  def post(url, path, params, options \\ []) do
+  def post(url, path, body, options \\ []) do
     Req.post!(
       url <> path,
-      {:json, params},
+      {:json, body},
       options
     )
     |> handle_response()

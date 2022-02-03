@@ -1,4 +1,4 @@
-defmodule Radixir.Utils do
+defmodule Radixir.Util do
   alias Radixir.Key
 
   def hash(data), do: :crypto.hash(:sha256, data)
@@ -20,24 +20,13 @@ defmodule Radixir.Utils do
     end
   end
 
-  def encode_message(nil), do: nil
-
-  def encode_message(
-        contents: contents,
-        private_key_hex: private_key_hex,
-        radix_address: radix_address
-      ),
-      do: encode_message(contents, private_key_hex, radix_address)
-
-  def encode_message(contents: contents), do: encode_message(contents)
-
   def encode_message(message) do
     message
     |> Base.encode16()
     |> String.replace_prefix("", "0000")
   end
 
-  def encode_message(message, private_key_hex, radix_address) do
+  def encrypt_message(message, private_key_hex, radix_address) do
     with {:ok, dh} <- get_dh(private_key_hex, radix_address),
          {key_bytes, ephemeral_public_key_bytes, nonce_bytes} <- get_encryption_params(dh),
          {:ok, {_ad, payload}} <-
@@ -52,17 +41,6 @@ defmodule Radixir.Utils do
     end
   end
 
-  def decode_message(nil), do: nil
-
-  def decode_message(
-        contents: contents,
-        private_key_hex: private_key_hex,
-        radix_address: radix_address
-      ),
-      do: decode_message(contents, private_key_hex, radix_address)
-
-  def decode_message(contents: contents), do: decode_message(contents)
-
   def decode_message("0000" <> message), do: decode16(message, "message")
 
   def decode_message("30303030" <> message) do
@@ -72,7 +50,7 @@ defmodule Radixir.Utils do
     end
   end
 
-  def decode_message(message, private_key_hex, radix_address) do
+  def decrypt_message(message, private_key_hex, radix_address) do
     with {:ok, dh} <- get_dh(private_key_hex, radix_address),
          {key_bytes, ephemeral_public_key_bytes, nonce_bytes, cipher_text_bytes, cipher_tag_bytes} <-
            get_decryption_params(message, dh) do
@@ -97,11 +75,11 @@ defmodule Radixir.Utils do
 
   def encode16(data), do: Base.encode16(data, case: :lower)
 
-  def maybe_put(map, _key, nil), do: map
-  def maybe_put(map, key, value), do: Map.put(map, key, value)
-
   def maybe_put_in(map, _key, nil), do: map
   def maybe_put_in(map, keys_list, value), do: put_in(map, keys_list, value)
+
+  def maybe_put(map, _key, nil), do: map
+  def maybe_put(map, key, value), do: Map.put(map, key, value)
 
   defp get_dh(private_key_hex, radix_address) do
     with {:ok, private_key_secret} <- Key.private_key_to_secret(private_key_hex),

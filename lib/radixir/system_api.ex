@@ -1,60 +1,31 @@
 defmodule Radixir.SystemAPI do
-  alias Radixir.Config
   alias Radixir.HTTP
 
-  def get_version() do
-    HTTP.get(
-      Config.radix_system_api_url(),
-      "/system/version",
-      auth: {"admin", Config.radix_admin_password()}
-    )
+  def get_version(url, username, password) do
+    HTTP.get(url, "/system/version", auth: {username, password})
   end
 
-  def get_health() do
-    HTTP.get(
-      Config.radix_system_api_url(),
-      "/system/health",
-      auth: {"admin", Config.radix_admin_password()}
-    )
+  def get_health(url, username, password) do
+    HTTP.get(url, "/system/health", auth: {username, password})
   end
 
-  def get_configuration() do
-    HTTP.get(
-      Config.radix_system_api_url(),
-      "/system/configuration",
-      auth: {"admin", Config.radix_admin_password()}
-    )
+  def get_configuration(url, username, password) do
+    HTTP.get(url, "/system/configuration", auth: {username, password})
   end
 
-  def get_peers() do
-    HTTP.get(
-      Config.radix_system_api_url(),
-      "/system/peers",
-      auth: {"admin", Config.radix_admin_password()}
-    )
+  def get_peers(url, username, password) do
+    HTTP.get(url, "/system/peers", auth: {username, password})
   end
 
-  def get_address_book() do
-    HTTP.get(
-      Config.radix_system_api_url(),
-      "/system/addressbook",
-      auth: {"admin", Config.radix_admin_password()}
-    )
+  def get_address_book(url, username, password) do
+    HTTP.get(url, "/system/addressbook", auth: {username, password})
   end
 
-  def get_metrics() do
-    HTTP.get(
-      Config.radix_system_api_url(),
-      "/system/metrics",
-      auth: {"admin", Config.radix_admin_password()}
-    )
+  def get_metrics(url, username, password) do
+    HTTP.get(url, "/system/metrics", auth: {username, password})
   end
 
-  def get_prometheus_metrics() do
-    HTTP.get(
-      Config.radix_system_api_url(),
-      "/prometheus/metrics",
-      auth: {"metrics", Config.radix_metrics_password()}
-    )
+  def get_prometheus_metrics(url, username, password) do
+    HTTP.get(url, "/prometheus/metrics", auth: {username, password})
   end
 end
