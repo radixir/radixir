@@ -1,8 +1,7 @@
-defmodule Radixir.Build do
-  alias Radixir.Config
+defmodule Radixir.Shapes do
   alias Radixir.Util
 
-  def network_identifier(network \\ Config.network()) do
+  def network_identifier(network) do
     %{network_identifier: %{network: network}}
   end
 
@@ -22,7 +21,32 @@ defmodule Radixir.Build do
     %{transaction_identifier: %{hash: hash}}
   end
 
-  def at_state_identifier(version, timestamp, epoch, round) do
+  def state_identifier(state_version, transaction_accumulator) do
+    %{
+      state_identifier: %{
+        state_version: state_version,
+        transaction_accumulator: transaction_accumulator
+      }
+    }
+  end
+
+  def sub_entity(address, validator_address, epoch_unlock) do
+    %{
+      sub_entity: %{
+        address: address,
+        metadata: %{validator_address: validator_address, epoch_unlock: epoch_unlock}
+      }
+    }
+  end
+
+  def at_state_identifier(nil), do: %{}
+
+  def at_state_identifier(options) do
+    version = Keyword.get(:version, options)
+    timestamp = Keyword.get(:timestamp, options)
+    epoch = Keyword.get(:epoch, options)
+    round = Keyword.get(:round, options)
+
     %{}
     |> Util.maybe_put(:version, version)
     |> Util.maybe_put(:timestamp, timestamp)
