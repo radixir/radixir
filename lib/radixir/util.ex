@@ -75,12 +75,6 @@ defmodule Radixir.Util do
 
   def encode16(data), do: Base.encode16(data, case: :lower)
 
-  def maybe_put_in(map, _key, nil), do: map
-  def maybe_put_in(map, keys_list, value), do: put_in(map, keys_list, value)
-
-  def maybe_put(map, _key, nil), do: map
-  def maybe_put(map, key, value), do: Map.put(map, key, value)
-
   defp get_dh(private_key_hex, radix_address) do
     with {:ok, private_key_secret} <- Key.private_key_to_secret(private_key_hex),
          {:ok, public_key_hex} <- Key.address_to_public_key(radix_address),
