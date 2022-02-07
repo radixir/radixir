@@ -1,66 +1,51 @@
 defmodule Radixir.Config do
   def radix_gateway_api_url do
     :radixir
-    |> Application.fetch_env!(__MODULE__)
-    |> Keyword.fetch!(:radix_gateway_api_url)
+    |> Application.get_env(__MODULE__, [])
+    |> Keyword.get(:radix_gateway_api_url)
   end
 
   def radix_core_api_url do
     :radixir
-    |> Application.fetch_env!(__MODULE__)
-    |> Keyword.fetch!(:radix_core_api_url)
+    |> Application.get_env(__MODULE__, [])
+    |> Keyword.get(:radix_core_api_url)
   end
 
   def radix_system_api_url do
     :radixir
-    |> Application.fetch_env!(__MODULE__)
-    |> Keyword.fetch!(:radix_system_api_url)
+    |> Application.get_env(__MODULE__, [])
+    |> Keyword.get(:radix_system_api_url)
   end
 
-  def radix_admin_username do
+  def radix_usernames() do
     :radixir
-    |> Application.fetch_env!(__MODULE__)
-    |> Keyword.fetch!(:radix_admin_username)
+    |> Application.get_env(__MODULE__, [])
+    |> Keyword.get(:radix_usernames, "")
+    |> String.split(", ")
   end
 
-  def radix_admin_password do
+  def radix_passwords() do
     :radixir
-    |> Application.fetch_env!(__MODULE__)
-    |> Keyword.fetch!(:radix_admin_password)
-  end
-
-  def radix_superadmin_username do
-    :radixir
-    |> Application.fetch_env!(__MODULE__)
-    |> Keyword.fetch!(:radix_superadmin_username)
-  end
-
-  def radix_superadmin_password do
-    :radixir
-    |> Application.fetch_env!(__MODULE__)
-    |> Keyword.fetch!(:radix_superadmin_password)
-  end
-
-  def radix_metrics_username do
-    :radixir
-    |> Application.fetch_env!(__MODULE__)
-    |> Keyword.fetch!(:radix_metrics_username)
-  end
-
-  def radix_metrics_password do
-    :radixir
-    |> Application.fetch_env!(__MODULE__)
-    |> Keyword.fetch!(:radix_metrics_password)
+    |> Application.get_env(__MODULE__, [])
+    |> Keyword.get(:radix_passwords, "")
+    |> String.split(", ")
   end
 
   def radix_testnet? do
     :radixir
-    |> Application.fetch_env!(__MODULE__)
-    |> Keyword.fetch!(:radix_testnet)
+    |> Application.get_env(__MODULE__, [])
+    |> Keyword.get(:radix_testnet)
     |> case do
       "true" -> true
       _ -> false
     end
+  end
+
+  @spec radix_auth(integer) :: [{:password, any} | {:username, any}, ...]
+  def radix_auth(index) do
+    usernames = radix_usernames()
+    passwords = radix_passwords()
+    [username: Enum.at(usernames, index), password: Enum.at(passwords, index)]
   end
 
   def network do
