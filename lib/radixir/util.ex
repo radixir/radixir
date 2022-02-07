@@ -75,10 +75,14 @@ defmodule Radixir.Util do
 
   def encode16(data), do: Base.encode16(data, case: :lower)
 
-  def many_map_puts(data, keys_values) do
+  def nested_map_put(data, keys, value) do
+    put_in(data, Enum.map(keys, &Access.key(&1, %{})), value)
+  end
+
+  def many_nested_map_puts(keys_values, data \\ %{}) do
     # [[keys: [:a, :b, :c], value: 4],[keys: [:z, :y, :x], value: 90]]
     Enum.reduce(keys_values, data, fn x, data ->
-      put_in(data, Enum.map(x[:keys], &Access.key(&1, %{})), x[:value])
+      nested_map_put(data, x[:keys], x[:value])
     end)
   end
 
