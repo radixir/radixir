@@ -75,6 +75,13 @@ defmodule Radixir.Util do
 
   def encode16(data), do: Base.encode16(data, case: :lower)
 
+  def many_map_puts(data, keys_values) do
+    # [[keys: [:a, :b, :c], value: 4],[keys: [:z, :y, :x], value: 90]]
+    Enum.reduce(keys_values, data, fn x, data ->
+      put_in(data, Enum.map(x[:keys], &Access.key(&1, %{})), x[:value])
+    end)
+  end
+
   defp get_dh(private_key_hex, radix_address) do
     with {:ok, private_key_secret} <- Key.private_key_to_secret(private_key_hex),
          {:ok, public_key_hex} <- Key.address_to_public_key(radix_address),
