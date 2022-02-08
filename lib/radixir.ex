@@ -54,6 +54,6 @@ defmodule Radixir do
 
     actions = [create_token_action_1, create_token_action_2]
 
-    Util.map_put(body, [:actions], actions)
+    Util.add_actions(body, actions)
   end
 end

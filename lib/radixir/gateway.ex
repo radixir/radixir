@@ -35,19 +35,53 @@ defmodule Radixir.Gateway do
     stitch_plan ++ stitch_plans
   end
 
-  def public_key(stitch_plans, params) do
+  def validator_identifier(stitch_plans, params) do
     schema = [
-      hex: [
+      address: [
         type: :string,
         required: true
       ]
     ]
 
-    hex =
+    address =
       NimbleOptions.validate!(params, schema)
-      |> Keyword.get(:hex)
+      |> Keyword.get(:address)
 
-    stitch_plan = [[keys: [:public_key, :hex], value: hex]]
+    stitch_plan = [[keys: [:validator_identifier, :address], value: address]]
+
+    stitch_plan ++ stitch_plans
+  end
+
+  def token_identifier(stitch_plans, params) do
+    schema = [
+      rri: [
+        type: :string,
+        required: true
+      ]
+    ]
+
+    rri =
+      NimbleOptions.validate!(params, schema)
+      |> Keyword.get(:rri)
+
+    stitch_plan = [[keys: [:token_identifier, :rri], value: rri]]
+
+    stitch_plan ++ stitch_plans
+  end
+
+  def transaction_identifier(stitch_plans, params) do
+    schema = [
+      hash: [
+        type: :string,
+        required: true
+      ]
+    ]
+
+    hash =
+      NimbleOptions.validate!(params, schema)
+      |> Keyword.get(:hash)
+
+    stitch_plan = [[keys: [:transaction_identifier, :hash], value: hash]]
 
     stitch_plan ++ stitch_plans
   end
@@ -91,6 +125,91 @@ defmodule Radixir.Gateway do
     stitch_plan ++ stitch_plans
   end
 
+  def public_key(stitch_plans, params) do
+    schema = [
+      hex: [
+        type: :string,
+        required: true
+      ]
+    ]
+
+    hex =
+      NimbleOptions.validate!(params, schema)
+      |> Keyword.get(:hex)
+
+    stitch_plan = [[keys: [:public_key, :hex], value: hex]]
+
+    stitch_plan ++ stitch_plans
+  end
+
+  def symbol(stitch_plans, params) do
+    schema = [
+      symbol: [
+        type: :string,
+        required: true
+      ]
+    ]
+
+    symbol =
+      NimbleOptions.validate!(params, schema)
+      |> Keyword.get(:symbol)
+
+    stitch_plan = [[keys: [:symbol], value: symbol]]
+
+    stitch_plan ++ stitch_plans
+  end
+
+  def unsigned_transaction(stitch_plans, params) do
+    schema = [
+      unsigned_transaction: [
+        type: :string,
+        required: true
+      ]
+    ]
+
+    unsigned_transaction =
+      NimbleOptions.validate!(params, schema)
+      |> Keyword.get(:unsigned_transaction)
+
+    stitch_plan = [[keys: [:unsigned_transaction], value: unsigned_transaction]]
+
+    stitch_plan ++ stitch_plans
+  end
+
+  def cursor(stitch_plans, params) do
+    schema = [
+      cursor: [
+        type: :string,
+        required: true
+      ]
+    ]
+
+    cursor =
+      NimbleOptions.validate!(params, schema)
+      |> Keyword.get(:cursor)
+
+    stitch_plan = [[keys: [:cursor], value: cursor]]
+
+    stitch_plan ++ stitch_plans
+  end
+
+  def limit(stitch_plans, params) do
+    schema = [
+      limit: [
+        type: :integer,
+        required: true
+      ]
+    ]
+
+    limit =
+      NimbleOptions.validate!(params, schema)
+      |> Keyword.get(:limit)
+
+    stitch_plan = [[keys: [:limit], value: limit]]
+
+    stitch_plan ++ stitch_plans
+  end
+
   def fee_payer(stitch_plans, params) do
     schema = [
       address: [
@@ -125,10 +244,66 @@ defmodule Radixir.Gateway do
     stitch_plan ++ stitch_plans
   end
 
+  def submit(stitch_plans, params) do
+    schema = [
+      submit: [
+        type: :boolean,
+        required: true
+      ]
+    ]
+
+    submit =
+      NimbleOptions.validate!(params, schema)
+      |> Keyword.get(:submit)
+
+    stitch_plan = [[keys: [:submit], value: submit]]
+
+    stitch_plan ++ stitch_plans
+  end
+
+  def signature(stitch_plans, params) do
+    schema = [
+      bytes: [
+        type: :string,
+        required: true
+      ],
+      hex: [
+        type: :string,
+        required: true
+      ]
+    ]
+
+    results = NimbleOptions.validate!(params, schema)
+
+    bytes = [keys: [:signature, :bytes], value: Keyword.get(results, :bytes)]
+    hex = [keys: [:signature, :public_key, :hex], value: Keyword.get(results, :hex)]
+
+    stitch_plan = [bytes, hex]
+
+    stitch_plan ++ stitch_plans
+  end
+
+  def signed_transaction(stitch_plans, params) do
+    schema = [
+      signed_transaction: [
+        type: :string,
+        required: true
+      ]
+    ]
+
+    signed_transaction =
+      NimbleOptions.validate!(params, schema)
+      |> Keyword.get(:signed_transaction)
+
+    stitch_plan = [[keys: [:signed_transaction], value: signed_transaction]]
+
+    stitch_plan ++ stitch_plans
+  end
+
   def disable_token_mint_and_burn(stitch_plans, params) do
     schema = [
       disable_token_mint_and_burn: [
-        type: :string,
+        type: :boolean,
         required: true
       ]
     ]
