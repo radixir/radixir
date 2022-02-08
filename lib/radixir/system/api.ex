@@ -1,4 +1,4 @@
-defmodule Radixir.SystemAPI do
+defmodule Radixir.System.API do
   alias Radixir.HTTP
 
   def get_version(url, username, password, options \\ []) do

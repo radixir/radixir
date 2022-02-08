@@ -1,4 +1,4 @@
-defmodule Radixir.CoreAPI do
+defmodule Radixir.Core.API do
   alias Radixir.HTTP
 
   def get_network_configuration(url, username, password, options \\ []) do

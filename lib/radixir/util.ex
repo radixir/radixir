@@ -75,6 +75,12 @@ defmodule Radixir.Util do
 
   def encode16(data), do: Base.encode16(data, case: :lower)
 
+  def optional_params(nil, _keys), do: []
+
+  def optional_params(value, keys) do
+    [keys: keys, value: value]
+  end
+
   def stitch(keys_values, data \\ %{}) do
     # [[keys: [:a, :b, :c], value: 4],[keys: [:z, :y, :x], value: 90]]
     Enum.reduce(keys_values, data, fn x, data ->
@@ -82,7 +88,7 @@ defmodule Radixir.Util do
     end)
   end
 
-  defp map_put(data, keys, value) do
+  def map_put(data, keys, value) do
     put_in(data, Enum.map(keys, &Access.key(&1, %{})), value)
   end
 

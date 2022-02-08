@@ -31,16 +31,6 @@ defmodule Radixir.Config do
     |> process_usernames_passwords("no passwords")
   end
 
-  defp process_usernames_passwords(nil, message), do: {:error, message}
-
-  defp process_usernames_passwords(content, error_message) do
-    String.split(content, ", ")
-    |> case do
-      [""] -> {:error, error_message}
-      items -> {:ok, items}
-    end
-  end
-
   def radix_testnet? do
     :radixir
     |> Application.get_env(__MODULE__)
@@ -60,6 +50,24 @@ defmodule Radixir.Config do
     end
   end
 
+  def network do
+    if radix_testnet?() do
+      "stokenet"
+    else
+      "mainnet"
+    end
+  end
+
+  defp process_usernames_passwords(nil, message), do: {:error, message}
+
+  defp process_usernames_passwords(content, error_message) do
+    String.split(content, ", ")
+    |> case do
+      [""] -> {:error, error_message}
+      items -> {:ok, items}
+    end
+  end
+
   defp valid_length(usernames, passwords) do
     usernames_length = Enum.count(usernames)
     passwords_length = Enum.count(passwords)
@@ -76,14 +84,6 @@ defmodule Radixir.Config do
       {:ok, index}
     else
       {:error, "invalid index for accessing usernames and passwords"}
-    end
-  end
-
-  def network do
-    if radix_testnet?() do
-      "stokenet"
-    else
-      "mainnet"
     end
   end
 end

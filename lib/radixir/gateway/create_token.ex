@@ -1,12 +1,8 @@
-defmodule Radixir.Gateway.Actions.CreateToken do
-  alias Radixir.Util
-
-  @agent :create_token
-
+defmodule Radixir.Gateway.CreateToken do
   def type(stitch_plans) do
-    keys_values = [[keys: [:type], value: "CreateTokenDefinition"]]
-    put(keys_values)
-    stitch_plans
+    stitch_plan = [[keys: [:type], value: "CreateTokenDefinition"]]
+
+    stitch_plan ++ stitch_plans
   end
 
   def token_properties(stitch_plans, params) do
@@ -64,10 +60,9 @@ defmodule Radixir.Gateway.Actions.CreateToken do
       value: Keyword.get(results, :granularity)
     ]
 
-    keys_values = [name, description, icon_url, url, symbol, is_supply_mutable, granularity]
+    stitch_plan = [name, description, icon_url, url, symbol, is_supply_mutable, granularity]
 
-    put(keys_values)
-    stitch_plans
+    stitch_plan ++ stitch_plans
   end
 
   def owner(stitch_plans, params) do
@@ -82,10 +77,9 @@ defmodule Radixir.Gateway.Actions.CreateToken do
       NimbleOptions.validate!(params, schema)
       |> Keyword.get(:address)
 
-    keys_values = [[keys: [:token_properties, :owner, :address], value: address]]
+    stitch_plan = [[keys: [:token_properties, :owner, :address], value: address]]
 
-    put(keys_values)
-    stitch_plans
+    stitch_plan ++ stitch_plans
   end
 
   def token_supply(stitch_plans, params) do
@@ -100,10 +94,9 @@ defmodule Radixir.Gateway.Actions.CreateToken do
       NimbleOptions.validate!(params, schema)
       |> Keyword.get(:value)
 
-    keys_values = [[keys: [:token_supply, :value], value: value]]
+    stitch_plan = [[keys: [:token_supply, :value], value: value]]
 
-    put(keys_values)
-    stitch_plans
+    stitch_plan ++ stitch_plans
   end
 
   def token_identifier(stitch_plans, params) do
@@ -118,10 +111,9 @@ defmodule Radixir.Gateway.Actions.CreateToken do
       NimbleOptions.validate!(params, schema)
       |> Keyword.get(:rri)
 
-    keys_values = [[keys: [:token_supply, :token_identifier, :rri], value: rri]]
+    stitch_plan = [[keys: [:token_supply, :token_identifier, :rri], value: rri]]
 
-    put(keys_values)
-    stitch_plans
+    stitch_plan ++ stitch_plans
   end
 
   def to_account(stitch_plans, params) do
@@ -136,31 +128,8 @@ defmodule Radixir.Gateway.Actions.CreateToken do
       NimbleOptions.validate!(params, schema)
       |> Keyword.get(:address)
 
-    keys_values = [[keys: [:to_account, :address], value: address]]
+    stitch_plan = [[keys: [:to_account, :address], value: address]]
 
-    put(keys_values)
-    stitch_plans
-  end
-
-  def get do
-    case Process.whereis(@agent) do
-      nil -> %{}
-      _ -> Agent.get(@agent, fn map -> map end)
-    end
-  end
-
-  def stop do
-    case Process.whereis(@agent) do
-      nil -> {:error, "not running"}
-      _ -> Agent.stop(@agent)
-    end
-  end
-
-  defp put(keys_values) do
-    if !Process.whereis(@agent) do
-      Agent.start_link(fn -> %{} end, name: @agent)
-    end
-
-    Agent.update(@agent, fn content -> Util.stitch(keys_values, content) end)
+    stitch_plan ++ stitch_plans
   end
 end

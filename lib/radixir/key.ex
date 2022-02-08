@@ -4,26 +4,26 @@ defmodule Radixir.Key do
 
   def generate(), do: Curvy.generate_key() |> format_keys()
 
-  def from_private_key(private_key_hex) do
-    with {:ok, keypair} <- private_key_to_keypair(private_key_hex) do
+  def from_private_key(private_key) do
+    with {:ok, keypair} <- private_key_to_keypair(private_key) do
       {:ok, format_keys(keypair)}
     end
   end
 
-  def address_to_public_key(radix_address) do
-    with {:ok, _hrp, <<4>> <> public_key_bytes} <- Bech32.decode(radix_address) do
+  def address_to_public_key(address) do
+    with {:ok, _hrp, <<4>> <> public_key_bytes} <- Bech32.decode(address) do
       {:ok, Util.encode16(public_key_bytes)}
     end
   end
 
-  def private_key_to_secret(private_key_hex) do
-    with {:ok, keypair} <- private_key_to_keypair(private_key_hex) do
+  def private_key_to_secret(private_key) do
+    with {:ok, keypair} <- private_key_to_keypair(private_key) do
       {:ok, :binary.decode_unsigned(keypair.privkey)}
     end
   end
 
-  def sign_data(data, private_key_hex) do
-    with {:ok, keypair} <- private_key_to_keypair(private_key_hex),
+  def sign_data(data, private_key) do
+    with {:ok, keypair} <- private_key_to_keypair(private_key),
          {:ok, data} <- Util.decode16(data, "data") do
       {:ok, Curvy.sign(data, Curvy.Key.to_privkey(keypair), encoding: :hex, hash: :none)}
     end
@@ -32,10 +32,10 @@ defmodule Radixir.Key do
   defp check_private_key_size(<<private_key_bytes::binary-size(32)>>),
     do: {:ok, private_key_bytes}
 
-  defp check_private_key_size(_), do: {:error, "invalid format for private_key_hex"}
+  defp check_private_key_size(_), do: {:error, "invalid format for private_key"}
 
-  defp private_key_to_keypair(private_key_hex) do
-    with {:ok, private_key} <- Util.decode16(private_key_hex, "private_key_hex"),
+  defp private_key_to_keypair(private_key) do
+    with {:ok, private_key} <- Util.decode16(private_key, "private_key"),
          {:ok, private_key} <- check_private_key_size(private_key) do
       {:ok, Curvy.Key.from_privkey(private_key)}
     end

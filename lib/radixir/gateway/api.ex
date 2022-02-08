@@ -1,4 +1,4 @@
-defmodule Radixir.GatewayAPI do
+defmodule Radixir.Gateway.API do
   alias Radixir.HTTP
 
   def get_info(url) do
