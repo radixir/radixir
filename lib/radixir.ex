@@ -1,59 +1,22 @@
 defmodule Radixir do
-  alias Radixir.Gateway
-  alias Radixir.Gateway.CreateToken
+  alias Radixir.Core.DeriveEntityIdentifier
   alias Radixir.Util
 
-  def get_account_balances() do
+  def derive_entity_identifier() do
     []
-    |> Gateway.network_identifier(network: "mainnet")
-    |> Gateway.account_identifier(address: "sdfdf")
-    |> Gateway.at_state_identifier(version: 45)
+    |> DeriveEntityIdentifier.network_identifier(network: "mainnet")
+    |> DeriveEntityIdentifier.public_key(
+      hex: "0276652d0e13c3f8733cd92cc487b66a2ea900754e624077241965497763c1db96"
+    )
+    |> DeriveEntityIdentifier.Metadata.PreparedStakes.type()
+    |> DeriveEntityIdentifier.Metadata.PreparedStakes.validator(
+      address: "rdx1qsp8vefdpcfu87rn8nvje3y8ke4za2gqw48xysrhysvk2jthv0qah9shn6ser"
+    )
+    |> DeriveEntityIdentifier.Metadata.PreparedStakes.sub_entity(
+      address: "rdx1qspfwatx9gl6k2j5063thkcwtyajv2w8z29pfuzzl5rynymm9p3ggrsqss2vv",
+      validator_address: "rdx1qspyekyu6xzyhuznlap0me5exzhf4aa32hv83766l8h5hfnl5c3umlc2txzzs",
+      epoch_unlock: 300
+    )
     |> Util.stitch()
-  end
-
-  def create_token() do
-    body =
-      []
-      |> Gateway.network_identifier(network: "mainnet")
-      |> Gateway.fee_payer(address: "lkjhldkhakjshdkjahlsdf")
-      |> Util.stitch()
-
-    create_token_action_1 =
-      []
-      |> CreateToken.token_properties(
-        name: "JEC",
-        description: "the jec coin rocks",
-        icon_url: "here.com",
-        url: "there.com",
-        symbol: "jec",
-        is_supply_mutable: true,
-        granularity: "343"
-      )
-      |> CreateToken.owner(address: "ownder address")
-      |> CreateToken.token_supply(value: "34343434")
-      |> CreateToken.token_identifier(rri: "sdsdfsdfsdsfs")
-      |> CreateToken.to_account(address: "to account address")
-      |> Util.stitch()
-
-    create_token_action_2 =
-      []
-      |> CreateToken.token_properties(
-        name: "JEC",
-        description: "the jec coin rocks",
-        icon_url: "here.com",
-        url: "there.com",
-        symbol: "jec",
-        is_supply_mutable: true,
-        granularity: "343"
-      )
-      |> CreateToken.owner(address: "ownder address")
-      |> CreateToken.token_supply(value: "34343434")
-      |> CreateToken.token_identifier(rri: "sdsdfsdfsdsfs")
-      |> CreateToken.to_account(address: "to account address")
-      |> Util.stitch()
-
-    actions = [create_token_action_1, create_token_action_2]
-
-    Util.add_actions(body, actions)
   end
 end

@@ -88,10 +88,6 @@ defmodule Radixir.Util do
     end)
   end
 
-  def add_actions(data, actions) do
-    map_put(data, [:actions], actions)
-  end
-
   def map_put(data, keys, value) do
     put_in(data, Enum.map(keys, &Access.key(&1, %{})), value)
   end

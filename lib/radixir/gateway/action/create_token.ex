@@ -1,8 +1,8 @@
-defmodule Radixir.Gateway.CreateToken do
-  def type(stitch_plans) do
-    stitch_plan = [[keys: [:type], value: "CreateTokenDefinition"]]
+defmodule Radixir.Gateway.Action.CreateToken do
+  alias Radixir.RequestPiece
 
-    stitch_plan ++ stitch_plans
+  def type(stitch_plans) do
+    RequestPiece.type(stitch_plans, type: "CreateTokenDefinition")
   end
 
   def token_properties(stitch_plans, params) do
@@ -100,36 +100,8 @@ defmodule Radixir.Gateway.CreateToken do
   end
 
   def token_identifier(stitch_plans, params) do
-    schema = [
-      rri: [
-        type: :string,
-        required: true
-      ]
-    ]
-
-    rri =
-      NimbleOptions.validate!(params, schema)
-      |> Keyword.get(:rri)
-
-    stitch_plan = [[keys: [:token_supply, :token_identifier, :rri], value: rri]]
-
-    stitch_plan ++ stitch_plans
+    RequestPiece.token_identifier(stitch_plans, params, [:token_supply])
   end
 
-  def to_account(stitch_plans, params) do
-    schema = [
-      address: [
-        type: :string,
-        required: true
-      ]
-    ]
-
-    address =
-      NimbleOptions.validate!(params, schema)
-      |> Keyword.get(:address)
-
-    stitch_plan = [[keys: [:to_account, :address], value: address]]
-
-    stitch_plan ++ stitch_plans
-  end
+  defdelegate to_account(stitch_plans, params), to: RequestPiece
 end
