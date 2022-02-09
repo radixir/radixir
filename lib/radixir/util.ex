@@ -33,6 +33,35 @@ defmodule Radixir.Util do
     {url, options}
   end
 
+  def get_auth_from_options(options) do
+    {username, options} = get_username_from_options(options)
+    {password, options} = get_password_from_options(options)
+    {auth_index, options} = get_auth_index_from_options(options)
+
+    parse_auth_results(username, password, auth_index, options)
+  end
+
+  defp parse_auth_results(nil = _username, nil = _password, nil = _auth_index, _options),
+    do: {:error, "no auth provided"}
+
+  defp parse_auth_results(_username, nil = _password, nil = _auth_index, _options),
+    do: {:error, "no password provided"}
+
+  defp parse_auth_results(nil = _username, _password, nil = _auth_index, _options),
+    do: {:error, "no username provided"}
+
+  defp parse_auth_results(nil = _username, nil = _password, auth_index, options) do
+    with {:ok, username, password} <- Config.radix_auth(auth_index) do
+      {:ok, username, password, options}
+    end
+  end
+
+  defp parse_auth_results(username, password, nil = _auth_index, options),
+    do: {:ok, username, password, options}
+
+  defp parse_auth_results(username, password, _auth_index, options),
+    do: {:ok, username, password, options}
+
   defp get_username_from_options(options) do
     username = Keyword.get(options, :username)
     options = Keyword.delete(options, :username)
@@ -49,29 +78,6 @@ defmodule Radixir.Util do
     auth_index = Keyword.get(options, :auth_index)
     options = Keyword.delete(options, :auth_index)
     {auth_index, options}
-  end
-
-  defp parse_auth_results(nil = _username, nil = _password, nil = _auth_index, _options),
-    do: {:error, "no auth provided"}
-
-  defp parse_auth_results(nil = _username, nil = _password, auth_index, options) do
-    with {:ok, username, password} <- Config.radix_auth(auth_index) do
-      {:ok, username, password, options}
-    end
-  end
-
-  defp parse_auth_results(username, password, nil = _auth_index, options),
-    do: {:ok, username, password, options}
-
-  defp parse_auth_results(username, password, _auth_index, options),
-    do: {:ok, username, password, options}
-
-  def get_auth_from_options(options) do
-    {username, options} = get_username_from_options(options)
-    {password, options} = get_password_from_options(options)
-    {auth_index, options} = get_auth_index_from_options(options)
-
-    parse_auth_results(username, password, auth_index, options)
   end
 
   def encrypt_message(message, private_key_hex, radix_address) do
