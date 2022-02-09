@@ -4,7 +4,7 @@ defmodule Radixir.Core.API do
 
   def get_network_configuration(options \\ []) do
     with {:ok, username, password, options} <- Util.get_auth_from_options(options),
-         {url, options} <- Util.get_url_from_options(options) do
+         {:ok, url, options} <- Util.get_url_from_options(options, :core) do
       auth = [auth: {username, password}]
       options = Keyword.merge(auth, options)
       HTTP.post(url, "/network/configuration", %{}, options)
@@ -13,7 +13,7 @@ defmodule Radixir.Core.API do
 
   def get_network_status(body, options \\ []) do
     with {:ok, username, password, options} <- Util.get_auth_from_options(options),
-         {url, options} <- Util.get_url_from_options(options) do
+         {:ok, url, options} <- Util.get_url_from_options(options, :core) do
       auth = [auth: {username, password}]
       options = Keyword.merge(auth, options)
       HTTP.post(url, "/network/status", body, options)
@@ -22,7 +22,7 @@ defmodule Radixir.Core.API do
 
   def get_entity_information(body, options \\ []) do
     with {:ok, username, password, options} <- Util.get_auth_from_options(options),
-         {url, options} <- Util.get_url_from_options(options) do
+         {:ok, url, options} <- Util.get_url_from_options(options, :core) do
       auth = [auth: {username, password}]
       options = Keyword.merge(auth, options)
       HTTP.post(url, "/entity", body, options)
@@ -31,7 +31,7 @@ defmodule Radixir.Core.API do
 
   def get_mempool_transactions(body, options \\ []) do
     with {:ok, username, password, options} <- Util.get_auth_from_options(options),
-         {url, options} <- Util.get_url_from_options(options) do
+         {:ok, url, options} <- Util.get_url_from_options(options, :core) do
       auth = [auth: {username, password}]
       options = Keyword.merge(auth, options)
       HTTP.post(url, "/mempool", body, options)
@@ -40,7 +40,7 @@ defmodule Radixir.Core.API do
 
   def get_mempool_transaction(body, options \\ []) do
     with {:ok, username, password, options} <- Util.get_auth_from_options(options),
-         {url, options} <- Util.get_url_from_options(options) do
+         {:ok, url, options} <- Util.get_url_from_options(options, :core) do
       auth = [auth: {username, password}]
       options = Keyword.merge(auth, options)
       HTTP.post(url, "/mempool/transaction", body, options)
@@ -49,7 +49,7 @@ defmodule Radixir.Core.API do
 
   def get_committed_transactions(body, options \\ []) do
     with {:ok, username, password, options} <- Util.get_auth_from_options(options),
-         {url, options} <- Util.get_url_from_options(options) do
+         {:ok, url, options} <- Util.get_url_from_options(options, :core) do
       auth = [auth: {username, password}]
       options = Keyword.merge(auth, options)
       HTTP.post(url, "/transactions", body, options)
@@ -58,7 +58,7 @@ defmodule Radixir.Core.API do
 
   def derive_entity_identifier(body, options \\ []) do
     with {:ok, username, password, options} <- Util.get_auth_from_options(options),
-         {url, options} <- Util.get_url_from_options(options) do
+         {:ok, url, options} <- Util.get_url_from_options(options, :core) do
       auth = [auth: {username, password}]
       options = Keyword.merge(auth, options)
       HTTP.post(url, "/construction/derive", body, options)
@@ -67,7 +67,7 @@ defmodule Radixir.Core.API do
 
   def build_transaction(body, options \\ []) do
     with {:ok, username, password, options} <- Util.get_auth_from_options(options),
-         {url, options} <- Util.get_url_from_options(options) do
+         {:ok, url, options} <- Util.get_url_from_options(options, :core) do
       auth = [auth: {username, password}]
       options = Keyword.merge(auth, options)
       HTTP.post(url, "/construction/build", body, options)
@@ -76,7 +76,7 @@ defmodule Radixir.Core.API do
 
   def parse_transaction(body, options \\ []) do
     with {:ok, username, password, options} <- Util.get_auth_from_options(options),
-         {url, options} <- Util.get_url_from_options(options) do
+         {:ok, url, options} <- Util.get_url_from_options(options, :core) do
       auth = [auth: {username, password}]
       options = Keyword.merge(auth, options)
       HTTP.post(url, "/construction/parse", body, options)
@@ -85,7 +85,7 @@ defmodule Radixir.Core.API do
 
   def finalize_transaction(body, options \\ []) do
     with {:ok, username, password, options} <- Util.get_auth_from_options(options),
-         {url, options} <- Util.get_url_from_options(options) do
+         {:ok, url, options} <- Util.get_url_from_options(options, :core) do
       auth = [auth: {username, password}]
       options = Keyword.merge(auth, options)
       HTTP.post(url, "/construction/finalize", body, options)
@@ -94,7 +94,7 @@ defmodule Radixir.Core.API do
 
   def get_transaction_hash(body, options \\ []) do
     with {:ok, username, password, options} <- Util.get_auth_from_options(options),
-         {url, options} <- Util.get_url_from_options(options) do
+         {:ok, url, options} <- Util.get_url_from_options(options, :core) do
       auth = [auth: {username, password}]
       options = Keyword.merge(auth, options)
       HTTP.post(url, "/construction/hash", body, options)
@@ -103,7 +103,7 @@ defmodule Radixir.Core.API do
 
   def submit_transaction(body, options \\ []) do
     with {:ok, username, password, options} <- Util.get_auth_from_options(options),
-         {url, options} <- Util.get_url_from_options(options) do
+         {:ok, url, options} <- Util.get_url_from_options(options, :core) do
       auth = [auth: {username, password}]
       options = Keyword.merge(auth, options)
       HTTP.post(url, "/construction/submit", body, options)
@@ -112,7 +112,7 @@ defmodule Radixir.Core.API do
 
   def get_public_keys(body, options \\ []) do
     with {:ok, username, password, options} <- Util.get_auth_from_options(options),
-         {url, options} <- Util.get_url_from_options(options) do
+         {:ok, url, options} <- Util.get_url_from_options(options, :core) do
       auth = [auth: {username, password}]
       options = Keyword.merge(auth, options)
       HTTP.post(url, "/key/list", body, options)
@@ -121,7 +121,7 @@ defmodule Radixir.Core.API do
 
   def sign_transaction(body, options \\ []) do
     with {:ok, username, password, options} <- Util.get_auth_from_options(options),
-         {url, options} <- Util.get_url_from_options(options) do
+         {:ok, url, options} <- Util.get_url_from_options(options, :core) do
       auth = [auth: {username, password}]
       options = Keyword.merge(auth, options)
       HTTP.post(url, "/key/sign", body, options)

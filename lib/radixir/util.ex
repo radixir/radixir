@@ -27,10 +27,26 @@ defmodule Radixir.Util do
     |> String.replace_prefix("", "0000")
   end
 
-  def get_url_from_options(options) do
-    url = Keyword.get(options, :url, Config.radix_gateway_api_url())
+  def get_url_from_options(options, api) do
+    url =
+      case api do
+        :gateway ->
+          Keyword.get(options, :url, Config.radix_gateway_api_url())
+
+        :core ->
+          Keyword.get(options, :url, Config.radix_core_api_url())
+
+        :system ->
+          Keyword.get(options, :url, Config.radix_system_api_url())
+      end
+
     options = Keyword.delete(options, :url)
-    {url, options}
+
+    if url do
+      {:ok, url, options}
+    else
+      {:error, "no url available"}
+    end
   end
 
   def get_auth_from_options(options) do

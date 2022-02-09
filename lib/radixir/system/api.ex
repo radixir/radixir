@@ -4,7 +4,7 @@ defmodule Radixir.System.API do
 
   def get_version(options \\ []) do
     with {:ok, username, password, options} <- Util.get_auth_from_options(options),
-         {url, options} <- Util.get_url_from_options(options) do
+         {:ok, url, options} <- Util.get_url_from_options(options, :system) do
       auth = [auth: {username, password}]
       options = Keyword.merge(auth, options)
       HTTP.get(url, "/system/version", options)
@@ -13,7 +13,7 @@ defmodule Radixir.System.API do
 
   def get_health(options \\ []) do
     with {:ok, username, password, options} <- Util.get_auth_from_options(options),
-         {url, options} <- Util.get_url_from_options(options) do
+         {:ok, url, options} <- Util.get_url_from_options(options, :system) do
       auth = [auth: {username, password}]
       options = Keyword.merge(auth, options)
       HTTP.get(url, "/system/health", options)
@@ -22,7 +22,7 @@ defmodule Radixir.System.API do
 
   def get_configuration(options \\ []) do
     with {:ok, username, password, options} <- Util.get_auth_from_options(options),
-         {url, options} <- Util.get_url_from_options(options) do
+         {:ok, url, options} <- Util.get_url_from_options(options, :system) do
       auth = [auth: {username, password}]
       options = Keyword.merge(auth, options)
       HTTP.get(url, "/system/configuration", options)
@@ -31,7 +31,7 @@ defmodule Radixir.System.API do
 
   def get_peers(options \\ []) do
     with {:ok, username, password, options} <- Util.get_auth_from_options(options),
-         {url, options} <- Util.get_url_from_options(options) do
+         {:ok, url, options} <- Util.get_url_from_options(options, :system) do
       auth = [auth: {username, password}]
       options = Keyword.merge(auth, options)
       HTTP.get(url, "/system/peers", options)
@@ -40,7 +40,7 @@ defmodule Radixir.System.API do
 
   def get_address_book(options \\ []) do
     with {:ok, username, password, options} <- Util.get_auth_from_options(options),
-         {url, options} <- Util.get_url_from_options(options) do
+         {:ok, url, options} <- Util.get_url_from_options(options, :system) do
       auth = [auth: {username, password}]
       options = Keyword.merge(auth, options)
       HTTP.get(url, "/system/addressbook", options)
@@ -49,7 +49,7 @@ defmodule Radixir.System.API do
 
   def get_metrics(options \\ []) do
     with {:ok, username, password, options} <- Util.get_auth_from_options(options),
-         {url, options} <- Util.get_url_from_options(options) do
+         {:ok, url, options} <- Util.get_url_from_options(options, :system) do
       auth = [auth: {username, password}]
       options = Keyword.merge(auth, options)
       HTTP.get(url, "/system/metrics", options)
@@ -58,7 +58,7 @@ defmodule Radixir.System.API do
 
   def get_prometheus_metrics(options \\ []) do
     with {:ok, username, password, options} <- Util.get_auth_from_options(options),
-         {url, options} <- Util.get_url_from_options(options) do
+         {:ok, url, options} <- Util.get_url_from_options(options, :system) do
       auth = [auth: {username, password}]
       options = Keyword.merge(auth, options)
       HTTP.get(url, "/prometheus/metrics", options)
