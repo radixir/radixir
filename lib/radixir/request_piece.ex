@@ -1,4 +1,5 @@
 defmodule Radixir.RequestPiece do
+  alias Radixir.Config
   alias Radixir.Util
 
   def account_identifier(stitch_plans, params) do
@@ -256,11 +257,11 @@ defmodule Radixir.RequestPiece do
     stitch_plan ++ stitch_plans
   end
 
-  def network_identifier(stitch_plans, params) do
+  def network_identifier(stitch_plans, params \\ []) do
     schema = [
       network: [
         type: :string,
-        required: true
+        default: Config.network()
       ]
     ]
 

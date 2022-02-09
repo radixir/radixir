@@ -46,7 +46,7 @@ defmodule Radixir.Config do
          {:ok, passwords} <- radix_passwords(),
          {:ok, length} <- valid_length(usernames, passwords),
          {:ok, index} <- valid_index(length, index) do
-      [username: Enum.at(usernames, index), password: Enum.at(passwords, index)]
+      {:ok, Enum.at(usernames, index), Enum.at(passwords, index)}
     end
   end
 
@@ -58,7 +58,7 @@ defmodule Radixir.Config do
     end
   end
 
-  defp process_usernames_passwords(nil, message), do: {:error, message}
+  defp process_usernames_passwords(nil, error_message), do: {:error, error_message}
 
   defp process_usernames_passwords(content, error_message) do
     String.split(content, ", ")

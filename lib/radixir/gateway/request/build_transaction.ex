@@ -2,7 +2,7 @@ defmodule Radixir.Gateway.Request.BuildTransaction do
   alias Radixir.RequestPiece
   alias Radixir.Util
 
-  defdelegate network_identifier(stitch_plans, params), to: RequestPiece
+  defdelegate network_identifier(stitch_plans, params \\ []), to: RequestPiece
   defdelegate at_state_identifier(stitch_plans, params), to: RequestPiece
 
   def add_actions(request, actions) do
