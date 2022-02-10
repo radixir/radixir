@@ -160,7 +160,7 @@ defmodule Radixir.RequestPiece do
     stitch_plan ++ stitch_plans
   end
 
-  def amount(stitch_plans, params) do
+  def amount(stitch_plans, params, prefix_keys \\ []) do
     schema = [
       value: [
         type: :string,
@@ -172,7 +172,7 @@ defmodule Radixir.RequestPiece do
       NimbleOptions.validate!(params, schema)
       |> Keyword.get(:value)
 
-    stitch_plan = [[keys: [:amount, :value], value: value]]
+    stitch_plan = [[keys: prefix_keys ++ [:amount, :value], value: value]]
 
     stitch_plan ++ stitch_plans
   end
@@ -207,6 +207,40 @@ defmodule Radixir.RequestPiece do
       |> Keyword.get(:address)
 
     stitch_plan = [[keys: [:from_account, :address], value: address]]
+
+    stitch_plan ++ stitch_plans
+  end
+
+  def to(stitch_plans, params, prefix_keys \\ []) do
+    schema = [
+      to: [
+        type: :string,
+        required: true
+      ]
+    ]
+
+    to =
+      NimbleOptions.validate!(params, schema)
+      |> Keyword.get(:to)
+
+    stitch_plan = [[keys: prefix_keys ++ [:to], value: to]]
+
+    stitch_plan ++ stitch_plans
+  end
+
+  def from(stitch_plans, params, prefix_keys \\ []) do
+    schema = [
+      from: [
+        type: :string,
+        required: true
+      ]
+    ]
+
+    from =
+      NimbleOptions.validate!(params, schema)
+      |> Keyword.get(:from)
+
+    stitch_plan = [[keys: prefix_keys ++ [:from], value: from]]
 
     stitch_plan ++ stitch_plans
   end

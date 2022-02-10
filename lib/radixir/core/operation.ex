@@ -93,18 +93,17 @@ defmodule Radixir.Core.Operation do
 
   def metadata(stitch_plans, params) do
     schema = [
-      metadata: [
-        metadata: :string,
+      type: [
+        substate_data_hex: :string,
         required: true
       ]
     ]
 
-    # TODO: figure out what goes here
-    metadata =
+    substate_data_hex =
       NimbleOptions.validate!(params, schema)
-      |> Keyword.get(:metadata)
+      |> Keyword.get(:substate_data_hex)
 
-    stitch_plan = [[keys: [:metadata], value: metadata]]
+    stitch_plan = [[keys: [:metadata, :substate_data_hex], value: substate_data_hex]]
 
     stitch_plan ++ stitch_plans
   end
