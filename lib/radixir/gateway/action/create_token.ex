@@ -66,20 +66,7 @@ defmodule Radixir.Gateway.Action.CreateToken do
   end
 
   def owner(stitch_plans, params) do
-    schema = [
-      address: [
-        type: :string,
-        required: true
-      ]
-    ]
-
-    address =
-      NimbleOptions.validate!(params, schema)
-      |> Keyword.get(:address)
-
-    stitch_plan = [[keys: [:token_properties, :owner, :address], value: address]]
-
-    stitch_plan ++ stitch_plans
+    RequestPiece.owner(stitch_plans, params, [:token_properties])
   end
 
   def token_supply(stitch_plans, params) do

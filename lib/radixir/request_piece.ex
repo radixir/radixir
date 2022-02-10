@@ -359,6 +359,23 @@ defmodule Radixir.RequestPiece do
     stitch_plan ++ stitch_plans
   end
 
+  def owner(stitch_plans, params, prefix_keys \\ []) do
+    schema = [
+      address: [
+        type: :string,
+        required: true
+      ]
+    ]
+
+    address =
+      NimbleOptions.validate!(params, schema)
+      |> Keyword.get(:address)
+
+    stitch_plan = [[keys: prefix_keys ++ [:owner, :address], value: address]]
+
+    stitch_plan ++ stitch_plans
+  end
+
   def message(stitch_plans, params) do
     schema = [
       message: [
@@ -462,6 +479,74 @@ defmodule Radixir.RequestPiece do
     hex = [keys: [:signature, :public_key, :hex], value: Keyword.get(results, :hex)]
 
     stitch_plan = [bytes, hex]
+
+    stitch_plan ++ stitch_plans
+  end
+
+  def url(stitch_plans, params, prefix_keys \\ []) do
+    schema = [
+      url: [
+        type: :string,
+        required: true
+      ]
+    ]
+
+    url =
+      NimbleOptions.validate!(params, schema)
+      |> Keyword.get(:url)
+
+    stitch_plan = [[keys: prefix_keys ++ [:url], value: url]]
+
+    stitch_plan ++ stitch_plans
+  end
+
+  def fee(stitch_plans, params, prefix_keys \\ []) do
+    schema = [
+      fee: [
+        type: :integer,
+        required: true
+      ]
+    ]
+
+    fee =
+      NimbleOptions.validate!(params, schema)
+      |> Keyword.get(:fee)
+
+    stitch_plan = [[keys: prefix_keys ++ [:fee], value: fee]]
+
+    stitch_plan ++ stitch_plans
+  end
+
+  def registered(stitch_plans, params, prefix_keys \\ []) do
+    schema = [
+      registered: [
+        type: :boolean,
+        required: true
+      ]
+    ]
+
+    registered =
+      NimbleOptions.validate!(params, schema)
+      |> Keyword.get(:registered)
+
+    stitch_plan = [[keys: prefix_keys ++ [:registered], value: registered]]
+
+    stitch_plan ++ stitch_plans
+  end
+
+  def epoch(stitch_plans, params, prefix_keys \\ []) do
+    schema = [
+      epoch: [
+        type: :integer,
+        required: true
+      ]
+    ]
+
+    epoch =
+      NimbleOptions.validate!(params, schema)
+      |> Keyword.get(:epoch)
+
+    stitch_plan = [[keys: prefix_keys ++ [:epoch], value: epoch]]
 
     stitch_plan ++ stitch_plans
   end
