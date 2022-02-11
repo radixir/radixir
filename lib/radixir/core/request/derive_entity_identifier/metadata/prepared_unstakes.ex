@@ -1,7 +1,7 @@
 defmodule Radixir.Core.Request.DeriveEntityIdentifier.Metadata.PreparedUnstakes do
-  alias Radixir.RequestPiece
+  alias Radixir.StitchPlan
 
   def type(stitch_plans) do
-    RequestPiece.type(stitch_plans, [type: "PreparedUnstakes"], [:metadata])
+    StitchPlan.type(stitch_plans, [type: "PreparedUnstakes"], [:metadata])
   end
 end

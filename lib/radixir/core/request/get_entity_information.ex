@@ -1,11 +1,11 @@
 defmodule Radixir.Core.Request.GetEntityInformation do
-  alias Radixir.RequestPiece
+  alias Radixir.StitchPlan
 
-  defdelegate network_identifier(stitch_plans, params \\ []), to: RequestPiece
+  defdelegate network_identifier(stitch_plans, params \\ []), to: StitchPlan
 
-  defdelegate entity_identifier(stitch_plans, params), to: RequestPiece
+  defdelegate entity_identifier(stitch_plans, params), to: StitchPlan
 
   def sub_entity(stitch_plans, params) do
-    RequestPiece.sub_entity(stitch_plans, params, [:entity_identifer])
+    StitchPlan.sub_entity(stitch_plans, params, [:entity_identifer])
   end
 end

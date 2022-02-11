@@ -1,19 +1,19 @@
 defmodule Radixir.Core.Request.BuildTransaction do
-  alias Radixir.RequestPiece
+  alias Radixir.StitchPlan
   alias Radixir.Util
-  defdelegate network_identifier(stitch_plans, params \\ []), to: RequestPiece
+  defdelegate network_identifier(stitch_plans, params \\ []), to: StitchPlan
 
   def add_operation_groups(request, operations_groups) do
     Util.map_put(request, [:operation_groups], operations_groups)
   end
 
-  defdelegate fee_payer(stitch_plans, params \\ []), to: RequestPiece
+  defdelegate fee_payer(stitch_plans, params \\ []), to: StitchPlan
 
   def sub_entity(stitch_plans, params) do
-    RequestPiece.sub_entity(stitch_plans, params, [:fee_payer])
+    StitchPlan.sub_entity(stitch_plans, params, [:fee_payer])
   end
 
-  defdelegate message(stitch_plans, params), to: RequestPiece
+  defdelegate message(stitch_plans, params), to: StitchPlan
 
   def disable_resource_allocate_and_destroy(stitch_plans, params) do
     schema = [

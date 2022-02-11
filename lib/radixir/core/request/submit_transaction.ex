@@ -1,6 +1,6 @@
 defmodule Radixir.Core.Request.SubmitTransaction do
-  alias Radixir.RequestPiece
+  alias Radixir.StitchPlan
 
-  defdelegate network_identifier(stitch_plans, params \\ []), to: RequestPiece
-  defdelegate signed_transaction(stitch_plans, params), to: RequestPiece
+  defdelegate network_identifier(stitch_plans, params \\ []), to: StitchPlan
+  defdelegate signed_transaction(stitch_plans, params), to: StitchPlan
 end

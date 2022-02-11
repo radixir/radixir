@@ -1,7 +1,7 @@
 defmodule Radixir.Gateway.Request.GetStakePositions do
-  alias Radixir.RequestPiece
+  alias Radixir.StitchPlan
 
-  defdelegate network_identifier(stitch_plans, params \\ []), to: RequestPiece
-  defdelegate account_identifier(stitch_plans, params), to: RequestPiece
-  defdelegate at_state_identifier(stitch_plans, params), to: RequestPiece
+  defdelegate network_identifier(stitch_plans, params \\ []), to: StitchPlan
+  defdelegate account_identifier(stitch_plans, params), to: StitchPlan
+  defdelegate at_state_identifier(stitch_plans, params), to: StitchPlan
 end

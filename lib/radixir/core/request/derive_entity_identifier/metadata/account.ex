@@ -1,7 +1,7 @@
 defmodule Radixir.Core.Request.DeriveEntityIdentifier.Metadata.Account do
-  alias Radixir.RequestPiece
+  alias Radixir.StitchPlan
 
   def type(stitch_plans) do
-    RequestPiece.type(stitch_plans, [type: "Account"], [:metadata])
+    StitchPlan.type(stitch_plans, [type: "Account"], [:metadata])
   end
 end
