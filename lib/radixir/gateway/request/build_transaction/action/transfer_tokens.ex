@@ -1,4 +1,4 @@
-defmodule Radixir.Gateway.Action.TransferTokens do
+defmodule Radixir.Gateway.Request.BuildTransaction.Action.TransferTokens do
   alias Radixir.StitchPlan
 
   def type(stitch_plans) do
