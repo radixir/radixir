@@ -163,7 +163,7 @@ defmodule Radixir.Util do
   end
 
   defp get_dh(private_key_hex, radix_address) do
-    with {:ok, private_key_secret} <- Key.private_key_to_secret(private_key_hex),
+    with {:ok, private_key_secret} <- Key.private_key_to_secret_integer(private_key_hex),
          {:ok, public_key_hex} <- Key.address_to_public_key(radix_address),
          {:ok, public_key_binary} <- decode16(public_key_hex, "public_key_hex"),
          public_keypair <- Curvy.Key.from_pubkey(public_key_binary) do

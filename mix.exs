@@ -14,7 +14,7 @@ defmodule Radixir.MixProject do
       description: description(),
       package: package(),
       deps: deps(),
-      source_url: @source_url
+      docs: docs()
     ]
   end
 
@@ -37,8 +37,19 @@ defmodule Radixir.MixProject do
 
   defp description() do
     """
-    An Elixir wrapper for Radix APIs and functionality.
+    An Elixir library for interacting with RadixDLT.
     """
+  end
+
+  def docs() do
+    [
+      main: "readme",
+      name: "Radixir",
+      source_ref: "v#{@version}",
+      canonical: "http://hexdocs.pm/radixir",
+      source_url: @source_url,
+      extras: ["README.md", "CHANGELOG.md", "LICENSE"]
+    ]
   end
 
   defp package() do

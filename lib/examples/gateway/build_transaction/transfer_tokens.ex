@@ -1,16 +1,14 @@
-defmodule Examples.Gateway.BuildTransaction do
+defmodule Examples.Gateway.BuildTransaction.TransferTokens do
   alias Radixir.Gateway.API
   alias Radixir.Gateway.Request.BuildTransaction
   alias Radixir.Gateway.Request.BuildTransaction.Action.TransferTokens
   alias Radixir.Util
 
-  def transfer_tokens() do
+  def go() do
     from = "tdx1qspf8f3eeg06955d5pzgvntz36c6nych7f8jw68mdmhlzvflj7pylqs9qzh0z"
     to_1 = "tdx1qspa8jmwnd8se6u3qmpdljryets2mv3e5u8eh2cnwmz6jquh5c2zs8src9qxu"
     to_2 = "tdx1qspdnf997vu6tlzwggctnsf2jnepzq3ctzv77qszyeh8kr3wl99w03s4w2ev4"
-
     amount = "1000000000000000000"
-
     rri = "xrd_tr1qyf0x76s"
 
     request_body =
