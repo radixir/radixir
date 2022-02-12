@@ -22,8 +22,8 @@ defmodule Examples.Gateway.BuildTransaction.CreateToken do
       |> CreateToken.token_properties(
         name: "JEC Token",
         description: "jec tokens ftw",
-        icon_url: "me.me/icon",
-        url: "me.me",
+        icon_url: "https://me.me/icon",
+        url: "https://me.me",
         symbol: "jec",
         is_supply_mutable: true,
         granularity: token_granularity
