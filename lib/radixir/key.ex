@@ -53,6 +53,31 @@ defmodule Radixir.Key do
   end
 
   @doc """
+  Converts an address to its public key.
+
+  ## Parameters
+    - `public_key`: Hex encoded public key.
+
+  ## Examples
+
+      iex> Radixir.Key.public_key_to_addresses("032f9accc4f9906dffa212d5cef8f13c7faf600242ee44111d4dee4fcaf978646f")
+      %{
+        mainnet_address: "rdx1qspjlxkvcnueqm0l5gfdtnhc7y78ltmqqfpwu3q3r4x7un72l9uxgmceghq5a",
+        testnet_address: "tdx1qspjlxkvcnueqm0l5gfdtnhc7y78ltmqqfpwu3q3r4x7un72l9uxgmccyzjy7"
+      }
+  """
+  def public_key_to_addresses(public_key) do
+    with {:ok, public_key} <- Util.decode16(public_key, "public_key") do
+      {mainnet_address, testnet_address} = pubkey_to_addrs(public_key)
+
+      %{
+        mainnet_address: mainnet_address,
+        testnet_address: testnet_address
+      }
+    end
+  end
+
+  @doc """
   Converts a private key to its secret integer.
 
   ## Parameters
@@ -102,8 +127,7 @@ defmodule Radixir.Key do
 
   defp format_keys(keypair) do
     public_key = Curvy.Key.to_pubkey(keypair)
-    mainnet_address = Bech32.encode("rdx", <<4>> <> public_key)
-    testnet_address = Bech32.encode("tdx", <<4>> <> public_key)
+    {mainnet_address, testnet_address} = pubkey_to_addrs(public_key)
     public_key = Util.encode16(public_key)
 
     private_key =
@@ -117,5 +141,9 @@ defmodule Radixir.Key do
       public_key: public_key,
       private_key: private_key
     }
+  end
+
+  defp pubkey_to_addrs(public_key) do
+    {Bech32.encode("rdx", <<4>> <> public_key), Bech32.encode("tdx", <<4>> <> public_key)}
   end
 end

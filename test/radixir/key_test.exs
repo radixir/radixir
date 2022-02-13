@@ -49,6 +49,24 @@ defmodule Radixir.KeyTest do
     end
   end
 
+  describe "public_key_to_addresses/1" do
+    test "converts a public key to its addresses" do
+      assert %{
+               mainnet_address:
+                 "rdx1qspjlxkvcnueqm0l5gfdtnhc7y78ltmqqfpwu3q3r4x7un72l9uxgmceghq5a",
+               testnet_address:
+                 "tdx1qspjlxkvcnueqm0l5gfdtnhc7y78ltmqqfpwu3q3r4x7un72l9uxgmccyzjy7"
+             } =
+               Key.public_key_to_addresses(
+                 "032f9accc4f9906dffa212d5cef8f13c7faf600242ee44111d4dee4fcaf978646f"
+               )
+    end
+
+    test "fails to decode public key" do
+      assert {:error, "could not decode public_key"} = Key.public_key_to_addresses("hello")
+    end
+  end
+
   describe "private_key_to_secret_integer/1" do
     test "converts a private key to its secret integer" do
       assert {:ok,
