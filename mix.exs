@@ -31,7 +31,8 @@ defmodule Radixir.MixProject do
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
       {:nimble_options, "~> 0.3.0"},
       {:req, "~> 0.2.0"},
-      {:scrypt, "~> 2.1"}
+      {:scrypt, "~> 2.1"},
+      {:xema, "~> 0.10"}
     ]
   end
 

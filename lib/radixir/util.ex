@@ -151,9 +151,9 @@ defmodule Radixir.Util do
     [keys: keys, value: value]
   end
 
-  def stitch(keys_values, data \\ %{}) do
+  def stitch(keys_values) do
     # [[keys: [:a, :b, :c], value: 4],[keys: [:z, :y, :x], value: 90]]
-    Enum.reduce(keys_values, data, fn x, data ->
+    Enum.reduce(keys_values, %{}, fn x, data ->
       map_put(data, x[:keys], x[:value])
     end)
   end
