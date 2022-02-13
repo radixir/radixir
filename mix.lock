@@ -1,6 +1,5 @@
 %{
   "castore": {:hex, :castore, "0.1.15", "dbb300827d5a3ec48f396ca0b77ad47058578927e9ebe792abd99fcbc3324326", [:mix], [], "hexpm", "c69379b907673c7e6eb229f09a0a09b60bb27cfb9625bcb82ea4c04ba82a8442"},
-  "conv_case": {:hex, :conv_case, "0.2.2", "5a98b74ab8f7ddbad670e5c7bb39ff280e60699aa3b25c7062ceccf48137433c", [:mix], [], "hexpm", "561c550ab6d55b2a4d4c14449e58c9957798613eb26ea182e14a962965377bca"},
   "curvy": {:hex, :curvy, "0.3.0", "cd097f77434baf783cd18a8374e1eae37dc203588902a3b59d1b4056ac9e7366", [:mix], [], "hexpm", "1fa6104cb458cfe6962b8353a0a6563bd191f9e72807fca0fa22b5a61809695c"},
   "earmark_parser": {:hex, :earmark_parser, "1.4.19", "de0d033d5ff9fc396a24eadc2fcf2afa3d120841eb3f1004d138cbf9273210e8", [:mix], [], "hexpm", "527ab6630b5c75c3a3960b75844c314ec305c76d9899bb30f71cb85952a9dc45"},
   "ex_crypto": {:git, "git@github.com:ntrepid8/ex_crypto.git", "0997a1aaebe701523c0a9b71d4acec4a1819354e", [branch: "master"]},
@@ -19,5 +18,4 @@
   "req": {:hex, :req, "0.2.0", "b4afce31dfc9648779e78538347c669abc932f5478692457be237f7874d8aaf1", [:mix], [{:finch, "~> 0.8.1", [hex: :finch, repo: "hexpm", optional: false]}, {:jason, "~> 1.0", [hex: :jason, repo: "hexpm", optional: false]}, {:mime, "~> 1.6 or ~> 2.0", [hex: :mime, repo: "hexpm", optional: false]}, {:nimble_csv, "~> 1.0", [hex: :nimble_csv, repo: "hexpm", optional: true]}], "hexpm", "5e7cafb25a2d6c246d88a66129b80bdd3dd7603d18693cb353763172004b2d1e"},
   "scrypt": {:hex, :scrypt, "2.1.0", "c6dbdde86432103a99442828548fa2d446e488e55c914a2e74c788e2f5d3a234", [:rebar3], [], "hexpm", "ea273459d1f4c412ac898f1c1c69fc003ec8f71ed00336dd6f40e344eba0a60e"},
   "telemetry": {:hex, :telemetry, "1.0.0", "0f453a102cdf13d506b7c0ab158324c337c41f1cc7548f0bc0e130bbf0ae9452", [:rebar3], [], "hexpm", "73bc09fa59b4a0284efb4624335583c528e07ec9ae76aca96ea0673850aec57a"},
-  "xema": {:hex, :xema, "0.15.0", "747c83ccdd666b3b6b8f8cdb5834c976bb361beecc8eea6a9c10fb1dd40d5f07", [:mix], [{:conv_case, "~> 0.2.2", [hex: :conv_case, repo: "hexpm", optional: false]}, {:decimal, "~> 1.0 or ~> 2.0", [hex: :decimal, repo: "hexpm", optional: true]}], "hexpm", "7aeb7a8206da128dce30a57b72153752172487cbf4b38ce54aad47602ca1a439"},
 }
