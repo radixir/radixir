@@ -1,4 +1,6 @@
 defmodule Examples.Gateway.BuildTransaction.CreateToken do
+  @moduledoc false
+
   alias Radixir.Gateway.API
   alias Radixir.Gateway.Request.BuildTransaction
   alias Radixir.Gateway.Request.BuildTransaction.Action.CreateToken

@@ -8,16 +8,6 @@ defmodule Radixir.Key do
 
   @doc """
   Generates a new key + addresses.
-
-  ## Returns
-  ```
-  %{
-    mainnet_address: "rdx1qspjlxkvcnueqm0l5gfdtnhc7y78ltmqqfpwu3q3r4x7un72l9uxgmceghq5a",
-    private_key: "ed50cfe0904bfbf7668502a3f7d562c3139997255c3268c779eeff04a40f9a17",
-    public_key: "032f9accc4f9906dffa212d5cef8f13c7faf600242ee44111d4dee4fcaf978646f",
-    testnet_address: "tdx1qspjlxkvcnueqm0l5gfdtnhc7y78ltmqqfpwu3q3r4x7un72l9uxgmccyzjy7"
-  }
-  ```
   """
   def generate(), do: Curvy.generate_key() |> format_keys()
 
@@ -26,16 +16,6 @@ defmodule Radixir.Key do
 
   ## Parameters
     - `private_key`: Hex encoded private key.
-
-  ## Returns
-  ```
-  %{
-    mainnet_address: "rdx1qspjlxkvcnueqm0l5gfdtnhc7y78ltmqqfpwu3q3r4x7un72l9uxgmceghq5a",
-    private_key: "ed50cfe0904bfbf7668502a3f7d562c3139997255c3268c779eeff04a40f9a17",
-    public_key: "032f9accc4f9906dffa212d5cef8f13c7faf600242ee44111d4dee4fcaf978646f",
-    testnet_address: "tdx1qspjlxkvcnueqm0l5gfdtnhc7y78ltmqqfpwu3q3r4x7un72l9uxgmccyzjy7"
-  }
-  ```
 
   ## Examples
 
@@ -61,11 +41,6 @@ defmodule Radixir.Key do
   ## Parameters
     - `address`: Radix address.
 
-  ## Returns
-  ```
-  {:ok, "032f9accc4f9906dffa212d5cef8f13c7faf600242ee44111d4dee4fcaf978646f"}
-  ```
-
   ## Examples
 
       iex> Radixir.Key.address_to_public_key("tdx1qspjlxkvcnueqm0l5gfdtnhc7y78ltmqqfpwu3q3r4x7un72l9uxgmccyzjy7")
@@ -82,11 +57,6 @@ defmodule Radixir.Key do
 
   ## Parameters
     - `private_key`: Hex encoded private key.
-
-  ## Returns
-  ```
-  {:ok, 107340927595134471984420820489673630767605194678966104711498635548873815202327}
-  ```
 
   ## Examples
 
@@ -105,11 +75,6 @@ defmodule Radixir.Key do
   ## Parameters
     - `data`: Hex encoded data to be signed.
     - `private_key`: Hex encoded private key.
-
-  ## Returns
-  ```
-  {:ok, 107340927595134471984420820489673630767605194678966104711498635548873815202327}
-  ```
 
   ## Examples
 
