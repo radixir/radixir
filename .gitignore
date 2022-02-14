@@ -10,3 +10,4 @@ radixir-*.tar
 .elixir_ls/
 keypairs.json
 .envrc.custom
+.envrc

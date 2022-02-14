@@ -2,7 +2,49 @@ defmodule Radixir.Util do
   alias Radixir.Config
   alias Radixir.Key
 
-  def hash(data), do: :crypto.hash(:sha256, data)
+  def encrypt_message(message, private_key_hex, address) do
+    with {:ok, dh} <- get_dh(private_key_hex, address),
+         {key_bytes, ephemeral_public_key_bytes, nonce_bytes} <- get_encryption_params(dh),
+         {:ok, {_ad, payload}} <-
+           ExCrypto.encrypt(key_bytes, ephemeral_public_key_bytes, nonce_bytes, message),
+         {_iv, cipher_text_bytes, cipher_tag_bytes} <- payload do
+      {:ok,
+       encode16(
+         <<1>> <>
+           <<255>> <>
+           ephemeral_public_key_bytes <> nonce_bytes <> cipher_tag_bytes <> cipher_text_bytes
+       )}
+    end
+  end
+
+  def decrypt_message(message, private_key_hex, address) do
+    with {:ok, dh} <- get_dh(private_key_hex, address),
+         {key_bytes, ephemeral_public_key_bytes, nonce_bytes, cipher_text_bytes, cipher_tag_bytes} <-
+           get_decryption_params(message, dh) do
+      ExCrypto.decrypt(
+        key_bytes,
+        ephemeral_public_key_bytes,
+        nonce_bytes,
+        cipher_text_bytes,
+        cipher_tag_bytes
+      )
+    end
+  end
+
+  def encode_message(message) do
+    message
+    |> encode16()
+    |> String.replace_prefix("", "0000")
+  end
+
+  def decode_message("0000" <> message), do: decode16(message, "message")
+
+  def decode_message("30303030" <> message) do
+    with {:ok, result} <- decode16(message, "message"),
+         {:ok, result} <- decode16(result, "message") do
+      {:ok, result}
+    end
+  end
 
   def verify_hash(unsigned_transaction, payload_to_sign) do
     with {:ok, unsigned_transaction_binary} <-
@@ -21,12 +63,21 @@ defmodule Radixir.Util do
     end
   end
 
-  def encode_message(message) do
-    message
-    |> Base.encode16()
-    |> String.replace_prefix("", "0000")
+  def encode16(data), do: Base.encode16(data, case: :lower)
+
+  def decode16(data_hex, info) do
+    with {:ok, result} <- Base.decode16(data_hex, case: :mixed) do
+      {:ok, result}
+    else
+      _ ->
+        {:error, "could not decode #{info}"}
+    end
   end
 
+  @doc false
+  def hash(data), do: :crypto.hash(:sha256, data)
+
+  @doc false
   def get_url_from_options(options, api) do
     url =
       case api do
@@ -49,12 +100,33 @@ defmodule Radixir.Util do
     end
   end
 
+  @doc false
   def get_auth_from_options(options) do
     {username, options} = get_username_from_options(options)
     {password, options} = get_password_from_options(options)
     {auth_index, options} = get_auth_index_from_options(options)
 
     parse_auth_results(username, password, auth_index, options)
+  end
+
+  @doc false
+  def optional_params(nil, _keys), do: []
+
+  @doc false
+  def optional_params(value, keys) do
+    [keys: keys, value: value]
+  end
+
+  def stitch(keys_values) do
+    # [[keys: [:a, :b, :c], value: 4],[keys: [:z, :y, :x], value: 90]]
+    Enum.reduce(keys_values, %{}, fn x, data ->
+      map_put(data, x[:keys], x[:value])
+    end)
+  end
+
+  @doc false
+  def map_put(data, keys, value) do
+    put_in(data, Enum.map(keys, &Access.key(&1, %{})), value)
   end
 
   defp parse_auth_results(nil = _username, nil = _password, nil = _auth_index, _options),
@@ -94,72 +166,6 @@ defmodule Radixir.Util do
     auth_index = Keyword.get(options, :auth_index)
     options = Keyword.delete(options, :auth_index)
     {auth_index, options}
-  end
-
-  def encrypt_message(message, private_key_hex, address) do
-    with {:ok, dh} <- get_dh(private_key_hex, address),
-         {key_bytes, ephemeral_public_key_bytes, nonce_bytes} <- get_encryption_params(dh),
-         {:ok, {_ad, payload}} <-
-           ExCrypto.encrypt(key_bytes, ephemeral_public_key_bytes, nonce_bytes, message),
-         {_iv, cipher_text_bytes, cipher_tag_bytes} <- payload do
-      {:ok,
-       encode16(
-         <<1>> <>
-           <<255>> <>
-           ephemeral_public_key_bytes <> nonce_bytes <> cipher_tag_bytes <> cipher_text_bytes
-       )}
-    end
-  end
-
-  def decode_message("0000" <> message), do: decode16(message, "message")
-
-  def decode_message("30303030" <> message) do
-    with {:ok, result} <- decode16(message, "message"),
-         {:ok, result} <- decode16(result, "message") do
-      {:ok, result}
-    end
-  end
-
-  def decrypt_message(message, private_key_hex, address) do
-    with {:ok, dh} <- get_dh(private_key_hex, address),
-         {key_bytes, ephemeral_public_key_bytes, nonce_bytes, cipher_text_bytes, cipher_tag_bytes} <-
-           get_decryption_params(message, dh) do
-      ExCrypto.decrypt(
-        key_bytes,
-        ephemeral_public_key_bytes,
-        nonce_bytes,
-        cipher_text_bytes,
-        cipher_tag_bytes
-      )
-    end
-  end
-
-  def decode16(data_hex, info) do
-    with {:ok, result} <- Base.decode16(data_hex, case: :mixed) do
-      {:ok, result}
-    else
-      _ ->
-        {:error, "could not decode #{info}"}
-    end
-  end
-
-  def encode16(data), do: Base.encode16(data, case: :lower)
-
-  def optional_params(nil, _keys), do: []
-
-  def optional_params(value, keys) do
-    [keys: keys, value: value]
-  end
-
-  def stitch(keys_values) do
-    # [[keys: [:a, :b, :c], value: 4],[keys: [:z, :y, :x], value: 90]]
-    Enum.reduce(keys_values, %{}, fn x, data ->
-      map_put(data, x[:keys], x[:value])
-    end)
-  end
-
-  def map_put(data, keys, value) do
-    put_in(data, Enum.map(keys, &Access.key(&1, %{})), value)
   end
 
   defp get_dh(private_key_hex, address) do

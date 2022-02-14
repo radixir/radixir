@@ -1,0 +1,11 @@
+# API URLs
+export GATEWAY_API_URL="https://stokenet.radixdlt.com"
+export CORE_API_URL="https://my-core-api.com"
+export SYSTEM_API_URL="https://my-system-api.com"
+
+# Using Testnet?
+export TESTNET=true
+
+# Authentication
+export USERNAMES='admin, superadmin, metrics'
+export PASSWORDS='funny cats very Jack 21!, harry Kack love h39! LW, monitor Kat darrel 23 Jack!'
