@@ -31,13 +31,13 @@ defmodule Radixir.Util do
     url =
       case api do
         :gateway ->
-          Keyword.get(options, :url, Config.radix_gateway_api_url())
+          Keyword.get(options, :url, Config.gateway_api_url())
 
         :core ->
-          Keyword.get(options, :url, Config.radix_core_api_url())
+          Keyword.get(options, :url, Config.core_api_url())
 
         :system ->
-          Keyword.get(options, :url, Config.radix_system_api_url())
+          Keyword.get(options, :url, Config.system_api_url())
       end
 
     options = Keyword.delete(options, :url)
@@ -67,7 +67,7 @@ defmodule Radixir.Util do
     do: {:error, "no username provided"}
 
   defp parse_auth_results(nil = _username, nil = _password, auth_index, options) do
-    with {:ok, username, password} <- Config.radix_auth(auth_index) do
+    with {:ok, username, password} <- Config.auth(auth_index) do
       {:ok, username, password, options}
     end
   end
@@ -96,8 +96,8 @@ defmodule Radixir.Util do
     {auth_index, options}
   end
 
-  def encrypt_message(message, private_key_hex, radix_address) do
-    with {:ok, dh} <- get_dh(private_key_hex, radix_address),
+  def encrypt_message(message, private_key_hex, address) do
+    with {:ok, dh} <- get_dh(private_key_hex, address),
          {key_bytes, ephemeral_public_key_bytes, nonce_bytes} <- get_encryption_params(dh),
          {:ok, {_ad, payload}} <-
            ExCrypto.encrypt(key_bytes, ephemeral_public_key_bytes, nonce_bytes, message),
@@ -120,8 +120,8 @@ defmodule Radixir.Util do
     end
   end
 
-  def decrypt_message(message, private_key_hex, radix_address) do
-    with {:ok, dh} <- get_dh(private_key_hex, radix_address),
+  def decrypt_message(message, private_key_hex, address) do
+    with {:ok, dh} <- get_dh(private_key_hex, address),
          {key_bytes, ephemeral_public_key_bytes, nonce_bytes, cipher_text_bytes, cipher_tag_bytes} <-
            get_decryption_params(message, dh) do
       ExCrypto.decrypt(
@@ -162,9 +162,9 @@ defmodule Radixir.Util do
     put_in(data, Enum.map(keys, &Access.key(&1, %{})), value)
   end
 
-  defp get_dh(private_key_hex, radix_address) do
+  defp get_dh(private_key_hex, address) do
     with {:ok, private_key_secret} <- Key.private_key_to_secret_integer(private_key_hex),
-         {:ok, public_key_hex} <- Key.address_to_public_key(radix_address),
+         {:ok, public_key_hex} <- Key.address_to_public_key(address),
          {:ok, public_key_binary} <- decode16(public_key_hex, "public_key_hex"),
          public_keypair <- Curvy.Key.from_pubkey(public_key_binary) do
       {:ok, Curvy.Point.mul(public_keypair.point, private_key_secret)}

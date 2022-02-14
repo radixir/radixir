@@ -1,9 +1,9 @@
 import Config
 
 config :radixir, Radixir.Config,
-  radix_gateway_api_url: System.get_env("RADIX_GATEWAY_API_URL"),
-  radix_core_api_url: System.get_env("RADIX_CORE_API_URL"),
-  radix_system_api_url: System.get_env("RADIX_SYSTEM_API_URL"),
-  radix_testnet: System.get_env("RADIX_TESTNET"),
-  radix_usernames: System.get_env("RADIX_USERNAMES"),
-  radix_passwords: System.get_env("RADIX_PASSWORDS")
+  gateway_api_url: System.get_env("GATEWAY_API_URL"),
+  core_api_url: System.get_env("CORE_API_URL"),
+  system_api_url: System.get_env("SYSTEM_API_URL"),
+  testnet: System.get_env("TESTNET"),
+  usernames: System.get_env("USERNAMES"),
+  passwords: System.get_env("PASSWORDS")

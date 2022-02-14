@@ -1,11 +1,12 @@
 defmodule Radixir.Bech32 do
-  @moduledoc """
-  This is an implementation of BIP-0173
+  @moduledoc false
+  # @moduledoc """
+  # This is an implementation of BIP-0173
 
-  Bech32 address format for native v0-16 witness outputs.
+  # Bech32 address format for native v0-16 witness outputs.
 
-  See https://github.com/bitcoin/bips/blob/master/bip-0173.mediawiki for details
-  """
+  # See https://github.com/bitcoin/bips/blob/master/bip-0173.mediawiki for details
+  # """
   @gen {0x3B6A57B2, 0x26508E6D, 0x1EA119FA, 0x3D4233DD, 0x2A1462B3}
 
   use Bitwise

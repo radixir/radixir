@@ -1,49 +1,49 @@
 defmodule Radixir.Config do
-  def radix_gateway_api_url do
+  def gateway_api_url do
     :radixir
     |> Application.get_env(__MODULE__)
-    |> Keyword.get(:radix_gateway_api_url)
+    |> Keyword.get(:gateway_api_url)
   end
 
-  def radix_core_api_url do
+  def core_api_url do
     :radixir
     |> Application.get_env(__MODULE__)
-    |> Keyword.get(:radix_core_api_url)
+    |> Keyword.get(:core_api_url)
   end
 
-  def radix_system_api_url do
+  def system_api_url do
     :radixir
     |> Application.get_env(__MODULE__)
-    |> Keyword.get(:radix_system_api_url)
+    |> Keyword.get(:system_api_url)
   end
 
-  def radix_usernames() do
+  def usernames() do
     :radixir
     |> Application.get_env(__MODULE__)
-    |> Keyword.get(:radix_usernames)
+    |> Keyword.get(:usernames)
     |> process_usernames_passwords("no usernames")
   end
 
-  def radix_passwords() do
+  def passwords() do
     :radixir
     |> Application.get_env(__MODULE__)
-    |> Keyword.get(:radix_passwords)
+    |> Keyword.get(:passwords)
     |> process_usernames_passwords("no passwords")
   end
 
-  def radix_testnet? do
+  def testnet? do
     :radixir
     |> Application.get_env(__MODULE__)
-    |> Keyword.get(:radix_testnet)
+    |> Keyword.get(:testnet)
     |> case do
       "true" -> true
       _ -> false
     end
   end
 
-  def radix_auth(index) do
-    with {:ok, usernames} <- radix_usernames(),
-         {:ok, passwords} <- radix_passwords(),
+  def auth(index) do
+    with {:ok, usernames} <- usernames(),
+         {:ok, passwords} <- passwords(),
          {:ok, length} <- valid_length(usernames, passwords),
          {:ok, index} <- valid_index(length, index) do
       {:ok, Enum.at(usernames, index), Enum.at(passwords, index)}
@@ -51,7 +51,7 @@ defmodule Radixir.Config do
   end
 
   def network do
-    if radix_testnet?() do
+    if testnet?() do
       "stokenet"
     else
       "mainnet"
