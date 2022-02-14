@@ -8,6 +8,5 @@ erl_crash.dump
 radixir-*.tar
 /tmp/
 .elixir_ls/
-keypairs.json
 .envrc.custom
 .envrc
