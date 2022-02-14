@@ -1,3 +1,8 @@
+# INSTRUCTIONS
+# 1. Copy the content of this file and paste it into a .envrc file.
+# 2. Change the values as needed.
+# 3. Note that Radixir can be used without any environment variables being set.
+
 # API URLs
 export GATEWAY_API_URL="https://stokenet.radixdlt.com"
 export CORE_API_URL="https://my-core-api.com"
