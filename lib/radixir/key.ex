@@ -9,16 +9,20 @@ defmodule Radixir.Key do
   @type private_key :: String.t()
   @type public_key :: String.t()
   @type address :: String.t()
+  @type addresses :: map()
+  @type keypair_and_addresses :: map()
+  @type data :: String.t()
+  @type signed_data :: Stiring.t()
   @type error_message :: String.t()
 
   @doc """
-  Generates a new key + addresses.
+  Generates a new keypair and addresses.
   """
-  @spec generate() :: map()
+  @spec generate() :: keypair_and_addresses
   def generate(), do: Curvy.generate_key() |> format()
 
   @doc """
-  Converts a private key to a key + addresses.
+  Converts `private_key` to its keypair and addresses.
 
   ## Parameters
     - `private_key`: Hex encoded private key.
@@ -35,7 +39,7 @@ defmodule Radixir.Key do
         }
       }
   """
-  @spec from_private_key(private_key()) :: {:ok, map()} | {:error, error_message()}
+  @spec from_private_key(private_key) :: {:ok, keypair_and_addresses} | {:error, error_message}
   def from_private_key(private_key) do
     with private_key <- String.downcase(private_key),
          {:ok, private_key} <- validate_private_key(private_key),
@@ -45,7 +49,7 @@ defmodule Radixir.Key do
   end
 
   @doc """
-  Converts an address to its public key.
+  Converts `address` to its public key.
 
   ## Parameters
     - `address`: Radix address.
@@ -55,7 +59,7 @@ defmodule Radixir.Key do
       iex> Radixir.Key.address_to_public_key("tdx1qspjlxkvcnueqm0l5gfdtnhc7y78ltmqqfpwu3q3r4x7un72l9uxgmccyzjy7")
       {:ok, "032f9accc4f9906dffa212d5cef8f13c7faf600242ee44111d4dee4fcaf978646f"}
   """
-  @spec address_to_public_key(address()) :: {:ok, public_key()} | {:error, atom()}
+  @spec address_to_public_key(address) :: {:ok, public_key} | {:error, atom()}
   def address_to_public_key(address) do
     with address <- String.downcase(address),
          {:ok, address} <- validate_address(address),
@@ -65,7 +69,7 @@ defmodule Radixir.Key do
   end
 
   @doc """
-  Converts an address to its public key.
+  Converts `public_key` to its addresses.
 
   ## Parameters
     - `public_key`: Hex encoded public key.
@@ -78,7 +82,7 @@ defmodule Radixir.Key do
         testnet_address: "tdx1qspjlxkvcnueqm0l5gfdtnhc7y78ltmqqfpwu3q3r4x7un72l9uxgmccyzjy7"
       }
   """
-  @spec public_key_to_addresses(public_key()) :: map() | {:error, error_message()}
+  @spec public_key_to_addresses(public_key) :: addresses | {:error, error_message}
   def public_key_to_addresses(public_key) do
     with public_key <- String.downcase(public_key),
          {:ok, public_key} <- validate_public_key(public_key),
@@ -93,7 +97,7 @@ defmodule Radixir.Key do
   end
 
   @doc """
-  Converts a private key to its secret integer.
+  Converts `private_key` to its secret integer.
 
   ## Parameters
     - `private_key`: Hex encoded private key.
@@ -103,6 +107,8 @@ defmodule Radixir.Key do
       iex> Radixir.Key.private_key_to_secret_integer("ed50cfe0904bfbf7668502a3f7d562c3139997255c3268c779eeff04a40f9a17")
       {:ok, 107340927595134471984420820489673630767605194678966104711498635548873815202327}
   """
+  @spec private_key_to_secret_integer(private_key) ::
+          {:ok, non_neg_integer} | {:error, error_message}
   def private_key_to_secret_integer(private_key) do
     with private_key <- String.downcase(private_key),
          {:ok, private_key} <- validate_private_key(private_key),
@@ -112,7 +118,7 @@ defmodule Radixir.Key do
   end
 
   @doc """
-  Signs data with provided private key.
+  Signs `data` with `private_key`.
 
   ## Parameters
     - `data`: Hex encoded data to be signed.
@@ -123,6 +129,7 @@ defmodule Radixir.Key do
       iex> Radixir.Key.sign_data("68656C6C6F207261646978","ed50cfe0904bfbf7668502a3f7d562c3139997255c3268c779eeff04a40f9a17")
       {:ok, "304402206f2c0f3a70c23879a44a2910f9b060e59d5b96e350605fdbee2a7a265ca503c302201043a8a957353744608c86824c286034e6166be475c7c096527a225cbdf90d0a"}
   """
+  @spec sign_data(data, private_key) :: {:ok, signed_data} | {:error, error_message}
   def sign_data(data, private_key) do
     with private_key <- String.downcase(private_key),
          {:ok, private_key} <- validate_private_key(private_key),

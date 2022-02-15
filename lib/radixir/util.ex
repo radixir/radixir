@@ -1,9 +1,36 @@
 defmodule Radixir.Util do
+  @moduledoc """
+  Utility functions that do various things.
+  """
   alias Radixir.Config
   alias Radixir.Key
 
-  def encrypt_message(message, private_key_hex, address) do
-    with {:ok, dh} <- get_dh(private_key_hex, address),
+  @type private_key :: String.t()
+  @type public_key :: String.t()
+  @type address :: String.t()
+  @type message :: String.t()
+  @type encrypted_message :: String.t()
+  @type encoded_message :: String.t()
+  @type data :: String.t()
+  @type encoded_data :: String.t()
+  @type error_note :: String.t()
+  @type unsigned_transaction :: String.t()
+  @type payload_to_sign :: String.t()
+  @type error_message :: String.t()
+  @type keys_values :: list(list())
+
+  @doc """
+  Encrypts `message` with `private_key` and `address`.
+
+  ## Parameters
+    - `message`: Plain text message to be encrypted.
+    - `private_key`: Hex encoded private key.
+    - `address`: Radix address.
+  """
+  @spec encrypt_message(message, private_key, address) ::
+          {:ok, encrypted_message} | {:error, error_message}
+  def encrypt_message(message, private_key, address) do
+    with {:ok, dh} <- get_dh(private_key, address),
          {key_bytes, ephemeral_public_key_bytes, nonce_bytes} <- get_encryption_params(dh),
          {:ok, {_ad, payload}} <-
            ExCrypto.encrypt(key_bytes, ephemeral_public_key_bytes, nonce_bytes, message),
@@ -17,10 +44,20 @@ defmodule Radixir.Util do
     end
   end
 
-  def decrypt_message(message, private_key_hex, address) do
-    with {:ok, dh} <- get_dh(private_key_hex, address),
+  @doc """
+  Decrypts `encrypted_message` with `private_key` and `address`.
+
+  ## Parameters
+    - `encrypted_message`: Encrypted message to be decrypted.
+    - `private_key`: Hex encoded private key.
+    - `address`: Radix address.
+  """
+  @spec decrypt_message(encrypted_message, private_key, address) ::
+          {:ok, message} | {:error, error_message}
+  def decrypt_message(encrypted_message, private_key, address) do
+    with {:ok, dh} <- get_dh(private_key, address),
          {key_bytes, ephemeral_public_key_bytes, nonce_bytes, cipher_text_bytes, cipher_tag_bytes} <-
-           get_decryption_params(message, dh) do
+           get_decryption_params(encrypted_message, dh) do
       ExCrypto.decrypt(
         key_bytes,
         ephemeral_public_key_bytes,
@@ -31,21 +68,31 @@ defmodule Radixir.Util do
     end
   end
 
+  @doc """
+  Encodes `message` by:
+    - Base16 encoding the message
+    - Prefixing "0000" to the front
+
+  ## Parameter
+    - `message`: Plain text.
+  """
+  @spec encode_message(message) :: encoded_message
   def encode_message(message) do
     message
     |> encode16()
     |> String.replace_prefix("", "0000")
   end
 
-  def decode_message("0000" <> message), do: decode16(message, "message")
+  @doc """
+  Decodes a message.
+  """
+  @spec decode_message(encoded_message) :: {:ok, message} | {:error, error_message}
+  def decode_message(encoded_message), do: do_decode_message(encoded_message)
 
-  def decode_message("30303030" <> message) do
-    with {:ok, result} <- decode16(message, "message"),
-         {:ok, result} <- decode16(result, "message") do
-      {:ok, result}
-    end
-  end
-
+  @doc """
+  Verifies double hash of `unsigned_transaction` matches `payload_to_sign`.
+  """
+  @spec verify_hash(unsigned_transaction, payload_to_sign) :: :ok | {:error, error_message}
   def verify_hash(unsigned_transaction, payload_to_sign) do
     with {:ok, unsigned_transaction_binary} <-
            decode16(unsigned_transaction, "unsigned_transaction") do
@@ -63,10 +110,18 @@ defmodule Radixir.Util do
     end
   end
 
+  @doc """
+  Base16 encodes `data`.
+  """
+  @spec encode16(data) :: encoded_data
   def encode16(data), do: Base.encode16(data, case: :lower)
 
-  def decode16(data_hex, info) do
-    with {:ok, result} <- Base.decode16(data_hex, case: :mixed) do
+  @doc """
+  Base16 decodes `encoded_data`.
+  """
+  @spec decode16(encoded_data, error_note) :: {:ok, data} | {:error, error_message}
+  def decode16(encoded_data, info) do
+    with {:ok, result} <- Base.decode16(encoded_data, case: :mixed) do
       {:ok, result}
     else
       _ ->
@@ -74,11 +129,32 @@ defmodule Radixir.Util do
     end
   end
 
+  @doc """
+  Stitches together stitch plans which results in a map.
+
+  ## Parameters
+    - `keys_values`: List of keyword lists.
+
+  ## Example
+
+      iex> Radixir.Util.stitch([[keys: [:a, :b, :c], value: 4],[keys: [:z, :y, :x], value: 90]])
+      %{a: %{b: %{c: 4}}, z: %{y: %{x: 90}}}
+  """
+  @spec stitch(keys_values) :: map()
   def stitch(keys_values) do
     # [[keys: [:a, :b, :c], value: 4],[keys: [:z, :y, :x], value: 90]]
     Enum.reduce(keys_values, %{}, fn x, data ->
       map_put(data, x[:keys], x[:value])
     end)
+  end
+
+  defp do_decode_message("0000" <> message), do: decode16(message, "message")
+
+  defp do_decode_message("30303030" <> message) do
+    with {:ok, result} <- decode16(message, "message"),
+         {:ok, result} <- decode16(result, "message") do
+      {:ok, result}
+    end
   end
 
   @doc false
