@@ -31,20 +31,44 @@ defmodule Radixir.KeyTest do
                )
     end
 
-    test "fails to decode private key" do
-      assert {:error, "could not decode private_key"} = Key.from_private_key("hello radix")
+    test "catches private_key having non hexadecimal digits" do
+      assert {:error, "private_key must only have hexadecimal digits"} =
+               Key.from_private_key("hello radix")
     end
 
-    test "catches incorrectly formated private key" do
-      assert {:error, "invalid format for private_key"} = Key.from_private_key("ed50")
+    test "catches private key not being the correct length" do
+      assert {:error, "private_key must be 64 characters long"} = Key.from_private_key("ed50")
     end
   end
 
   describe "address_to_public_key/1" do
-    test "converts an address to its public key" do
+    test "converts an address (starts with tdx) to its public key" do
       assert {:ok, "032f9accc4f9906dffa212d5cef8f13c7faf600242ee44111d4dee4fcaf978646f"} =
                Key.address_to_public_key(
                  "tdx1qspjlxkvcnueqm0l5gfdtnhc7y78ltmqqfpwu3q3r4x7un72l9uxgmccyzjy7"
+               )
+    end
+
+    test "converts an address (starts with rdx) to its public key" do
+      assert {:ok, "032f9accc4f9906dffa212d5cef8f13c7faf600242ee44111d4dee4fcaf978646f"} =
+               Key.address_to_public_key(
+                 "rdx1qspjlxkvcnueqm0l5gfdtnhc7y78ltmqqfpwu3q3r4x7un72l9uxgmceghq5a"
+               )
+    end
+
+    test "catches address having non alpha numeric characters" do
+      assert {:error, "address must only have alpha numeric characters"} =
+               Key.address_to_public_key("hello radix")
+    end
+
+    test "catches address not being the correct length" do
+      assert {:error, "address must be 65 characters long"} = Key.address_to_public_key("rdxed50")
+    end
+
+    test "catches address not starting with rdx or tdx" do
+      assert {:error, "address must start with rdx or tdx"} =
+               Key.address_to_public_key(
+                 "ddx1qspjlxkvcnueqm0l5gfdtnhc7y78ltmqqfpwu3q3r4x7un72l9uxgmccyzjy7"
                )
     end
   end
@@ -62,8 +86,14 @@ defmodule Radixir.KeyTest do
                )
     end
 
-    test "fails to decode public key" do
-      assert {:error, "could not decode public_key"} = Key.public_key_to_addresses("hello")
+    test "catches public_key having non hexadecimal digits" do
+      assert {:error, "public_key must only have hexadecimal digits"} =
+               Key.public_key_to_addresses("hello radix")
+    end
+
+    test "catches private key not being the correct length" do
+      assert {:error, "public_key must be 66 characters long"} =
+               Key.public_key_to_addresses("ed50")
     end
   end
 
@@ -76,13 +106,13 @@ defmodule Radixir.KeyTest do
                )
     end
 
-    test "fails to decode private key" do
-      assert {:error, "could not decode private_key"} =
+    test "catches private_key having non hexadecimal digits" do
+      assert {:error, "private_key must only have hexadecimal digits"} =
                Key.private_key_to_secret_integer("hello radix")
     end
 
-    test "catches incorrectly formated private key" do
-      assert {:error, "invalid format for private_key"} =
+    test "catches private key not being the correct length" do
+      assert {:error, "private_key must be 64 characters long"} =
                Key.private_key_to_secret_integer("ed50")
     end
   end
@@ -97,16 +127,16 @@ defmodule Radixir.KeyTest do
                )
     end
 
-    test "fails to decode private key" do
-      assert {:error, "could not decode private_key"} =
+    test "catches private_key having non hexadecimal digits" do
+      assert {:error, "private_key must only have hexadecimal digits"} =
                Key.sign_data(
                  "68656C6C6F207261646978",
                  "hello"
                )
     end
 
-    test "catches incorrectly formated private key" do
-      assert {:error, "invalid format for private_key"} =
+    test "catches private key not being the correct length" do
+      assert {:error, "private_key must be 64 characters long"} =
                Key.sign_data(
                  "68656C6C6F207261646978",
                  "ed50"

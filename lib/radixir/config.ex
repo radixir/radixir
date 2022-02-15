@@ -1,22 +1,50 @@
 defmodule Radixir.Config do
+  @moduledoc """
+  Configuration helpers.
+  """
+
+  @type url :: String.t()
+  @type username :: String.t()
+  @type password :: String.t()
+  @type error_message :: String.t()
+
+  @doc """
+  Fetches gateway api url.
+  """
+  @spec gateway_api_url() :: url | nil
   def gateway_api_url do
     :radixir
     |> Application.get_env(__MODULE__)
     |> Keyword.get(:gateway_api_url)
   end
 
+  @doc """
+  Fetches core api url.
+  """
+  @spec core_api_url() :: url | nil
   def core_api_url do
     :radixir
     |> Application.get_env(__MODULE__)
     |> Keyword.get(:core_api_url)
   end
 
+  @doc """
+  Fetches system api url.
+  """
+  @spec system_api_url() :: url | nil
   def system_api_url do
     :radixir
     |> Application.get_env(__MODULE__)
     |> Keyword.get(:system_api_url)
   end
 
+  @doc """
+  Fetches usernames.
+
+  ## Note
+  See `.envrc.example` for required format of usernames string.
+  """
+  @spec usernames() :: {:ok, list(username)} | {:error, error_message}
   def usernames() do
     :radixir
     |> Application.get_env(__MODULE__)
@@ -24,6 +52,13 @@ defmodule Radixir.Config do
     |> process_usernames_passwords("no usernames")
   end
 
+  @doc """
+  Fetches passwords.
+
+  ## Note
+  See `.envrc.example` for required format of passwords string.
+  """
+  @spec passwords() :: {:ok, list(password)} | {:error, error_message}
   def passwords() do
     :radixir
     |> Application.get_env(__MODULE__)
@@ -31,6 +66,10 @@ defmodule Radixir.Config do
     |> process_usernames_passwords("no passwords")
   end
 
+  @doc """
+  Specifies whether or not the testnet is being used.
+  """
+  @spec testnet?() :: boolean()
   def testnet? do
     :radixir
     |> Application.get_env(__MODULE__)
@@ -41,6 +80,19 @@ defmodule Radixir.Config do
     end
   end
 
+  @doc """
+  Fetches the username / password at specified index.
+
+  ## Example
+
+  If the following usernames and passwords are exported as follows:
+  ```
+  export USERNAMES='admin, superadmin, metrics'
+  export PASSWORDS='funny cats very Jack 21!, harry Kack love h39! LW, monitor Kat darrel 23 Jack!'
+  ```
+  then `auth(0)` would return `{:ok, "admin", "funny cats very Jack 21!"}`
+  """
+  @spec auth(non_neg_integer()) :: {:ok, username, password} | {:error, error_message}
   def auth(index) do
     with {:ok, usernames} <- usernames(),
          {:ok, passwords} <- passwords(),
@@ -50,6 +102,13 @@ defmodule Radixir.Config do
     end
   end
 
+  @doc """
+  Fetches the network being used.
+
+  ## Note
+  The two possibilities are `stokenet` or `mainnet`.
+  """
+  @spec network() :: String.t()
   def network do
     if testnet?() do
       "stokenet"

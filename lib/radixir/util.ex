@@ -74,6 +74,13 @@ defmodule Radixir.Util do
     end
   end
 
+  def stitch(keys_values) do
+    # [[keys: [:a, :b, :c], value: 4],[keys: [:z, :y, :x], value: 90]]
+    Enum.reduce(keys_values, %{}, fn x, data ->
+      map_put(data, x[:keys], x[:value])
+    end)
+  end
+
   @doc false
   def hash(data), do: :crypto.hash(:sha256, data)
 
@@ -115,13 +122,6 @@ defmodule Radixir.Util do
   @doc false
   def optional_params(value, keys) do
     [keys: keys, value: value]
-  end
-
-  def stitch(keys_values) do
-    # [[keys: [:a, :b, :c], value: 4],[keys: [:z, :y, :x], value: 90]]
-    Enum.reduce(keys_values, %{}, fn x, data ->
-      map_put(data, x[:keys], x[:value])
-    end)
   end
 
   @doc false
