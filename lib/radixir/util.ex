@@ -30,7 +30,11 @@ defmodule Radixir.Util do
   @spec encrypt_message(message, private_key, address) ::
           {:ok, encrypted_message} | {:error, error_message}
   def encrypt_message(message, private_key, address) do
-    with {:ok, dh} <- get_dh(private_key, address),
+    with private_key <- String.downcase(private_key),
+         {:ok, private_key} <- Key.validate_private_key(private_key),
+         address <- String.downcase(address),
+         {:ok, address} <- Key.validate_address(address),
+         {:ok, dh} <- get_dh(private_key, address),
          {key_bytes, ephemeral_public_key_bytes, nonce_bytes} <- get_encryption_params(dh),
          {:ok, {_ad, payload}} <-
            ExCrypto.encrypt(key_bytes, ephemeral_public_key_bytes, nonce_bytes, message),
@@ -55,7 +59,11 @@ defmodule Radixir.Util do
   @spec decrypt_message(encrypted_message, private_key, address) ::
           {:ok, message} | {:error, error_message}
   def decrypt_message(encrypted_message, private_key, address) do
-    with {:ok, dh} <- get_dh(private_key, address),
+    with private_key <- String.downcase(private_key),
+         {:ok, private_key} <- Key.validate_private_key(private_key),
+         address <- String.downcase(address),
+         {:ok, address} <- Key.validate_address(address),
+         {:ok, dh} <- get_dh(private_key, address),
          {key_bytes, ephemeral_public_key_bytes, nonce_bytes, cipher_text_bytes, cipher_tag_bytes} <-
            get_decryption_params(encrypted_message, dh) do
       ExCrypto.decrypt(
@@ -120,12 +128,12 @@ defmodule Radixir.Util do
   Base16 decodes `encoded_data`.
   """
   @spec decode16(encoded_data, error_note) :: {:ok, data} | {:error, error_message}
-  def decode16(encoded_data, info) do
+  def decode16(encoded_data, error_note) do
     with {:ok, result} <- Base.decode16(encoded_data, case: :mixed) do
       {:ok, result}
     else
       _ ->
-        {:error, "could not decode #{info}"}
+        {:error, "could not decode #{error_note}"}
     end
   end
 

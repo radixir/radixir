@@ -173,21 +173,24 @@ defmodule Radixir.Key do
     {Bech32.encode("rdx", <<4>> <> public_key), Bech32.encode("tdx", <<4>> <> public_key)}
   end
 
-  defp validate_public_key(public_key) do
+  @doc false
+  def validate_public_key(public_key) do
     with {:ok, public_key} <- only_has_hex(public_key, "public_key"),
          {:ok, public_key} <- expected_length(public_key, 66, "public_key") do
       {:ok, public_key}
     end
   end
 
-  defp validate_private_key(private_key) do
+  @doc false
+  def validate_private_key(private_key) do
     with {:ok, private_key} <- only_has_hex(private_key, "private_key"),
          {:ok, private_key} <- expected_length(private_key, 64, "private_key") do
       {:ok, private_key}
     end
   end
 
-  defp validate_address(address) do
+  @doc false
+  def validate_address(address) do
     with {:ok, address} <- only_has_alpha_num(address),
          {:ok, address} <- starts_rdx_tdx(address),
          {:ok, address} <- expected_length(address, 65, "address") do
