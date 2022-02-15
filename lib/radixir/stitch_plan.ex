@@ -1,7 +1,32 @@
 defmodule Radixir.StitchPlan do
+  @moduledoc """
+  Generates stitch plans for maps that are used in requests.
+  """
   alias Radixir.Config
   alias Radixir.Util
 
+  @type stitch_plans :: list(keyword())
+  @type params :: keyword()
+  @type prefix_keys :: list(atom())
+
+  @doc """
+  Generates stitch plan for `account_identifier` map.
+
+  ## Parameters
+    - `stitch_plans`: On-going stitch plans that will be stitched into a map.
+    - `params`: Keyword list that contains:
+      - `address` (required, string): Radix address.
+
+  ## Examples
+      iex> Radixir.StitchPlan.account_identifier([], [address: "rdx1qspxpjejcn3przwrf7lvaaftm84ufrmf9yccd6xxnaj96kwykr59hvgnv42z7"])
+      [
+        [
+          keys: [:account_identifier, :address],
+          value: "rdx1qspxpjejcn3przwrf7lvaaftm84ufrmf9yccd6xxnaj96kwykr59hvgnv42z7"
+        ]
+      ]
+  """
+  @spec account_identifier(stitch_plans, params) :: stitch_plans
   def account_identifier(stitch_plans, params) do
     schema = [
       address: [
@@ -19,6 +44,24 @@ defmodule Radixir.StitchPlan do
     stitch_plan ++ stitch_plans
   end
 
+  @doc """
+  Generates stitch plan for `validator_identifier` map.
+
+  ## Parameters
+    - `stitch_plans`: On-going stitch plans that will be stitched into a map.
+    - `params`: Keyword list that contains:
+      - `address` (required, string): Radix address.
+
+  ## Examples
+      iex> Radixir.StitchPlan.validator_identifier([], [address: "rdx1qspxpjejcn3przwrf7lvaaftm84ufrmf9yccd6xxnaj96kwykr59hvgnv42z7"])
+      [
+        [
+          keys: [:validator_identifier, :address],
+          value: "rdx1qspxpjejcn3przwrf7lvaaftm84ufrmf9yccd6xxnaj96kwykr59hvgnv42z7"
+        ]
+      ]
+  """
+  @spec validator_identifier(stitch_plans, params) :: stitch_plans
   def validator_identifier(stitch_plans, params) do
     schema = [
       address: [
@@ -36,6 +79,25 @@ defmodule Radixir.StitchPlan do
     stitch_plan ++ stitch_plans
   end
 
+  @doc """
+  Generates stitch plan for `token_identifier` map.
+
+  ## Parameters
+    - `stitch_plans`: On-going stitch plans that will be stitched into a map.
+    - `params`: Keyword list that contains:
+      - `rri` (required, string): Radix Resource Identifier.
+    - `prefix_keys`: List of atoms that will be prefixed to `keys` list.
+
+  ## Examples
+      iex> Radixir.StitchPlan.token_identifier([], [rri: "xrd_tr1qyf0x76s"], [:hello, :there])
+      [
+        [
+          keys: [:hello, :there, :token_identifier, :rri],
+          value: "xrd_tr1qyf0x76s"
+        ]
+      ]
+  """
+  @spec token_identifier(stitch_plans, params, prefix_keys) :: stitch_plans
   def token_identifier(stitch_plans, params, prefix_keys \\ []) do
     schema = [
       rri: [
@@ -53,6 +115,25 @@ defmodule Radixir.StitchPlan do
     stitch_plan ++ stitch_plans
   end
 
+  @doc """
+  Generates stitch plan for `at_state_identifier` map.
+
+  ## Parameters
+    - `stitch_plans`: On-going stitch plans that will be stitched into a map.
+    - `params`: Keyword list that contains:
+      - `version` (optional, integer): Version.
+      - `timestamp` (optional, string): Timestamp.
+      - `epoch` (optional, integer): Epoch.
+      - `round` (optional, integer): Round.
+
+  ## Examples
+      iex> Radixir.StitchPlan.at_state_identifier([], [version: 9000, round: 90])
+      [
+        [keys: [:at_state_identifier, :version], value: 9000],
+        [keys: [:at_state_identifier, :round], value: 90]
+      ]
+  """
+  @spec at_state_identifier(stitch_plans, params) :: stitch_plans
   def at_state_identifier(stitch_plans, params) do
     schema = [
       version: [
@@ -92,6 +173,25 @@ defmodule Radixir.StitchPlan do
     stitch_plan ++ stitch_plans
   end
 
+  @doc """
+  Generates stitch plan for `symbol` map.
+
+  ## Parameters
+    - `stitch_plans`: On-going stitch plans that will be stitched into a map.
+    - `params`: Keyword list that contains:
+      - `symbol` (required, string): Symbol.
+    - `prefix_keys`: List of atoms that will be prefixed to `keys` list.
+
+  ## Examples
+      iex> Radixir.StitchPlan.symbol([], [symbol: "veg"])
+      [
+        [
+          keys: [:symbol],
+          value: "veg"
+        ]
+      ]
+  """
+  @spec symbol(stitch_plans, params) :: stitch_plans
   def symbol(stitch_plans, params, prefix_keys \\ []) do
     schema = [
       symbol: [
@@ -109,6 +209,24 @@ defmodule Radixir.StitchPlan do
     stitch_plan ++ stitch_plans
   end
 
+  @doc """
+  Generates stitch plan for `cursor` map.
+
+  ## Parameters
+    - `stitch_plans`: On-going stitch plans that will be stitched into a map.
+    - `params`: Keyword list that contains:
+      - `cursor` (required, string): Cursor.
+
+  ## Examples
+      iex> Radixir.StitchPlan.cursor([], [cursor: "asdfasdf"])
+      [
+        [
+          keys: [:cursor],
+          value: "asdfasdf"
+        ]
+      ]
+  """
+  @spec cursor(stitch_plans, params) :: stitch_plans
   def cursor(stitch_plans, params) do
     schema = [
       cursor: [
@@ -126,6 +244,24 @@ defmodule Radixir.StitchPlan do
     stitch_plan ++ stitch_plans
   end
 
+  @doc """
+  Generates stitch plan for `fee_payer` map.
+
+  ## Parameters
+    - `stitch_plans`: On-going stitch plans that will be stitched into a map.
+    - `params`: Keyword list that contains:
+      - `address` (required, string): Radix address.
+
+  ## Examples
+      iex> Radixir.StitchPlan.fee_payer([], [address: "rdx1qspxpjejcn3przwrf7lvaaftm84ufrmf9yccd6xxnaj96kwykr59hvgnv42z7"])
+      [
+        [
+          keys: [:fee_payer, :address],
+          value: "rdx1qspxpjejcn3przwrf7lvaaftm84ufrmf9yccd6xxnaj96kwykr59hvgnv42z7"
+        ]
+      ]
+  """
+  @spec fee_payer(stitch_plans, params) :: stitch_plans
   def fee_payer(stitch_plans, params) do
     schema = [
       address: [
@@ -143,6 +279,24 @@ defmodule Radixir.StitchPlan do
     stitch_plan ++ stitch_plans
   end
 
+  @doc """
+  Generates stitch plan for `submit` map.
+
+  ## Parameters
+    - `stitch_plans`: On-going stitch plans that will be stitched into a map.
+    - `params`: Keyword list that contains:
+      - `submit` (required, boolean): Submit.
+
+  ## Examples
+      iex> Radixir.StitchPlan.submit([], [submit: false])
+      [
+        [
+          keys: [:submit],
+          value: false
+        ]
+      ]
+  """
+  @spec submit(stitch_plans, params) :: stitch_plans
   def submit(stitch_plans, params) do
     schema = [
       submit: [
@@ -160,6 +314,25 @@ defmodule Radixir.StitchPlan do
     stitch_plan ++ stitch_plans
   end
 
+  @doc """
+  Generates stitch plan for `amount` map.
+
+  ## Parameters
+    - `stitch_plans`: On-going stitch plans that will be stitched into a map.
+    - `params`: Keyword list that contains:
+      - `amount` (required, string): Amount.
+    - `prefix_keys`: List of atoms that will be prefixed to `keys` list.
+
+  ## Examples
+      iex> Radixir.StitchPlan.amount([], [value: "10"])
+      [
+        [
+          keys: [:amount, :value],
+          value: "10"
+        ]
+      ]
+  """
+  @spec amount(stitch_plans, params) :: stitch_plans
   def amount(stitch_plans, params, prefix_keys \\ []) do
     schema = [
       value: [
@@ -177,6 +350,24 @@ defmodule Radixir.StitchPlan do
     stitch_plan ++ stitch_plans
   end
 
+  @doc """
+  Generates stitch plan for `to_account` map.
+
+  ## Parameters
+    - `stitch_plans`: On-going stitch plans that will be stitched into a map.
+    - `params`: Keyword list that contains:
+      - `address` (required, string): To account.
+
+  ## Examples
+      iex> Radixir.StitchPlan.to_account([], [address: "rdx1qspxpjejcn3przwrf7lvaaftm84ufrmf9yccd6xxnaj96kwykr59hvgnv42z7"])
+      [
+        [
+          keys: [:to_account, :address],
+          value: "rdx1qspxpjejcn3przwrf7lvaaftm84ufrmf9yccd6xxnaj96kwykr59hvgnv42z7"
+        ]
+      ]
+  """
+  @spec to_account(stitch_plans, params) :: stitch_plans
   def to_account(stitch_plans, params) do
     schema = [
       address: [
@@ -194,6 +385,24 @@ defmodule Radixir.StitchPlan do
     stitch_plan ++ stitch_plans
   end
 
+  @doc """
+  Generates stitch plan for `from_account` map.
+
+  ## Parameters
+    - `stitch_plans`: On-going stitch plans that will be stitched into a map.
+    - `params`: Keyword list that contains:
+      - `address` (required, string): From account.
+
+  ## Examples
+      iex> Radixir.StitchPlan.from_account([], [address: "rdx1qspxpjejcn3przwrf7lvaaftm84ufrmf9yccd6xxnaj96kwykr59hvgnv42z7"])
+      [
+        [
+          keys: [:from_account, :address],
+          value: "rdx1qspxpjejcn3przwrf7lvaaftm84ufrmf9yccd6xxnaj96kwykr59hvgnv42z7"
+        ]
+      ]
+  """
+  @spec from_account(stitch_plans, params) :: stitch_plans
   def from_account(stitch_plans, params) do
     schema = [
       address: [
@@ -211,6 +420,24 @@ defmodule Radixir.StitchPlan do
     stitch_plan ++ stitch_plans
   end
 
+  @doc """
+  Generates stitch plan for `to` map.
+
+  ## Parameters
+    - `stitch_plans`: On-going stitch plans that will be stitched into a map.
+    - `params`: Keyword list that contains:
+      - `address` (required, string): To address.
+
+  ## Examples
+      iex> Radixir.StitchPlan.to([], [to: "rdx1qspxpjejcn3przwrf7lvaaftm84ufrmf9yccd6xxnaj96kwykr59hvgnv42z7"])
+      [
+        [
+          keys: [:to],
+          value: "rdx1qspxpjejcn3przwrf7lvaaftm84ufrmf9yccd6xxnaj96kwykr59hvgnv42z7"
+        ]
+      ]
+  """
+  @spec to(stitch_plans, params) :: stitch_plans
   def to(stitch_plans, params, prefix_keys \\ []) do
     schema = [
       to: [
@@ -228,6 +455,24 @@ defmodule Radixir.StitchPlan do
     stitch_plan ++ stitch_plans
   end
 
+  @doc """
+  Generates stitch plan for `from` map.
+
+  ## Parameters
+    - `stitch_plans`: On-going stitch plans that will be stitched into a map.
+    - `params`: Keyword list that contains:
+      - `address` (required, string): From address.
+
+  ## Examples
+      iex> Radixir.StitchPlan.from([], [from: "rdx1qspxpjejcn3przwrf7lvaaftm84ufrmf9yccd6xxnaj96kwykr59hvgnv42z7"])
+      [
+        [
+          keys: [:from],
+          value: "rdx1qspxpjejcn3przwrf7lvaaftm84ufrmf9yccd6xxnaj96kwykr59hvgnv42z7"
+        ]
+      ]
+  """
+  @spec from(stitch_plans, params) :: stitch_plans
   def from(stitch_plans, params, prefix_keys \\ []) do
     schema = [
       from: [

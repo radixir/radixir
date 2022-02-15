@@ -28,7 +28,6 @@ defmodule Radixir.Key do
     - `private_key`: Hex encoded private key.
 
   ## Examples
-
       iex> Radixir.Key.from_private_key("ed50cfe0904bfbf7668502a3f7d562c3139997255c3268c779eeff04a40f9a17")
       {:ok,
         %{
@@ -55,9 +54,10 @@ defmodule Radixir.Key do
     - `address`: Radix address.
 
   ## Examples
-
       iex> Radixir.Key.address_to_public_key("tdx1qspjlxkvcnueqm0l5gfdtnhc7y78ltmqqfpwu3q3r4x7un72l9uxgmccyzjy7")
-      {:ok, "032f9accc4f9906dffa212d5cef8f13c7faf600242ee44111d4dee4fcaf978646f"}
+      {:ok,
+        "032f9accc4f9906dffa212d5cef8f13c7faf600242ee44111d4dee4fcaf978646f"
+      }
   """
   @spec address_to_public_key(address) :: {:ok, public_key} | {:error, atom()}
   def address_to_public_key(address) do
@@ -75,7 +75,6 @@ defmodule Radixir.Key do
     - `public_key`: Hex encoded public key.
 
   ## Examples
-
       iex> Radixir.Key.public_key_to_addresses("032f9accc4f9906dffa212d5cef8f13c7faf600242ee44111d4dee4fcaf978646f")
       %{
         mainnet_address: "rdx1qspjlxkvcnueqm0l5gfdtnhc7y78ltmqqfpwu3q3r4x7un72l9uxgmceghq5a",
@@ -103,9 +102,10 @@ defmodule Radixir.Key do
     - `private_key`: Hex encoded private key.
 
   ## Examples
-
       iex> Radixir.Key.private_key_to_secret_integer("ed50cfe0904bfbf7668502a3f7d562c3139997255c3268c779eeff04a40f9a17")
-      {:ok, 107340927595134471984420820489673630767605194678966104711498635548873815202327}
+      {:ok,
+        107340927595134471984420820489673630767605194678966104711498635548873815202327
+      }
   """
   @spec private_key_to_secret_integer(private_key) ::
           {:ok, non_neg_integer} | {:error, error_message}
@@ -125,9 +125,10 @@ defmodule Radixir.Key do
     - `private_key`: Hex encoded private key.
 
   ## Examples
-
       iex> Radixir.Key.sign_data("68656C6C6F207261646978","ed50cfe0904bfbf7668502a3f7d562c3139997255c3268c779eeff04a40f9a17")
-      {:ok, "304402206f2c0f3a70c23879a44a2910f9b060e59d5b96e350605fdbee2a7a265ca503c302201043a8a957353744608c86824c286034e6166be475c7c096527a225cbdf90d0a"}
+      {:ok,
+        "304402206f2c0f3a70c23879a44a2910f9b060e59d5b96e350605fdbee2a7a265ca503c302201043a8a957353744608c86824c286034e6166be475c7c096527a225cbdf90d0a"
+      }
   """
   @spec sign_data(data, private_key) :: {:ok, signed_data} | {:error, error_message}
   def sign_data(data, private_key) do

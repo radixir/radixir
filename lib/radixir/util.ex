@@ -17,7 +17,7 @@ defmodule Radixir.Util do
   @type unsigned_transaction :: String.t()
   @type payload_to_sign :: String.t()
   @type error_message :: String.t()
-  @type keys_values :: list(list())
+  @type keys_values :: list(keyword())
 
   @doc """
   Encrypts `message` with `private_key` and `address`.
@@ -143,8 +143,7 @@ defmodule Radixir.Util do
   ## Parameters
     - `keys_values`: List of keyword lists.
 
-  ## Example
-
+  ## Examples
       iex> Radixir.Util.stitch([[keys: [:a, :b, :c], value: 4],[keys: [:z, :y, :x], value: 90]])
       %{a: %{b: %{c: 4}}, z: %{y: %{x: 90}}}
   """
