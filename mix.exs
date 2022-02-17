@@ -37,7 +37,7 @@ defmodule Radixir.MixProject do
 
   defp description() do
     """
-    An Elixir library for interacting with RadixDLT.
+    Radix + Elixir
     """
   end
 

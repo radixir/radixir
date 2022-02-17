@@ -1,6 +1,6 @@
 # Radixir
 
-An Elixir wrapper for Radix APIs and functionality.
+Radix + Elixir
 
 ## Installation
 
@@ -9,7 +9,7 @@ The package can be installed by adding `radixir` to your list of dependencies in
 ```elixir
 def deps do
   [
-    {:radixir, "~> 0.0.1"}
+    {:radixir, "~> 0.0.2"}
   ]
 end
 ```
@@ -17,6 +17,25 @@ end
 ## Documentation
 
 Check out the docs here [https://hexdocs.pm/radixir](https://hexdocs.pm/radixir).
+
+## Configuration
+
+See `.envrc.example` for an example of what environment variables can be set. Note that Radixir can still be used even if no environment variables are set.
+
+## Getting started locally
+
+- Install [asdf](https://asdf-vm.com/guide/getting-started.html#_3-install-asdf)
+- Clone [radixir](https://github.com/radixir/radixir) repo
+- Run `asdf install` while in `radixir` directory
+- Run `iex -S mix` to start using `radixir`
+
+## Example Usage
+
+Usage examples can be found in `/lib/examples`.
+
+## Github
+
+[Radixir](https://github.com/radixir/radixir)
 
 ## License
 
