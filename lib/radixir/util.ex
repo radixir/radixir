@@ -37,7 +37,7 @@ defmodule Radixir.Util do
          {:ok, dh} <- get_dh(private_key, address),
          {key_bytes, ephemeral_public_key_bytes, nonce_bytes} <- get_encryption_params(dh),
          {:ok, {_ad, payload}} <-
-           ExCrypto.encrypt(key_bytes, ephemeral_public_key_bytes, nonce_bytes, message),
+           Crypto.encrypt(key_bytes, ephemeral_public_key_bytes, nonce_bytes, message),
          {_iv, cipher_text_bytes, cipher_tag_bytes} <- payload do
       {:ok,
        encode16(
@@ -66,7 +66,7 @@ defmodule Radixir.Util do
          {:ok, dh} <- get_dh(private_key, address),
          {key_bytes, ephemeral_public_key_bytes, nonce_bytes, cipher_text_bytes, cipher_tag_bytes} <-
            get_decryption_params(encrypted_message, dh) do
-      ExCrypto.decrypt(
+      Crypto.decrypt(
         key_bytes,
         ephemeral_public_key_bytes,
         nonce_bytes,

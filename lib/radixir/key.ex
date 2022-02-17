@@ -3,7 +3,6 @@ defmodule Radixir.Key do
   Handles all things to do with public/private keys and radix addresses.
   """
 
-  alias Radixir.Bech32
   alias Radixir.Util
 
   @type private_key :: String.t()
