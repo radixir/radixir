@@ -63,7 +63,7 @@ defmodule Radixir.Key do
   def address_to_public_key(address) do
     with address <- String.downcase(address),
          {:ok, address} <- validate_address(address),
-         {:ok, _hrp, <<4>> <> public_key_bytes} <- Bech32.decode(address) do
+         {:ok, public_key_bytes} <- addr_to_pubkey(address) do
       {:ok, Util.encode16(public_key_bytes)}
     end
   end
@@ -86,12 +86,7 @@ defmodule Radixir.Key do
     with public_key <- String.downcase(public_key),
          {:ok, public_key} <- validate_public_key(public_key),
          {:ok, public_key} <- Util.decode16(public_key, "public_key") do
-      {mainnet_address, testnet_address} = pubkey_to_addrs(public_key)
-
-      %{
-        mainnet_address: mainnet_address,
-        testnet_address: testnet_address
-      }
+      pubkey_to_addrs(public_key)
     end
   end
 
@@ -154,7 +149,7 @@ defmodule Radixir.Key do
 
   defp format(keypair) do
     public_key = Curvy.Key.to_pubkey(keypair)
-    {mainnet_address, testnet_address} = pubkey_to_addrs(public_key)
+    addresses = pubkey_to_addrs(public_key)
     public_key = Util.encode16(public_key)
 
     private_key =
@@ -163,15 +158,19 @@ defmodule Radixir.Key do
       |> Util.encode16()
 
     %{
-      mainnet_address: mainnet_address,
-      testnet_address: testnet_address,
       public_key: public_key,
       private_key: private_key
     }
+    |> Map.merge(addresses)
   end
 
   defp pubkey_to_addrs(public_key) do
-    {Bech32.encode("rdx", <<4>> <> public_key), Bech32.encode("tdx", <<4>> <> public_key)}
+    %{
+      mainnet_address: Bech32.encode("rdx", <<4>> <> public_key),
+      testnet_address: Bech32.encode("tdx", <<4>> <> public_key),
+      validator_mainnet_address: Bech32.encode("rv", public_key),
+      validator_testnet_address: Bech32.encode("tv", public_key)
+    }
   end
 
   @doc false
@@ -193,9 +192,33 @@ defmodule Radixir.Key do
   @doc false
   def validate_address(address) do
     with {:ok, address} <- only_has_alpha_num(address),
-         {:ok, address} <- starts_rdx_tdx(address),
-         {:ok, address} <- expected_length(address, 65, "address") do
+         {:ok, address} <- valid_address_prefix(address),
+         {:ok, address} <- valid_address_length(address) do
       {:ok, address}
+    end
+  end
+
+  defp addr_to_pubkey("rdx" <> _rest = address) do
+    with {:ok, _hrp, <<4>> <> public_key_bytes} <- Bech32.decode(address) do
+      {:ok, public_key_bytes}
+    end
+  end
+
+  defp addr_to_pubkey("tdx" <> _rest = address) do
+    with {:ok, _hrp, <<4>> <> public_key_bytes} <- Bech32.decode(address) do
+      {:ok, public_key_bytes}
+    end
+  end
+
+  defp addr_to_pubkey("rv" <> _rest = address) do
+    with {:ok, _hrp, public_key_bytes} <- Bech32.decode(address) do
+      {:ok, public_key_bytes}
+    end
+  end
+
+  defp addr_to_pubkey("tv" <> _rest = address) do
+    with {:ok, _hrp, public_key_bytes} <- Bech32.decode(address) do
+      {:ok, public_key_bytes}
     end
   end
 
@@ -219,14 +242,30 @@ defmodule Radixir.Key do
     end
   end
 
-  defp starts_rdx_tdx(address) do
-    case String.match?(address, ~r/^rdx|tdx/) do
+  defp valid_address_prefix(address) do
+    case String.match?(address, ~r/^rdx|tdx|rv|tv/) do
       true ->
         {:ok, address}
 
       false ->
-        {:error, "address must start with rdx or tdx"}
+        {:error, "address must start with rdx, tdx, rv or tv"}
     end
+  end
+
+  defp valid_address_length("rv" <> _rest = address) do
+    expected_length(address, 62, "validator address")
+  end
+
+  defp valid_address_length("tv" <> _rest = address) do
+    expected_length(address, 62, "validator address")
+  end
+
+  defp valid_address_length("rdx" <> _rest = address) do
+    expected_length(address, 65, "address")
+  end
+
+  defp valid_address_length("tdx" <> _rest = address) do
+    expected_length(address, 65, "address")
   end
 
   defp expected_length(value, length, type) do
