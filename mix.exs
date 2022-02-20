@@ -27,6 +27,7 @@ defmodule Radixir.MixProject do
   defp deps() do
     [
       {:curvy, "~> 0.3.0"},
+      {:decimal, "~> 2.0"},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
       {:nimble_options, "~> 0.3.0"},
       {:req, "~> 0.2.0"},

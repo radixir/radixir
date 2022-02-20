@@ -12,6 +12,8 @@ defmodule Radixir.Util do
   @type encrypted_message :: String.t()
   @type encoded_message :: String.t()
   @type data :: String.t()
+  @type atto :: String.t()
+  @type xrd :: String.t()
   @type encoded_data :: String.t()
   @type error_note :: String.t()
   @type unsigned_transaction :: String.t()
@@ -153,6 +155,64 @@ defmodule Radixir.Util do
     Enum.reduce(keys_values, %{}, fn x, data ->
       map_put(data, x[:keys], x[:value])
     end)
+  end
+
+  @doc """
+  Converts xrd to atto, smallest unit of value.
+
+  ## Parameters
+    - `xrd`: Amount of XRD.
+
+  ## Examples
+      iex> Radixir.Util.xrd_to_atto("1.5")
+      {:ok, "1500000000000000000"}
+  """
+  @spec xrd_to_atto(xrd) :: {:ok, atto} | {:error, error_message}
+  def xrd_to_atto(xrd) do
+    case Decimal.parse(xrd) do
+      :error ->
+        {:error, "could not parse #{xrd} into float"}
+
+      {value, _} ->
+        {value, _} =
+          value
+          |> Decimal.mult(Integer.pow(10, 18))
+          |> Decimal.to_string()
+          |> Float.parse()
+
+        result =
+          value
+          |> trunc()
+          |> Integer.to_string()
+
+        {:ok, result}
+    end
+  end
+
+  @doc """
+  Converts atto, the smallest unit of value, into xrd.
+
+  ## Parameters
+    - `atto`: Amount of XRD, in atto units.
+
+  ## Examples
+      iex> Radixir.Util.atto_to_xrd("1500000000000000000")
+      {:ok, "1.5"}
+  """
+  @spec atto_to_xrd(atto) :: {:ok, xrd} | {:error, error_message}
+  def atto_to_xrd(atto) do
+    case Decimal.parse(atto) do
+      :error ->
+        {:error, "could not parse #{atto} into integer"}
+
+      {value, _} ->
+        result =
+          value
+          |> Decimal.div(Integer.pow(10, 18))
+          |> Decimal.to_string(:normal)
+
+        {:ok, result}
+    end
   end
 
   defp do_decode_message("0000" <> message), do: decode16(message, "message")

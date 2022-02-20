@@ -11,6 +11,7 @@ defmodule Radixir.Key do
   @type addresses :: map()
   @type keypair_and_addresses :: map()
   @type data :: String.t()
+  @type symbol :: String.t()
   @type signed_data :: Stiring.t()
   @type error_message :: String.t()
 
@@ -30,14 +31,19 @@ defmodule Radixir.Key do
       iex> Radixir.Key.from_private_key("ed50cfe0904bfbf7668502a3f7d562c3139997255c3268c779eeff04a40f9a17")
       {:ok,
       %{
-        mainnet_address: "rdx1qspjlxkvcnueqm0l5gfdtnhc7y78ltmqqfpwu3q3r4x7un72l9uxgmceghq5a",
+        mainnet: %{
+          account_address: "rdx1qspjlxkvcnueqm0l5gfdtnhc7y78ltmqqfpwu3q3r4x7un72l9uxgmceghq5a",
+          node_address: "rn1qvhe4nxylxgxmlazzt2ua78383l67cqzgthygygafhhyljhe0pjx7mctqsv",
+          validator_address: "rv1qvhe4nxylxgxmlazzt2ua78383l67cqzgthygygafhhyljhe0pjx7rtpsuj"
+        },
+        testnet: %{
+          account_address: "tdx1qspjlxkvcnueqm0l5gfdtnhc7y78ltmqqfpwu3q3r4x7un72l9uxgmccyzjy7",
+          node_address: "tn1qvhe4nxylxgxmlazzt2ua78383l67cqzgthygygafhhyljhe0pjx7apvxlm",
+          validator_address: "tv1qvhe4nxylxgxmlazzt2ua78383l67cqzgthygygafhhyljhe0pjx79jxkn9"
+        },
         private_key: "ed50cfe0904bfbf7668502a3f7d562c3139997255c3268c779eeff04a40f9a17",
-        public_key: "032f9accc4f9906dffa212d5cef8f13c7faf600242ee44111d4dee4fcaf978646f",
-        testnet_address: "tdx1qspjlxkvcnueqm0l5gfdtnhc7y78ltmqqfpwu3q3r4x7un72l9uxgmccyzjy7",
-        validator_mainnet_address: "rv1qvhe4nxylxgxmlazzt2ua78383l67cqzgthygygafhhyljhe0pjx7rtpsuj",
-        validator_testnet_address: "tv1qvhe4nxylxgxmlazzt2ua78383l67cqzgthygygafhhyljhe0pjx79jxkn9"
-        }
-      }
+        public_key: "032f9accc4f9906dffa212d5cef8f13c7faf600242ee44111d4dee4fcaf978646f"
+      }}
   """
   @spec from_private_key(private_key) :: {:ok, keypair_and_addresses} | {:error, error_message}
   def from_private_key(private_key) do
@@ -77,19 +83,26 @@ defmodule Radixir.Key do
 
   ## Examples
       iex> Radixir.Key.public_key_to_addresses("032f9accc4f9906dffa212d5cef8f13c7faf600242ee44111d4dee4fcaf978646f")
+      {:ok,
       %{
-        mainnet_address: "rdx1qspjlxkvcnueqm0l5gfdtnhc7y78ltmqqfpwu3q3r4x7un72l9uxgmceghq5a",
-        testnet_address: "tdx1qspjlxkvcnueqm0l5gfdtnhc7y78ltmqqfpwu3q3r4x7un72l9uxgmccyzjy7",
-        validator_mainnet_address: "rv1qvhe4nxylxgxmlazzt2ua78383l67cqzgthygygafhhyljhe0pjx7rtpsuj",
-        validator_testnet_address: "tv1qvhe4nxylxgxmlazzt2ua78383l67cqzgthygygafhhyljhe0pjx79jxkn9"
-      }
+        mainnet: %{
+          account_address: "rdx1qspjlxkvcnueqm0l5gfdtnhc7y78ltmqqfpwu3q3r4x7un72l9uxgmceghq5a",
+          node_address: "rn1qvhe4nxylxgxmlazzt2ua78383l67cqzgthygygafhhyljhe0pjx7mctqsv",
+          validator_address: "rv1qvhe4nxylxgxmlazzt2ua78383l67cqzgthygygafhhyljhe0pjx7rtpsuj"
+        },
+        testnet: %{
+          account_address: "tdx1qspjlxkvcnueqm0l5gfdtnhc7y78ltmqqfpwu3q3r4x7un72l9uxgmccyzjy7",
+          node_address: "tn1qvhe4nxylxgxmlazzt2ua78383l67cqzgthygygafhhyljhe0pjx7apvxlm",
+          validator_address: "tv1qvhe4nxylxgxmlazzt2ua78383l67cqzgthygygafhhyljhe0pjx79jxkn9"
+        }
+      }}
   """
-  @spec public_key_to_addresses(public_key) :: addresses | {:error, error_message}
+  @spec public_key_to_addresses(public_key) :: {:ok, addresses} | {:error, error_message}
   def public_key_to_addresses(public_key) do
     with public_key <- String.downcase(public_key),
          {:ok, public_key} <- validate_public_key(public_key),
          {:ok, public_key} <- Util.decode16(public_key, "public_key") do
-      pubkey_to_addrs(public_key)
+      {:ok, pubkey_to_addrs(public_key)}
     end
   end
 
@@ -138,6 +151,41 @@ defmodule Radixir.Key do
     end
   end
 
+  @doc """
+  Generates mainnet and testnet token rri from `public_key` and `symbol`.
+
+  ## Parameters
+    - `public_key`: Hex encoded public key.
+    - `synbol`: Token symbol.
+
+  ## Examples
+      iex> Radixir.Key.generate_token_rri("02690937690ffb9d7ae8b67af05efc03a5a9f7e53933de80f92ce763a5554a1fa3","gok")
+      %{
+        mainnet: "gok_rr1qdjusppk2dqe2r08xlnlauuaedn9rtuttz2c6g76jq3qee68dq",
+        testnet: "gok_tr1qdjusppk2dqe2r08xlnlauuaedn9rtuttz2c6g76jq3qezz2ds"
+      }
+  """
+  @spec generate_token_rri(public_key, symbol) :: {:ok, map()} | {:error, error_message}
+  def generate_token_rri(public_key, symbol) do
+    with public_key <- String.downcase(public_key),
+         symbol <- String.downcase(symbol),
+         {:ok, public_key} <- validate_public_key(public_key),
+         {:ok, public_key} <- Util.decode16(public_key, "public_key") do
+      result =
+        (public_key <> symbol)
+        |> Util.hash()
+        |> Util.hash()
+        |> String.slice(6..31)
+
+      data = <<3>> <> result
+
+      %{
+        mainnet: Bech32.encode(symbol <> "_rr", data),
+        testnet: Bech32.encode(symbol <> "_tr", data)
+      }
+    end
+  end
+
   defp check_private_key_size(<<private_key_bytes::binary-size(32)>>),
     do: {:ok, private_key_bytes}
 
@@ -169,10 +217,16 @@ defmodule Radixir.Key do
 
   defp pubkey_to_addrs(public_key) do
     %{
-      mainnet_address: Bech32.encode("rdx", <<4>> <> public_key),
-      testnet_address: Bech32.encode("tdx", <<4>> <> public_key),
-      validator_mainnet_address: Bech32.encode("rv", public_key),
-      validator_testnet_address: Bech32.encode("tv", public_key)
+      mainnet: %{
+        account_address: Bech32.encode("rdx", <<4>> <> public_key),
+        validator_address: Bech32.encode("rv", public_key),
+        node_address: Bech32.encode("rn", public_key)
+      },
+      testnet: %{
+        account_address: Bech32.encode("tdx", <<4>> <> public_key),
+        validator_address: Bech32.encode("tv", public_key),
+        node_address: Bech32.encode("tn", public_key)
+      }
     }
   end
 
@@ -213,13 +267,7 @@ defmodule Radixir.Key do
     end
   end
 
-  defp addr_to_pubkey("rv" <> _rest = address) do
-    with {:ok, _hrp, public_key_bytes} <- Bech32.decode(address) do
-      {:ok, public_key_bytes}
-    end
-  end
-
-  defp addr_to_pubkey("tv" <> _rest = address) do
+  defp addr_to_pubkey(address) do
     with {:ok, _hrp, public_key_bytes} <- Bech32.decode(address) do
       {:ok, public_key_bytes}
     end
@@ -246,12 +294,12 @@ defmodule Radixir.Key do
   end
 
   defp valid_address_prefix(address) do
-    case String.match?(address, ~r/^rdx|tdx|rv|tv/) do
+    case String.match?(address, ~r/^rdx|tdx|rv|tv|rn|tn/) do
       true ->
         {:ok, address}
 
       false ->
-        {:error, "address must start with rdx, tdx, rv or tv"}
+        {:error, "address must start with rdx, tdx, rv, tv, rn or tn"}
     end
   end
 
@@ -263,12 +311,20 @@ defmodule Radixir.Key do
     expected_length(address, 62, "validator address")
   end
 
+  defp valid_address_length("rn" <> _rest = address) do
+    expected_length(address, 62, "node address")
+  end
+
+  defp valid_address_length("tn" <> _rest = address) do
+    expected_length(address, 62, "node address")
+  end
+
   defp valid_address_length("rdx" <> _rest = address) do
-    expected_length(address, 65, "address")
+    expected_length(address, 65, "account address")
   end
 
   defp valid_address_length("tdx" <> _rest = address) do
-    expected_length(address, 65, "address")
+    expected_length(address, 65, "account address")
   end
 
   defp expected_length(value, length, type) do
