@@ -6,6 +6,7 @@
 - Added node and validator addresses to `Radixir.Key` module
 - Reformated the addresses map from `Radixir.Key` module
 - Added conversion from XRD to atto to `Radixir.Util` module
+- Added ability to generate token rri to `Radixir.Key` module
 
 ## 0.0.2 (02.17.2022)
 
