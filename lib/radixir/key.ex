@@ -14,8 +14,8 @@ defmodule Radixir.Key do
   @type symbol :: String.t()
   @type signed_data :: Stiring.t()
   @type error_message :: String.t()
-  @type master_private_key :: String.t()
-  @type master_public_key :: String.t()
+  @type account_extended_private_key :: String.t()
+  @type account_extended_public_key :: String.t()
   @type index :: integer
   @type options :: keyword
 
@@ -37,14 +37,16 @@ defmodule Radixir.Key do
   ## Parameters
     - `options`: Keyword list that contains
       - `mnemonic` (optional, string): If `mnemonic` is not in `options` then the mnemonic set in the configs will be used.
-      - `index` (optional, integer): If `index` is not in `options` then an index of 0 will be used.
+      - `account_index` (optional, integer): If `account_index` is not in `options` then an `account_index` of 0 will be used.
+      - `address_index` (optional, integer): If `address_index` is not in `options` then an `address_index` of 0 will be used.
   """
   @spec generate_from_mnemonic(options) :: {:ok, map} | {:error, error_message}
   def generate_from_mnemonic(options \\ []) do
     with {:ok, mnemonic} <- Util.get_mnemonic_from_options(options),
-         index <- Keyword.get(options, :index, 0) do
+         account_index <- Keyword.get(options, :account_index, 0),
+         address_index <- Keyword.get(options, :address_index, 0) do
       BlockKeys.from_mnemonic(mnemonic)
-      |> BlockKeys.CKD.derive("m/44'/1022'/0'/0/#{index}")
+      |> BlockKeys.CKD.derive("m/44'/1022'/#{account_index}'/0/#{address_index}")
       |> Encoding.decode_extended_key()
       |> Map.fetch!(:key)
       |> Util.encode16()
@@ -54,34 +56,39 @@ defmodule Radixir.Key do
   end
 
   @doc """
-  Generates master private key and master public key from mnemonic.
+  Generates account extended private key and account extended public key from mnemonic.
 
   ## Parameters
     - `options`: Keyword list that contains
       - `mnemonic` (optional, string): If `mnemonic` is not in `options` then the mnemonic set in the configs will be used.
+      - `account_index` (optional, integer): If `account_index` is not in `options` then an `account_index` of 0 will be used.
   """
-  @spec get_master_keys_from_mnemonic(options) :: {:ok, map} | {:error, error_message}
-  def get_master_keys_from_mnemonic(options \\ []) do
-    with {:ok, mnemonic} <- Util.get_mnemonic_from_options(options) do
+  @spec get_account_extended_keys_from_mnemonic(options) :: {:ok, map} | {:error, error_message}
+  def get_account_extended_keys_from_mnemonic(options \\ []) do
+    with {:ok, mnemonic} <- Util.get_mnemonic_from_options(options),
+         account_index <- Keyword.get(options, :account_index, 0) do
       root_key = BlockKeys.from_mnemonic(mnemonic)
 
       %{
-        master_private_key: BlockKeys.CKD.derive(root_key, "m/44'/1022'/0'"),
-        master_public_key: BlockKeys.CKD.derive(root_key, "M/44'/1022'/0'")
+        account_extended_private_key:
+          BlockKeys.CKD.derive(root_key, "m/44'/1022'/#{account_index}'"),
+        account_extended_public_key:
+          BlockKeys.CKD.derive(root_key, "M/44'/1022'/#{account_index}'")
       }
     end
   end
 
   @doc """
-  Generates a keypair and addresses from master private key.
+  Generates a keypair and addresses from account extended private key.
 
   ## Parameters
-    - `master_private_key`: Master private key.
+    - `account_extended_private_key`: Account extended private key.
     - `index`: Path index.
   """
-  @spec from_master_private_key(master_private_key, index) :: {:ok, map} | {:error, error_message}
-  def from_master_private_key(master_private_key, index \\ 0) do
-    BlockKeys.CKD.derive(master_private_key, "m/0/#{index}")
+  @spec from_account_extended_private_key(account_extended_private_key, index) ::
+          {:ok, map} | {:error, error_message}
+  def from_account_extended_private_key(account_extended_private_key, index \\ 0) do
+    BlockKeys.CKD.derive(account_extended_private_key, "m/0/#{index}")
     |> Encoding.decode_extended_key()
     |> Map.fetch!(:key)
     |> Util.encode16()
@@ -93,17 +100,16 @@ defmodule Radixir.Key do
   Generates addresses from master public key.
 
   ## Parameters
-    - `master_public_key`: Master public key.
+    - `account_extended_public_key`: Master public key.
     - `index`: Path index.
   """
-  @spec master_public_key_to_addresses(master_public_key, index) ::
+  @spec account_extended_public_key_to_addresses(account_extended_public_key, index) ::
           {:ok, map} | {:error, error_message}
-  def master_public_key_to_addresses(master_public_key, index \\ 0) do
-    BlockKeys.CKD.derive(master_public_key, "M/0/#{index}")
+  def account_extended_public_key_to_addresses(account_extended_public_key, index \\ 0) do
+    BlockKeys.CKD.derive(account_extended_public_key, "M/0/#{index}")
     |> Encoding.decode_extended_key()
     |> Map.fetch!(:key)
     |> Util.encode16()
-    |> String.replace_prefix("00", "")
     |> public_key_to_addresses()
   end
 
