@@ -32,7 +32,7 @@ defmodule Radixir.Key do
   def generate_mnemonic(), do: BlockKeys.Mnemonic.generate_phrase()
 
   @doc """
-  Generates a keypair and addresses from mnemonic.
+  Derives a keypair and addresses from mnemonic.
 
   ## Parameters
     - `options`: Keyword list that contains
@@ -40,8 +40,8 @@ defmodule Radixir.Key do
       - `account_index` (optional, integer): If `account_index` is not in `options` then an `account_index` of 0 will be used.
       - `address_index` (optional, integer): If `address_index` is not in `options` then an `address_index` of 0 will be used.
   """
-  @spec generate_from_mnemonic(options) :: {:ok, map} | {:error, error_message}
-  def generate_from_mnemonic(options \\ []) do
+  @spec from_mnemonic(options) :: {:ok, map} | {:error, error_message}
+  def from_mnemonic(options \\ []) do
     with {:ok, mnemonic} <- Util.get_mnemonic_from_options(options),
          account_index <- Keyword.get(options, :account_index, 0),
          address_index <- Keyword.get(options, :address_index, 0) do
@@ -52,29 +52,6 @@ defmodule Radixir.Key do
       |> Util.encode16()
       |> String.replace_prefix("00", "")
       |> from_private_key()
-    end
-  end
-
-  @doc """
-  Generates account extended private key and account extended public key from mnemonic.
-
-  ## Parameters
-    - `options`: Keyword list that contains
-      - `mnemonic` (optional, string): If `mnemonic` is not in `options` then the mnemonic set in the configs will be used.
-      - `account_index` (optional, integer): If `account_index` is not in `options` then an `account_index` of 0 will be used.
-  """
-  @spec get_account_extended_keys_from_mnemonic(options) :: {:ok, map} | {:error, error_message}
-  def get_account_extended_keys_from_mnemonic(options \\ []) do
-    with {:ok, mnemonic} <- Util.get_mnemonic_from_options(options),
-         account_index <- Keyword.get(options, :account_index, 0) do
-      root_key = BlockKeys.from_mnemonic(mnemonic)
-
-      %{
-        account_extended_private_key:
-          BlockKeys.CKD.derive(root_key, "m/44'/1022'/#{account_index}'"),
-        account_extended_public_key:
-          BlockKeys.CKD.derive(root_key, "M/44'/1022'/#{account_index}'")
-      }
     end
   end
 
@@ -94,23 +71,6 @@ defmodule Radixir.Key do
     |> Util.encode16()
     |> String.replace_prefix("00", "")
     |> from_private_key()
-  end
-
-  @doc """
-  Generates addresses from master public key.
-
-  ## Parameters
-    - `account_extended_public_key`: Master public key.
-    - `index`: Path index.
-  """
-  @spec account_extended_public_key_to_addresses(account_extended_public_key, index) ::
-          {:ok, map} | {:error, error_message}
-  def account_extended_public_key_to_addresses(account_extended_public_key, index \\ 0) do
-    BlockKeys.CKD.derive(account_extended_public_key, "M/0/#{index}")
-    |> Encoding.decode_extended_key()
-    |> Map.fetch!(:key)
-    |> Util.encode16()
-    |> public_key_to_addresses()
   end
 
   @doc """
@@ -147,24 +107,43 @@ defmodule Radixir.Key do
   end
 
   @doc """
-  Converts `address` to its public key.
+  Generates account extended private key and account extended public key from mnemonic.
 
   ## Parameters
-    - `address`: Radix address.
-
-  ## Examples
-      iex> Radixir.Key.address_to_public_key("tdx1qspjlxkvcnueqm0l5gfdtnhc7y78ltmqqfpwu3q3r4x7un72l9uxgmccyzjy7")
-      {:ok,
-        "032f9accc4f9906dffa212d5cef8f13c7faf600242ee44111d4dee4fcaf978646f"
-      }
+    - `options`: Keyword list that contains
+      - `mnemonic` (optional, string): If `mnemonic` is not in `options` then the mnemonic set in the configs will be used.
+      - `account_index` (optional, integer): If `account_index` is not in `options` then an `account_index` of 0 will be used.
   """
-  @spec address_to_public_key(address) :: {:ok, public_key} | {:error, atom()}
-  def address_to_public_key(address) do
-    with address <- String.downcase(address),
-         {:ok, address} <- validate_address(address),
-         {:ok, public_key_bytes} <- addr_to_pubkey(address) do
-      {:ok, Util.encode16(public_key_bytes)}
+  @spec get_account_extended_keys_from_mnemonic(options) :: {:ok, map} | {:error, error_message}
+  def get_account_extended_keys_from_mnemonic(options \\ []) do
+    with {:ok, mnemonic} <- Util.get_mnemonic_from_options(options),
+         account_index <- Keyword.get(options, :account_index, 0) do
+      root_key = BlockKeys.from_mnemonic(mnemonic)
+
+      %{
+        account_extended_private_key:
+          BlockKeys.CKD.derive(root_key, "m/44'/1022'/#{account_index}'"),
+        account_extended_public_key:
+          BlockKeys.CKD.derive(root_key, "M/44'/1022'/#{account_index}'")
+      }
     end
+  end
+
+  @doc """
+  Generates addresses from master public key.
+
+  ## Parameters
+    - `account_extended_public_key`: Master public key.
+    - `index`: Path index.
+  """
+  @spec account_extended_public_key_to_addresses(account_extended_public_key, index) ::
+          {:ok, map} | {:error, error_message}
+  def account_extended_public_key_to_addresses(account_extended_public_key, index \\ 0) do
+    BlockKeys.CKD.derive(account_extended_public_key, "M/0/#{index}")
+    |> Encoding.decode_extended_key()
+    |> Map.fetch!(:key)
+    |> Util.encode16()
+    |> public_key_to_addresses()
   end
 
   @doc """
@@ -195,6 +174,27 @@ defmodule Radixir.Key do
          {:ok, public_key} <- validate_public_key(public_key),
          {:ok, public_key} <- Util.decode16(public_key, "public_key") do
       {:ok, pubkey_to_addrs(public_key)}
+    end
+  end
+
+  @doc """
+  Converts `address` to its public key.
+
+  ## Parameters
+    - `address`: Radix address.
+
+  ## Examples
+      iex> Radixir.Key.address_to_public_key("tdx1qspjlxkvcnueqm0l5gfdtnhc7y78ltmqqfpwu3q3r4x7un72l9uxgmccyzjy7")
+      {:ok,
+        "032f9accc4f9906dffa212d5cef8f13c7faf600242ee44111d4dee4fcaf978646f"
+      }
+  """
+  @spec address_to_public_key(address) :: {:ok, public_key} | {:error, atom()}
+  def address_to_public_key(address) do
+    with address <- String.downcase(address),
+         {:ok, address} <- validate_address(address),
+         {:ok, public_key_bytes} <- addr_to_pubkey(address) do
+      {:ok, Util.encode16(public_key_bytes)}
     end
   end
 

@@ -6,6 +6,7 @@ defmodule Radixir.System.API do
   alias Radixir.Util
 
   @type options :: keyword()
+  @type error_message :: String.t()
 
   @doc """
   Submits request to `/system/version`.
@@ -33,7 +34,7 @@ defmodule Radixir.System.API do
   ## System API Documentation
     - [/system/version](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/radixdlt/radixdlt/1.1.0/radixdlt-core/radixdlt/src/main/java/com/radixdlt/api/system/api.yaml#/paths/~1system~1version/get)
   """
-  @spec get_version(options) :: {:ok, map} | {:error, map | String.t()}
+  @spec get_version(options) :: {:ok, map} | {:error, map | error_message}
   def get_version(options \\ []) do
     with {:ok, username, password, options} <- Util.get_auth_from_options(options),
          {:ok, url, options} <- Util.get_url_from_options(options, :system) do
@@ -69,7 +70,7 @@ defmodule Radixir.System.API do
   ## System API Documentation
     - [/system/health](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/radixdlt/radixdlt/1.1.0/radixdlt-core/radixdlt/src/main/java/com/radixdlt/api/system/api.yaml#/paths/~1system~1health/get)
   """
-  @spec get_health(options) :: {:ok, map} | {:error, map | String.t()}
+  @spec get_health(options) :: {:ok, map} | {:error, map | error_message}
   def get_health(options \\ []) do
     with {:ok, username, password, options} <- Util.get_auth_from_options(options),
          {:ok, url, options} <- Util.get_url_from_options(options, :system) do
@@ -105,7 +106,7 @@ defmodule Radixir.System.API do
   ## System API Documentation
     - [/system/configuration](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/radixdlt/radixdlt/1.1.0/radixdlt-core/radixdlt/src/main/java/com/radixdlt/api/system/api.yaml#/paths/~1system~1configuration/get)
   """
-  @spec get_configuration(options) :: {:ok, map} | {:error, map | String.t()}
+  @spec get_configuration(options) :: {:ok, map} | {:error, map | error_message}
   def get_configuration(options \\ []) do
     with {:ok, username, password, options} <- Util.get_auth_from_options(options),
          {:ok, url, options} <- Util.get_url_from_options(options, :system) do
@@ -141,7 +142,7 @@ defmodule Radixir.System.API do
   ## System API Documentation
     - [/system/peers](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/radixdlt/radixdlt/1.1.0/radixdlt-core/radixdlt/src/main/java/com/radixdlt/api/system/api.yaml#/paths/~1system~1peers/get)
   """
-  @spec get_peers(options) :: {:ok, map} | {:error, map | String.t()}
+  @spec get_peers(options) :: {:ok, map} | {:error, map | error_message}
   def get_peers(options \\ []) do
     with {:ok, username, password, options} <- Util.get_auth_from_options(options),
          {:ok, url, options} <- Util.get_url_from_options(options, :system) do
@@ -177,7 +178,7 @@ defmodule Radixir.System.API do
   ## System API Documentation
     - [/system/addressbook](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/radixdlt/radixdlt/1.1.0/radixdlt-core/radixdlt/src/main/java/com/radixdlt/api/system/api.yaml#/paths/~1system~1addressbook/get)
   """
-  @spec get_address_book(options) :: {:ok, map} | {:error, map | String.t()}
+  @spec get_address_book(options) :: {:ok, map} | {:error, map | error_message}
   def get_address_book(options \\ []) do
     with {:ok, username, password, options} <- Util.get_auth_from_options(options),
          {:ok, url, options} <- Util.get_url_from_options(options, :system) do
@@ -213,7 +214,7 @@ defmodule Radixir.System.API do
   ## System API Documentation
     - [/system/metrics](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/radixdlt/radixdlt/1.1.0/radixdlt-core/radixdlt/src/main/java/com/radixdlt/api/system/api.yaml#/paths/~1system~1metrics/get)
   """
-  @spec get_metrics(options) :: {:ok, map} | {:error, map | String.t()}
+  @spec get_metrics(options) :: {:ok, map} | {:error, map | error_message}
   def get_metrics(options \\ []) do
     with {:ok, username, password, options} <- Util.get_auth_from_options(options),
          {:ok, url, options} <- Util.get_url_from_options(options, :system) do
@@ -249,7 +250,7 @@ defmodule Radixir.System.API do
   ## System API Documentation
     - [/prometheus/metrics](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/radixdlt/radixdlt/1.1.0/radixdlt-core/radixdlt/src/main/java/com/radixdlt/api/system/api.yaml#/paths/~1prometheus~1metrics/get)
   """
-  @spec get_prometheus_metrics(options) :: {:ok, map} | {:error, map | String.t()}
+  @spec get_prometheus_metrics(options) :: {:ok, map} | {:error, map | error_message}
   def get_prometheus_metrics(options \\ []) do
     with {:ok, username, password, options} <- Util.get_auth_from_options(options),
          {:ok, url, options} <- Util.get_url_from_options(options, :system) do
