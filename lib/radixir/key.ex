@@ -46,7 +46,7 @@ defmodule Radixir.Key do
          account_index <- Keyword.get(options, :account_index, 0),
          address_index <- Keyword.get(options, :address_index, 0) do
       BlockKeys.from_mnemonic(mnemonic)
-      |> BlockKeys.CKD.derive("m/44'/1022'/#{account_index}'/0/#{address_index}")
+      |> BlockKeys.CKD.derive("m/44'/1022'/#{account_index}'/0/#{address_index}'")
       |> Encoding.decode_extended_key()
       |> Map.fetch!(:key)
       |> Util.encode16()
@@ -88,7 +88,7 @@ defmodule Radixir.Key do
   @spec from_account_extended_private_key(account_extended_private_key, index) ::
           {:ok, map} | {:error, error_message}
   def from_account_extended_private_key(account_extended_private_key, index \\ 0) do
-    BlockKeys.CKD.derive(account_extended_private_key, "m/0/#{index}")
+    BlockKeys.CKD.derive(account_extended_private_key, "m/0/#{index}'")
     |> Encoding.decode_extended_key()
     |> Map.fetch!(:key)
     |> Util.encode16()
