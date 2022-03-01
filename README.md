@@ -18,9 +18,24 @@ end
 
 Check out the docs here [https://hexdocs.pm/radixir](https://hexdocs.pm/radixir).
 
-## Configuration
+## Environment variables
 
 See `.envrc.example` for an example of what environment variables can be set. Note that Radixir can still be used even if no environment variables are set.
+
+## Configuration
+
+Place the following in `runtime.exs` if using environment variables:
+
+```
+config :radixir, Radixir.Config,
+  gateway_api_url: System.get_env("GATEWAY_API_URL"),
+  core_api_url: System.get_env("CORE_API_URL"),
+  system_api_url: System.get_env("SYSTEM_API_URL"),
+  testnet: System.get_env("TESTNET"),
+  usernames: System.get_env("USERNAMES"),
+  passwords: System.get_env("PASSWORDS")
+
+```
 
 ## Getting started locally
 

@@ -7,6 +7,7 @@ defmodule Radixir.Config do
   @type username :: String.t()
   @type password :: String.t()
   @type error_message :: String.t()
+  @type mnemonic :: String.t()
 
   @doc """
   Fetches gateway api url.
@@ -36,6 +37,16 @@ defmodule Radixir.Config do
     :radixir
     |> Application.get_env(__MODULE__)
     |> Keyword.get(:system_api_url)
+  end
+
+  @doc """
+  Fetches mnemonic.
+  """
+  @spec mnemonic() :: url | nil
+  def mnemonic do
+    :radixir
+    |> Application.get_env(__MODULE__)
+    |> Keyword.get(:mnemonic)
   end
 
   @doc """

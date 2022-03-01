@@ -13,12 +13,12 @@ defmodule Radixir.Gateway.API do
 
   ## Parameters
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not found in `options` then the url set in the configs will be used.
+      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
 
   ## Gateway API Documentation
     - [/gateway](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/radixdlt/radixdlt-network-gateway/1.1.1/gateway-api-spec.yaml#tag/Status/paths/~1gateway/post)
   """
-  @spec get_info(options) :: {:ok, map} | {:error, map}
+  @spec get_info(options) :: {:ok, map} | {:error, map | String.t()}
   def get_info(options \\ []) do
     with {:ok, url, options} <- Util.get_url_from_options(options, :gateway) do
       HTTP.post(url, "/gateway", %{}, options)
@@ -31,12 +31,12 @@ defmodule Radixir.Gateway.API do
   ## Parameters
     - `body`: Request body.
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not found in `options` then the url set in the configs will be used.
+      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
 
   ## Gateway API Documentation
     - [/account/derive](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/radixdlt/radixdlt-network-gateway/1.1.1/gateway-api-spec.yaml#tag/Account/paths/~1account~1derive/post)
   """
-  @spec derive_account_identifier(body, options) :: {:ok, map} | {:error, map}
+  @spec derive_account_identifier(body, options) :: {:ok, map} | {:error, map | String.t()}
   def derive_account_identifier(body, options \\ []) do
     with {:ok, url, options} <- Util.get_url_from_options(options, :gateway) do
       HTTP.post(url, "/account/derive", body, options)
@@ -49,12 +49,12 @@ defmodule Radixir.Gateway.API do
   ## Parameters
     - `body`: Request body.
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not found in `options` then the url set in the configs will be used.
+      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
 
   ## Gateway API Documentation
     - [/account/balances](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/radixdlt/radixdlt-network-gateway/1.1.1/gateway-api-spec.yaml#tag/Account/paths/~1account~1balances/post)
   """
-  @spec get_account_balances(body, options) :: {:ok, map} | {:error, map}
+  @spec get_account_balances(body, options) :: {:ok, map} | {:error, map | String.t()}
   def get_account_balances(body, options \\ []) do
     with {:ok, url, options} <- Util.get_url_from_options(options, :gateway) do
       HTTP.post(url, "/account/balances", body, options)
@@ -67,12 +67,12 @@ defmodule Radixir.Gateway.API do
   ## Parameters
     - `body`: Request body.
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not found in `options` then the url set in the configs will be used.
+      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
 
   ## Gateway API Documentation
     - [/account/stakes](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/radixdlt/radixdlt-network-gateway/1.1.1/gateway-api-spec.yaml#tag/Account/paths/~1account~1stakes/post)
   """
-  @spec get_stake_positions(body, options) :: {:ok, map} | {:error, map}
+  @spec get_stake_positions(body, options) :: {:ok, map} | {:error, map | String.t()}
   def get_stake_positions(body, options \\ []) do
     with {:ok, url, options} <- Util.get_url_from_options(options, :gateway) do
       HTTP.post(url, "/account/stakes", body, options)
@@ -85,12 +85,12 @@ defmodule Radixir.Gateway.API do
   ## Parameters
     - `body`: Request body.
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not found in `options` then the url set in the configs will be used.
+      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
 
   ## Gateway API Documentation
     - [/account/unstakes](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/radixdlt/radixdlt-network-gateway/1.1.1/gateway-api-spec.yaml#tag/Account/paths/~1account~1unstakes/post)
   """
-  @spec get_unstake_positions(body, options) :: {:ok, map} | {:error, map}
+  @spec get_unstake_positions(body, options) :: {:ok, map} | {:error, map | String.t()}
   def get_unstake_positions(body, options \\ []) do
     with {:ok, url, options} <- Util.get_url_from_options(options, :gateway) do
       HTTP.post(url, "/account/unstakes", body, options)
@@ -103,12 +103,12 @@ defmodule Radixir.Gateway.API do
   ## Parameters
     - `body`: Request body.
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not found in `options` then the url set in the configs will be used.
+      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
 
   ## Gateway API Documentation
     - [/account/transactions](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/radixdlt/radixdlt-network-gateway/1.1.1/gateway-api-spec.yaml#tag/Account/paths/~1account~1transactions/post)
   """
-  @spec get_account_transactions(body, options) :: {:ok, map} | {:error, map}
+  @spec get_account_transactions(body, options) :: {:ok, map} | {:error, map | String.t()}
   def get_account_transactions(body, options \\ []) do
     with {:ok, url, options} <- Util.get_url_from_options(options, :gateway) do
       HTTP.post(url, "/account/transactions", body, options)
@@ -121,12 +121,12 @@ defmodule Radixir.Gateway.API do
   ## Parameters
     - `body`: Request body.
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not found in `options` then the url set in the configs will be used.
+      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
 
   ## Gateway API Documentation
     - [/token/native](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/radixdlt/radixdlt-network-gateway/1.1.1/gateway-api-spec.yaml#tag/Token/paths/~1token~1native/post)
   """
-  @spec get_native_token_info(body, options) :: {:ok, map} | {:error, map}
+  @spec get_native_token_info(body, options) :: {:ok, map} | {:error, map | String.t()}
   def get_native_token_info(body, options \\ []) do
     with {:ok, url, options} <- Util.get_url_from_options(options, :gateway) do
       HTTP.post(url, "/token/native", body, options)
@@ -139,12 +139,12 @@ defmodule Radixir.Gateway.API do
   ## Parameters
     - `body`: Request body.
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not found in `options` then the url set in the configs will be used.
+      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
 
   ## Gateway API Documentation
     - [/token](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/radixdlt/radixdlt-network-gateway/1.1.1/gateway-api-spec.yaml#tag/Token/paths/~1token/post)
   """
-  @spec get_token_info(body, options) :: {:ok, map} | {:error, map}
+  @spec get_token_info(body, options) :: {:ok, map} | {:error, map | String.t()}
   def get_token_info(body, options \\ []) do
     with {:ok, url, options} <- Util.get_url_from_options(options, :gateway) do
       HTTP.post(url, "/token", body, options)
@@ -157,12 +157,12 @@ defmodule Radixir.Gateway.API do
   ## Parameters
     - `body`: Request body.
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not found in `options` then the url set in the configs will be used.
+      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
 
   ## Gateway API Documentation
     - [/token/derive](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/radixdlt/radixdlt-network-gateway/1.1.1/gateway-api-spec.yaml#tag/Token/paths/~1token~1derive/post)
   """
-  @spec derive_token_identifier(body, options) :: {:ok, map} | {:error, map}
+  @spec derive_token_identifier(body, options) :: {:ok, map} | {:error, map | String.t()}
   def derive_token_identifier(body, options \\ []) do
     with {:ok, url, options} <- Util.get_url_from_options(options, :gateway) do
       HTTP.post(url, "/token/derive", body, options)
@@ -175,12 +175,12 @@ defmodule Radixir.Gateway.API do
   ## Parameters
     - `body`: Request body.
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not found in `options` then the url set in the configs will be used.
+      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
 
   ## Gateway API Documentation
     - [/validator](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/radixdlt/radixdlt-network-gateway/1.1.1/gateway-api-spec.yaml#tag/Validator/paths/~1validator/post)
   """
-  @spec get_validator(body, options) :: {:ok, map} | {:error, map}
+  @spec get_validator(body, options) :: {:ok, map} | {:error, map | String.t()}
   def get_validator(body, options \\ []) do
     with {:ok, url, options} <- Util.get_url_from_options(options, :gateway) do
       HTTP.post(url, "/validator", body, options)
@@ -193,12 +193,12 @@ defmodule Radixir.Gateway.API do
   ## Parameters
     - `body`: Request body.
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not found in `options` then the url set in the configs will be used.
+      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
 
   ## Gateway API Documentation
     - [/validator/derive](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/radixdlt/radixdlt-network-gateway/1.1.1/gateway-api-spec.yaml#tag/Validator/paths/~1validator~1derive/post)
   """
-  @spec derive_validator_identifier(body, options) :: {:ok, map} | {:error, map}
+  @spec derive_validator_identifier(body, options) :: {:ok, map} | {:error, map | String.t()}
   def derive_validator_identifier(body, options \\ []) do
     with {:ok, url, options} <- Util.get_url_from_options(options, :gateway) do
       HTTP.post(url, "/validator/derive", body, options)
@@ -211,12 +211,12 @@ defmodule Radixir.Gateway.API do
   ## Parameters
     - `body`: Request body.
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not found in `options` then the url set in the configs will be used.
+      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
 
   ## Gateway API Documentation
     - [/validators](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/radixdlt/radixdlt-network-gateway/1.1.1/gateway-api-spec.yaml#tag/Validator/paths/~1validators/post)
   """
-  @spec get_validators(body, options) :: {:ok, map} | {:error, map}
+  @spec get_validators(body, options) :: {:ok, map} | {:error, map | String.t()}
   def get_validators(body, options \\ []) do
     with {:ok, url, options} <- Util.get_url_from_options(options, :gateway) do
       HTTP.post(url, "/validators", body, options)
@@ -229,12 +229,12 @@ defmodule Radixir.Gateway.API do
   ## Parameters
     - `body`: Request body.
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not found in `options` then the url set in the configs will be used.
+      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
 
   ## Gateway API Documentation
     - [/validator/stakes](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/radixdlt/radixdlt-network-gateway/1.1.1/gateway-api-spec.yaml#tag/Validator/paths/~1validator~1stakes/post)
   """
-  @spec get_validator_stakes(body, options) :: {:ok, map} | {:error, map}
+  @spec get_validator_stakes(body, options) :: {:ok, map} | {:error, map | String.t()}
   def get_validator_stakes(body, options \\ []) do
     with {:ok, url, options} <- Util.get_url_from_options(options, :gateway) do
       HTTP.post(url, "/validator/stakes", body, options)
@@ -247,12 +247,12 @@ defmodule Radixir.Gateway.API do
   ## Parameters
     - `body`: Request body.
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not found in `options` then the url set in the configs will be used.
+      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
 
   ## Gateway API Documentation
     - [/transaction/rules](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/radixdlt/radixdlt-network-gateway/1.1.1/gateway-api-spec.yaml#tag/Transaction/paths/~1transaction~1rules/post)
   """
-  @spec get_transaction_rules(body, options) :: {:ok, map} | {:error, map}
+  @spec get_transaction_rules(body, options) :: {:ok, map} | {:error, map | String.t()}
   def get_transaction_rules(body, options \\ []) do
     with {:ok, url, options} <- Util.get_url_from_options(options, :gateway) do
       HTTP.post(url, "/transaction/rules", body, options)
@@ -265,12 +265,12 @@ defmodule Radixir.Gateway.API do
   ## Parameters
     - `body`: Request body.
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not found in `options` then the url set in the configs will be used.
+      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
 
   ## Gateway API Documentation
     - [/transaction/build](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/radixdlt/radixdlt-network-gateway/1.1.1/gateway-api-spec.yaml#tag/Transaction/paths/~1transaction~1build/post)
   """
-  @spec build_transaction(body, options) :: {:ok, map} | {:error, map}
+  @spec build_transaction(body, options) :: {:ok, map} | {:error, map | String.t()}
   def build_transaction(body, options \\ []) do
     with {:ok, url, options} <- Util.get_url_from_options(options, :gateway) do
       HTTP.post(url, "/transaction/build", body, options)
@@ -283,12 +283,12 @@ defmodule Radixir.Gateway.API do
   ## Parameters
     - `body`: Request body.
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not found in `options` then the url set in the configs will be used.
+      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
 
   ## Gateway API Documentation
     - [/transaction/finalize](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/radixdlt/radixdlt-network-gateway/1.1.1/gateway-api-spec.yaml#tag/Transaction/paths/~1transaction~1finalize/post)
   """
-  @spec finalize_transaction(body, options) :: {:ok, map} | {:error, map}
+  @spec finalize_transaction(body, options) :: {:ok, map} | {:error, map | String.t()}
   def finalize_transaction(body, options \\ []) do
     with {:ok, url, options} <- Util.get_url_from_options(options, :gateway) do
       HTTP.post(url, "/transaction/finalize", body, options)
@@ -301,12 +301,12 @@ defmodule Radixir.Gateway.API do
   ## Parameters
     - `body`: Request body.
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not found in `options` then the url set in the configs will be used.
+      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
 
   ## Gateway API Documentation
     - [/transaction/submit](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/radixdlt/radixdlt-network-gateway/1.1.1/gateway-api-spec.yaml#tag/Transaction/paths/~1transaction~1submit/post)
   """
-  @spec submit_transaction(body, options) :: {:ok, map} | {:error, map}
+  @spec submit_transaction(body, options) :: {:ok, map} | {:error, map | String.t()}
   def submit_transaction(body, options \\ []) do
     with {:ok, url, options} <- Util.get_url_from_options(options, :gateway) do
       HTTP.post(url, "/transaction/submit", body, options)
@@ -319,12 +319,12 @@ defmodule Radixir.Gateway.API do
   ## Parameters
     - `body`: Request body.
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not found in `options` then the url set in the configs will be used.
+      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
 
   ## Gateway API Documentation
     - [/transaction/status](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/radixdlt/radixdlt-network-gateway/1.1.1/gateway-api-spec.yaml#tag/Transaction/paths/~1transaction~1status/post)
   """
-  @spec get_transaction_status(body, options) :: {:ok, map} | {:error, map}
+  @spec get_transaction_status(body, options) :: {:ok, map} | {:error, map | String.t()}
   def get_transaction_status(body, options \\ []) do
     with {:ok, url, options} <- Util.get_url_from_options(options, :gateway) do
       HTTP.post(url, "/transaction/status", body, options)

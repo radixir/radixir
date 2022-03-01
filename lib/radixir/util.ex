@@ -225,6 +225,11 @@ defmodule Radixir.Util do
   end
 
   @doc false
+  def take_and_drop(options, keys) do
+    {Keyword.take(options, keys), Keyword.drop(options, keys)}
+  end
+
+  @doc false
   def hash(data), do: :crypto.hash(:sha256, data)
 
   @doc false
@@ -247,6 +252,17 @@ defmodule Radixir.Util do
       {:ok, url, options}
     else
       {:error, "no url available"}
+    end
+  end
+
+  @doc false
+  def get_mnemonic_from_options(options) do
+    case Keyword.get(options, :mnemonic, Config.mnemonic()) do
+      nil ->
+        {:error, "no mnemonic available"}
+
+      mnemonic ->
+        {:ok, mnemonic}
     end
   end
 

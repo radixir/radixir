@@ -577,7 +577,7 @@ defmodule Radixir.StitchPlan do
   ## Parameters
     - `stitch_plans`: On-going stitch plans that will be stitched into a map.
     - `params`: Keyword list that contains:
-      - `network` (optional, string): If `network` is not in params it will default to what is returned from `Radixir.Config.network()`.
+      - `network` (optional, string): If `network` is not in `params` then it will default to what is returned from `Radixir.Config.network()`.
 
   ## Examples
       iex> Radixir.StitchPlan.network_identifier([], [network: "mainnet"])

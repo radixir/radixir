@@ -3,23 +3,109 @@ defmodule Radixir.Key do
   Handles all things to do with public/private keys and radix addresses.
   """
 
+  alias BlockKeys.Encoding
   alias Radixir.Util
 
   @type private_key :: String.t()
   @type public_key :: String.t()
   @type address :: String.t()
-  @type addresses :: map()
-  @type keypair_and_addresses :: map()
+  @type addresses :: map
   @type data :: String.t()
   @type symbol :: String.t()
   @type signed_data :: Stiring.t()
   @type error_message :: String.t()
+  @type master_private_key :: String.t()
+  @type master_public_key :: String.t()
+  @type index :: integer
+  @type options :: keyword
 
   @doc """
   Generates a new keypair and addresses.
   """
-  @spec generate() :: keypair_and_addresses
+  @spec generate() :: map
   def generate(), do: Curvy.generate_key() |> format()
+
+  @doc """
+  Generates a new mnemonic.
+  """
+  @spec generate_mnemonic() :: String.t()
+  def generate_mnemonic(), do: BlockKeys.Mnemonic.generate_phrase()
+
+  @doc """
+  Generates a keypair and addresses from mnemonic.
+
+  ## Parameters
+    - `options`: Keyword list that contains
+      - `mnemonic` (optional, string): If `mnemonic` is not in `options` then the mnemonic set in the configs will be used.
+      - `index` (optional, integer): If `index` is not in `options` then an index of 0 will be used.
+  """
+  @spec generate_from_mnemonic(options) :: {:ok, map} | {:error, error_message}
+  def generate_from_mnemonic(options \\ []) do
+    with {:ok, mnemonic} <- Util.get_mnemonic_from_options(options),
+         index <- Keyword.get(options, :index, 0) do
+      BlockKeys.from_mnemonic(mnemonic)
+      |> BlockKeys.CKD.derive("m/44'/1022'/0'/0/#{index}")
+      |> Encoding.decode_extended_key()
+      |> Map.fetch!(:key)
+      |> Util.encode16()
+      |> String.replace_prefix("00", "")
+      |> from_private_key()
+    end
+  end
+
+  @doc """
+  Generates master private key and master public key from mnemonic.
+
+  ## Parameters
+    - `options`: Keyword list that contains
+      - `mnemonic` (optional, string): If `mnemonic` is not in `options` then the mnemonic set in the configs will be used.
+  """
+  @spec get_master_keys_from_mnemonic(options) :: {:ok, map} | {:error, error_message}
+  def get_master_keys_from_mnemonic(options \\ []) do
+    with {:ok, mnemonic} <- Util.get_mnemonic_from_options(options) do
+      root_key = BlockKeys.from_mnemonic(mnemonic)
+
+      %{
+        master_private_key: BlockKeys.CKD.derive(root_key, "m/44'/1022'/0'"),
+        master_public_key: BlockKeys.CKD.derive(root_key, "M/44'/1022'/0'")
+      }
+    end
+  end
+
+  @doc """
+  Generates a keypair and addresses from master private key.
+
+  ## Parameters
+    - `master_private_key`: Master private key.
+    - `index`: Path index.
+  """
+  @spec from_master_private_key(master_private_key, index) :: {:ok, map} | {:error, error_message}
+  def from_master_private_key(master_private_key, index \\ 0) do
+    BlockKeys.CKD.derive(master_private_key, "m/0/#{index}")
+    |> Encoding.decode_extended_key()
+    |> Map.fetch!(:key)
+    |> Util.encode16()
+    |> String.replace_prefix("00", "")
+    |> from_private_key()
+  end
+
+  @doc """
+  Generates addresses from master public key.
+
+  ## Parameters
+    - `master_public_key`: Master public key.
+    - `index`: Path index.
+  """
+  @spec master_public_key_to_addresses(master_public_key, index) ::
+          {:ok, map} | {:error, error_message}
+  def master_public_key_to_addresses(master_public_key, index \\ 0) do
+    BlockKeys.CKD.derive(master_public_key, "M/0/#{index}")
+    |> Encoding.decode_extended_key()
+    |> Map.fetch!(:key)
+    |> Util.encode16()
+    |> String.replace_prefix("00", "")
+    |> public_key_to_addresses()
+  end
 
   @doc """
   Converts `private_key` to its keypair and addresses.
@@ -45,7 +131,7 @@ defmodule Radixir.Key do
         public_key: "032f9accc4f9906dffa212d5cef8f13c7faf600242ee44111d4dee4fcaf978646f"
       }}
   """
-  @spec from_private_key(private_key) :: {:ok, keypair_and_addresses} | {:error, error_message}
+  @spec from_private_key(private_key) :: {:ok, map} | {:error, error_message}
   def from_private_key(private_key) do
     with private_key <- String.downcase(private_key),
          {:ok, private_key} <- validate_private_key(private_key),

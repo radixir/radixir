@@ -11,6 +11,9 @@ export SYSTEM_API_URL="https://my-system-api.com"
 # Using Testnet?
 export TESTNET=true
 
+# Mnemonic
+export MNEMONIC="nurse grid sister metal flock choice system control about mountain sister rapid hundred render shed chicken print cover tape sister zero bronze tattoo stairs"
+
 # Authentication
 export USERNAMES='admin, superadmin, metrics'
 export PASSWORDS='funny cats very Jack 21!, harry Kack love h39! LW, monitor Kat darrel 23 Jack!'

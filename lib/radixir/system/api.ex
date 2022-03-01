@@ -12,7 +12,7 @@ defmodule Radixir.System.API do
 
   ## Parameters
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not found in `options` then the url set in the configs will be used.
+      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
       - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
       - `username`: (optional, string): `username` to be used for endpoint authentication.
       - `password`: (optional, string): `password` to be used for endpoint authentication.
@@ -33,7 +33,7 @@ defmodule Radixir.System.API do
   ## System API Documentation
     - [/system/version](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/radixdlt/radixdlt/1.1.0/radixdlt-core/radixdlt/src/main/java/com/radixdlt/api/system/api.yaml#/paths/~1system~1version/get)
   """
-  @spec get_version(options) :: {:ok, map} | {:error, map}
+  @spec get_version(options) :: {:ok, map} | {:error, map | String.t()}
   def get_version(options \\ []) do
     with {:ok, username, password, options} <- Util.get_auth_from_options(options),
          {:ok, url, options} <- Util.get_url_from_options(options, :system) do
@@ -48,7 +48,7 @@ defmodule Radixir.System.API do
 
   ## Parameters
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not found in `options` then the url set in the configs will be used.
+      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
       - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
       - `username`: (optional, string): `username` to be used for endpoint authentication.
       - `password`: (optional, string): `password` to be used for endpoint authentication.
@@ -69,7 +69,7 @@ defmodule Radixir.System.API do
   ## System API Documentation
     - [/system/health](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/radixdlt/radixdlt/1.1.0/radixdlt-core/radixdlt/src/main/java/com/radixdlt/api/system/api.yaml#/paths/~1system~1health/get)
   """
-  @spec get_health(options) :: {:ok, map} | {:error, map}
+  @spec get_health(options) :: {:ok, map} | {:error, map | String.t()}
   def get_health(options \\ []) do
     with {:ok, username, password, options} <- Util.get_auth_from_options(options),
          {:ok, url, options} <- Util.get_url_from_options(options, :system) do
@@ -84,7 +84,7 @@ defmodule Radixir.System.API do
 
   ## Parameters
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not found in `options` then the url set in the configs will be used.
+      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
       - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
       - `username`: (optional, string): `username` to be used for endpoint authentication.
       - `password`: (optional, string): `password` to be used for endpoint authentication.
@@ -105,7 +105,7 @@ defmodule Radixir.System.API do
   ## System API Documentation
     - [/system/configuration](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/radixdlt/radixdlt/1.1.0/radixdlt-core/radixdlt/src/main/java/com/radixdlt/api/system/api.yaml#/paths/~1system~1configuration/get)
   """
-  @spec get_configuration(options) :: {:ok, map} | {:error, map}
+  @spec get_configuration(options) :: {:ok, map} | {:error, map | String.t()}
   def get_configuration(options \\ []) do
     with {:ok, username, password, options} <- Util.get_auth_from_options(options),
          {:ok, url, options} <- Util.get_url_from_options(options, :system) do
@@ -120,7 +120,7 @@ defmodule Radixir.System.API do
 
   ## Parameters
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not found in `options` then the url set in the configs will be used.
+      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
       - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
       - `username`: (optional, string): `username` to be used for endpoint authentication.
       - `password`: (optional, string): `password` to be used for endpoint authentication.
@@ -141,7 +141,7 @@ defmodule Radixir.System.API do
   ## System API Documentation
     - [/system/peers](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/radixdlt/radixdlt/1.1.0/radixdlt-core/radixdlt/src/main/java/com/radixdlt/api/system/api.yaml#/paths/~1system~1peers/get)
   """
-  @spec get_peers(options) :: {:ok, map} | {:error, map}
+  @spec get_peers(options) :: {:ok, map} | {:error, map | String.t()}
   def get_peers(options \\ []) do
     with {:ok, username, password, options} <- Util.get_auth_from_options(options),
          {:ok, url, options} <- Util.get_url_from_options(options, :system) do
@@ -156,7 +156,7 @@ defmodule Radixir.System.API do
 
   ## Parameters
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not found in `options` then the url set in the configs will be used.
+      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
       - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
       - `username`: (optional, string): `username` to be used for endpoint authentication.
       - `password`: (optional, string): `password` to be used for endpoint authentication.
@@ -177,7 +177,7 @@ defmodule Radixir.System.API do
   ## System API Documentation
     - [/system/addressbook](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/radixdlt/radixdlt/1.1.0/radixdlt-core/radixdlt/src/main/java/com/radixdlt/api/system/api.yaml#/paths/~1system~1addressbook/get)
   """
-  @spec get_address_book(options) :: {:ok, map} | {:error, map}
+  @spec get_address_book(options) :: {:ok, map} | {:error, map | String.t()}
   def get_address_book(options \\ []) do
     with {:ok, username, password, options} <- Util.get_auth_from_options(options),
          {:ok, url, options} <- Util.get_url_from_options(options, :system) do
@@ -192,7 +192,7 @@ defmodule Radixir.System.API do
 
   ## Parameters
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not found in `options` then the url set in the configs will be used.
+      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
       - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
       - `username`: (optional, string): `username` to be used for endpoint authentication.
       - `password`: (optional, string): `password` to be used for endpoint authentication.
@@ -213,7 +213,7 @@ defmodule Radixir.System.API do
   ## System API Documentation
     - [/system/metrics](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/radixdlt/radixdlt/1.1.0/radixdlt-core/radixdlt/src/main/java/com/radixdlt/api/system/api.yaml#/paths/~1system~1metrics/get)
   """
-  @spec get_metrics(options) :: {:ok, map} | {:error, map}
+  @spec get_metrics(options) :: {:ok, map} | {:error, map | String.t()}
   def get_metrics(options \\ []) do
     with {:ok, username, password, options} <- Util.get_auth_from_options(options),
          {:ok, url, options} <- Util.get_url_from_options(options, :system) do
@@ -228,7 +228,7 @@ defmodule Radixir.System.API do
 
   ## Parameters
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not found in `options` then the url set in the configs will be used.
+      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
       - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
       - `username`: (optional, string): `username` to be used for endpoint authentication.
       - `password`: (optional, string): `password` to be used for endpoint authentication.
@@ -249,7 +249,7 @@ defmodule Radixir.System.API do
   ## System API Documentation
     - [/prometheus/metrics](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/radixdlt/radixdlt/1.1.0/radixdlt-core/radixdlt/src/main/java/com/radixdlt/api/system/api.yaml#/paths/~1prometheus~1metrics/get)
   """
-  @spec get_prometheus_metrics(options) :: {:ok, map} | {:error, map}
+  @spec get_prometheus_metrics(options) :: {:ok, map} | {:error, map | String.t()}
   def get_prometheus_metrics(options \\ []) do
     with {:ok, username, password, options} <- Util.get_auth_from_options(options),
          {:ok, url, options} <- Util.get_url_from_options(options, :system) do

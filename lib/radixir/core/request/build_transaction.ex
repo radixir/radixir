@@ -16,7 +16,7 @@ defmodule Radixir.Core.Request.BuildTransaction do
   ## Parameters
     - `stitch_plans`: On-going stitch plans that will be stitched into a map.
     - `params`: Keyword list that contains:
-      - `network` (optional, string): If `network` is not in params it will default to what is returned from `Radixir.Config.network()`.
+      - `network` (optional, string): If `network` is not in `params` it will default to what is returned from `Radixir.Config.network()`.
   """
   @spec network_identifier(stitch_plans, params) :: stitch_plans
   defdelegate network_identifier(stitch_plans, params \\ []), to: StitchPlan
@@ -28,7 +28,7 @@ defmodule Radixir.Core.Request.BuildTransaction do
     - `request`: Request body.
     - `operation_groups`: List of operation maps to be added to request body.
   """
-  @spec add_operation_groups(request, operations_groups) :: stitch_plans
+  @spec add_operation_groups(request, operations_groups) :: map()
   def add_operation_groups(request, operations_groups) do
     Util.map_put(request, [:operation_groups], operations_groups)
   end

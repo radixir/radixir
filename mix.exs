@@ -26,6 +26,7 @@ defmodule Radixir.MixProject do
 
   defp deps() do
     [
+      {:block_keys, "~> 0.1.10"},
       {:curvy, "~> 0.3.0"},
       {:decimal, "~> 2.0"},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
