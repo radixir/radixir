@@ -230,6 +230,13 @@ defmodule Radixir.Util do
   end
 
   @doc false
+  def maybe_create_stitch_plan(stitch_plans, [], _function), do: stitch_plans
+
+  @doc false
+  def maybe_create_stitch_plan(stitch_plans, params, function),
+    do: function.(stitch_plans, params)
+
+  @doc false
   def hash(data), do: :crypto.hash(:sha256, data)
 
   @doc false

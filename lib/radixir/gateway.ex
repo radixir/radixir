@@ -14,6 +14,26 @@ defmodule Radixir.Gateway do
   @type signature_bytes :: String.t()
   @type signature_public_key :: String.t()
   @type transaction_hash :: String.t()
+  @type fee_payer_address :: String.t()
+  @type create_token_params :: %{
+          name: String.t(),
+          description: String.t(),
+          icon_url: String.t(),
+          url: String.t(),
+          symbol: String.t(),
+          is_supply_mutable: boolean,
+          granularity: String.t(),
+          owner_address: String.t(),
+          token_supply: String.t(),
+          token_rri: String.t(),
+          to_account_address: String.t()
+        }
+  @type transfer_tokens_params :: %{
+          from_address: String.t(),
+          to_address: String.t(),
+          amount: String.t(),
+          token_rri: String.t()
+        }
 
   @doc """
   Gets the Gateway API version, network and current ledger state.
@@ -172,8 +192,8 @@ defmodule Radixir.Gateway do
       |> Request.GetAccountTransactions.network_identifier(network)
       |> Request.GetAccountTransactions.account_identifier(address: address)
       |> Request.GetAccountTransactions.at_state_identifier(at_state_identifier)
-      |> Request.GetAccountTransactions.cursor(cursor)
-      |> Request.GetAccountTransactions.limit(limit)
+      |> Util.maybe_create_stitch_plan(cursor, &Request.GetAccountTransactions.cursor/2)
+      |> Util.maybe_create_stitch_plan(limit, &Request.GetAccountTransactions.limit/2)
       |> Util.stitch()
 
     API.get_account_transactions(body, options)
@@ -377,8 +397,8 @@ defmodule Radixir.Gateway do
       |> Request.GetValidatorStakes.network_identifier(network)
       |> Request.GetValidatorStakes.validator_identifier(address: address)
       |> Request.GetValidatorStakes.at_state_identifier(at_state_identifier)
-      |> Request.GetValidatorStakes.cursor(cursor)
-      |> Request.GetValidatorStakes.limit(limit)
+      |> Util.maybe_create_stitch_plan(cursor, &Request.GetValidatorStakes.cursor/2)
+      |> Util.maybe_create_stitch_plan(limit, &Request.GetValidatorStakes.limit/2)
       |> Util.stitch()
 
     API.get_validator_stakes(body, options)
@@ -413,7 +433,156 @@ defmodule Radixir.Gateway do
     API.get_transaction_rules(body, options)
   end
 
-  # TODO: build transaction goes here
+  @doc """
+  Builds a transaction of one or more create token actions.
+
+  ## Parameters
+    - `create_token_params_list`: List of create token params
+    - `fee_payer_address`: Fee payer address
+    - `options`: Keyword list that contains
+      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `version` (optional, integer): Version key in `at_state_identifier` map.
+      - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
+      - `epoch` (optional, integer): Epoch key in `at_state_identifier` map.
+      - `round` (optional, integer): Round key in `at_state_identifier` map.
+      - `message` (optional, string): Message to be included in transaction.
+      - `disable_token_mint_and_burn` (optional, boolean): Disable Token Mint and Burn.
+  """
+  @spec build_create_token_transaction(list(create_token_params), fee_payer_address, options) ::
+          {:ok, map()} | {:error, map | error_message}
+  def build_create_token_transaction(create_token_params_list, fee_payer_address, options \\ []) do
+    {network, options} = Util.take_and_drop(options, [:network])
+
+    {at_state_identifier, options} =
+      Util.take_and_drop(options, [:version, :timestamp, :epoch, :round])
+
+    {message, options} = Util.take_and_drop(options, [:message])
+
+    {disable_token_mint_and_burn, options} =
+      Util.take_and_drop(options, [:disable_token_mint_and_burn])
+
+    actions =
+      Enum.map(create_token_params_list, fn x ->
+        []
+        |> Request.BuildTransaction.Action.CreateToken.type()
+        |> Request.BuildTransaction.Action.CreateToken.token_properties(
+          name: x.name,
+          description: x.description,
+          icon_url: x.icon_url,
+          url: x.url,
+          symbol: x.symbol,
+          is_supply_mutable: x.is_supply_mutable,
+          granularity: x.granularity
+        )
+        |> Request.BuildTransaction.Action.CreateToken.owner(address: x.owner_address)
+        |> Request.BuildTransaction.Action.CreateToken.token_supply(value: x.token_supply)
+        |> Request.BuildTransaction.Action.CreateToken.token_identifier(rri: x.token_rri)
+        |> Request.BuildTransaction.Action.CreateToken.to_account(address: x.to_account_address)
+        |> Util.stitch()
+      end)
+
+    body =
+      []
+      |> Request.BuildTransaction.network_identifier(network)
+      |> Request.BuildTransaction.at_state_identifier(at_state_identifier)
+      |> Request.BuildTransaction.fee_payer(address: fee_payer_address)
+      |> Util.maybe_create_stitch_plan(message, &Request.BuildTransaction.message/2)
+      |> Util.maybe_create_stitch_plan(
+        disable_token_mint_and_burn,
+        &Request.BuildTransaction.disable_token_mint_and_burn/2
+      )
+      |> Util.stitch()
+
+    body = Request.BuildTransaction.add_actions(body, actions)
+
+    API.build_transaction(body, options)
+    # create_token_params = %{
+    #   name: "JEC Token",
+    #   description: "jec tokens ftw",
+    #   icon_url: "https://me.me/icon",
+    #   url: "https://me.me",
+    #   symbol: "jec",
+    #   is_supply_mutable: true,
+    #   granularity: "1",
+    #   owner_address: "tdx1qspf8f3eeg06955d5pzgvntz36c6nych7f8jw68mdmhlzvflj7pylqs9qzh0z",
+    #   token_supply: "0",
+    #   token_rri: "jec_tr1qvnc03t4m6te6zlkcy03q4sst5ddcad49urt6ggr7lvq6he0sq",
+    #   to_account_address: "tdx1qspf8f3eeg06955d5pzgvntz36c6nych7f8jw68mdmhlzvflj7pylqs9qzh0z"
+    # }
+  end
+
+  @doc """
+  Builds a transaction of one or more transfer tokens actions.
+
+  ## Parameters
+    - `transfer_tokens_params_list`: List of transfer tokens params
+    - `fee_payer_address`: Fee payer address
+    - `options`: Keyword list that contains
+      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `version` (optional, integer): Version key in `at_state_identifier` map.
+      - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
+      - `epoch` (optional, integer): Epoch key in `at_state_identifier` map.
+      - `round` (optional, integer): Round key in `at_state_identifier` map.
+      - `message` (optional, string): Message to be included in transaction.
+      - `disable_token_mint_and_burn` (optional, boolean): Disable Token Mint and Burn.
+  """
+  @spec build_transfer_tokens_transaction(
+          list(transfer_tokens_params),
+          fee_payer_address,
+          options
+        ) ::
+          {:ok, map()} | {:error, map | error_message}
+  def build_transfer_tokens_transaction(
+        transfer_tokens_params_list,
+        fee_payer_address,
+        options \\ []
+      ) do
+    {network, options} = Util.take_and_drop(options, [:network])
+
+    {at_state_identifier, options} =
+      Util.take_and_drop(options, [:version, :timestamp, :epoch, :round])
+
+    {message, options} = Util.take_and_drop(options, [:message])
+
+    {disable_token_mint_and_burn, options} =
+      Util.take_and_drop(options, [:disable_token_mint_and_burn])
+
+    actions =
+      Enum.map(transfer_tokens_params_list, fn x ->
+        []
+        |> Request.BuildTransaction.Action.TransferTokens.type()
+        |> Request.BuildTransaction.Action.TransferTokens.from_account(address: x.from_address)
+        |> Request.BuildTransaction.Action.TransferTokens.to_account(address: x.to_address)
+        |> Request.BuildTransaction.Action.TransferTokens.amount(value: x.amount)
+        |> Request.BuildTransaction.Action.TransferTokens.token_identifier(rri: x.token_rri)
+        |> Util.stitch()
+      end)
+
+    body =
+      []
+      |> Request.BuildTransaction.network_identifier(network)
+      |> Request.BuildTransaction.at_state_identifier(at_state_identifier)
+      |> Request.BuildTransaction.fee_payer(address: fee_payer_address)
+      |> Util.maybe_create_stitch_plan(message, &Request.BuildTransaction.message/2)
+      |> Util.maybe_create_stitch_plan(
+        disable_token_mint_and_burn,
+        &Request.BuildTransaction.disable_token_mint_and_burn/2
+      )
+      |> Util.stitch()
+
+    body = Request.BuildTransaction.add_actions(body, actions)
+
+    API.build_transaction(body, options)
+
+    # transfer_tokens_params = %{
+    #   from_address: "tdx1qspf8f3eeg06955d5pzgvntz36c6nych7f8jw68mdmhlzvflj7pylqs9qzh0z",
+    #   to_address: "tdx1qspa8jmwnd8se6u3qmpdljryets2mv3e5u8eh2cnwmz6jquh5c2zs8src9qxu",
+    #   amount: "10000000000000000",
+    #   token_rri: "xrd_tr1qyf0x76s"
+    # }
+  end
 
   @doc """
   Gets a signed transaction payload and transaction identifier, from an unsigned transaction payload and signature.
@@ -449,7 +618,7 @@ defmodule Radixir.Gateway do
         hex: signature_public_key,
         bytes: signature_bytes
       )
-      |> Request.FinalizeTransaction.submit(submit: submit)
+      |> Util.maybe_create_stitch_plan(submit, &Request.FinalizeTransaction.submit/2)
       |> Util.stitch()
 
     API.finalize_transaction(body, options)
