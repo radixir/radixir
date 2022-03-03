@@ -1236,17 +1236,17 @@ defmodule Radixir.StitchPlan do
   @spec validator(stitch_plans, params, prefix_keys) :: stitch_plans
   def validator(stitch_plans, params, prefix_keys \\ []) do
     schema = [
-      address: [
+      validator_address: [
         type: :string,
         required: true
       ]
     ]
 
-    address =
+    validator_address =
       NimbleOptions.validate!(params, schema)
-      |> Keyword.get(:address)
+      |> Keyword.get(:validator_address)
 
-    stitch_plan = [[keys: prefix_keys ++ [:validator, :address], value: address]]
+    stitch_plan = [[keys: prefix_keys ++ [:validator, :address], value: validator_address]]
 
     stitch_plan ++ stitch_plans
   end
@@ -1274,7 +1274,7 @@ defmodule Radixir.StitchPlan do
   @spec sub_entity(stitch_plans, params, prefix_keys) :: stitch_plans
   def sub_entity(stitch_plans, params, prefix_keys \\ []) do
     schema = [
-      address: [
+      sub_entity_address: [
         type: :string,
         required: true
       ],
@@ -1288,9 +1288,9 @@ defmodule Radixir.StitchPlan do
 
     results = NimbleOptions.validate!(params, schema)
 
-    address = [
+    sub_entity_address = [
       keys: prefix_keys ++ [:sub_entity, :address],
-      value: Keyword.get(results, :address)
+      value: Keyword.get(results, :sub_entity_address)
     ]
 
     validator_address =
@@ -1301,7 +1301,8 @@ defmodule Radixir.StitchPlan do
       Keyword.get(results, :epoch_unlock)
       |> Util.optional_params(prefix_keys ++ [:sub_entity, :metadata, :epoch_unlock])
 
-    stitch_plan = [address, validator_address, epoch_unlock] |> Enum.filter(fn x -> x != [] end)
+    stitch_plan =
+      [sub_entity_address, validator_address, epoch_unlock] |> Enum.filter(fn x -> x != [] end)
 
     stitch_plan ++ stitch_plans
   end

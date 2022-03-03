@@ -918,7 +918,7 @@ defmodule Radixir.Gateway do
         []
         |> Request.BuildTransaction.Action.RegisterValidator.type()
         |> Request.BuildTransaction.Action.RegisterValidator.validator(
-          address: x.validator_address
+          validator_address: x.validator_address
         )
         |> Util.stitch()
       end)
@@ -982,7 +982,7 @@ defmodule Radixir.Gateway do
         []
         |> Request.BuildTransaction.Action.UnregisterValidator.type()
         |> Request.BuildTransaction.Action.UnregisterValidator.validator(
-          address: x.validator_address
+          validator_address: x.validator_address
         )
         |> Util.stitch()
       end)
