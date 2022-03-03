@@ -15,6 +15,7 @@ defmodule Radixir.Gateway do
   @type signature_public_key :: String.t()
   @type transaction_hash :: String.t()
   @type fee_payer_address :: String.t()
+  @type validator_address :: String.t()
   @type create_token_params :: %{
           name: String.t(),
           description: String.t(),
@@ -31,6 +32,28 @@ defmodule Radixir.Gateway do
   @type transfer_tokens_params :: %{
           from_address: String.t(),
           to_address: String.t(),
+          amount: String.t(),
+          token_rri: String.t()
+        }
+  @type stake_tokens_params :: %{
+          from_address: String.t(),
+          to_validator_address: String.t(),
+          amount: String.t(),
+          token_rri: String.t()
+        }
+  @type unstake_tokens_params :: %{
+          from_validator_address: String.t(),
+          to_address: String.t(),
+          amount: String.t(),
+          token_rri: String.t()
+        }
+  @type mint_tokens_params :: %{
+          to_address: String.t(),
+          amount: String.t(),
+          token_rri: String.t()
+        }
+  @type burn_tokens_params :: %{
+          from_address: String.t(),
           amount: String.t(),
           token_rri: String.t()
         }
@@ -582,6 +605,403 @@ defmodule Radixir.Gateway do
     #   amount: "10000000000000000",
     #   token_rri: "xrd_tr1qyf0x76s"
     # }
+  end
+
+  @doc """
+  Builds a transaction of one or more stake tokens actions.
+
+  ## Parameters
+    - `stake_tokens_params_list`: List of stake tokens params
+    - `fee_payer_address`: Fee payer address
+    - `options`: Keyword list that contains
+      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `version` (optional, integer): Version key in `at_state_identifier` map.
+      - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
+      - `epoch` (optional, integer): Epoch key in `at_state_identifier` map.
+      - `round` (optional, integer): Round key in `at_state_identifier` map.
+      - `message` (optional, string): Message to be included in transaction.
+      - `disable_token_mint_and_burn` (optional, boolean): Disable Token Mint and Burn.
+  """
+  @spec build_stake_tokens_transaction(
+          list(stake_tokens_params),
+          fee_payer_address,
+          options
+        ) ::
+          {:ok, map()} | {:error, map | error_message}
+  def build_stake_tokens_transaction(
+        stake_tokens_params_list,
+        fee_payer_address,
+        options \\ []
+      ) do
+    {network, options} = Util.take_and_drop(options, [:network])
+
+    {at_state_identifier, options} =
+      Util.take_and_drop(options, [:version, :timestamp, :epoch, :round])
+
+    {message, options} = Util.take_and_drop(options, [:message])
+
+    {disable_token_mint_and_burn, options} =
+      Util.take_and_drop(options, [:disable_token_mint_and_burn])
+
+    actions =
+      Enum.map(stake_tokens_params_list, fn x ->
+        []
+        |> Request.BuildTransaction.Action.StakeTokens.type()
+        |> Request.BuildTransaction.Action.StakeTokens.from_account(address: x.from_address)
+        |> Request.BuildTransaction.Action.StakeTokens.to_validator(
+          address: x.to_validator_address
+        )
+        |> Request.BuildTransaction.Action.StakeTokens.amount(value: x.amount)
+        |> Request.BuildTransaction.Action.StakeTokens.token_identifier(rri: x.token_rri)
+        |> Util.stitch()
+      end)
+
+    body =
+      []
+      |> Request.BuildTransaction.network_identifier(network)
+      |> Request.BuildTransaction.at_state_identifier(at_state_identifier)
+      |> Request.BuildTransaction.fee_payer(address: fee_payer_address)
+      |> Util.maybe_create_stitch_plan(message, &Request.BuildTransaction.message/2)
+      |> Util.maybe_create_stitch_plan(
+        disable_token_mint_and_burn,
+        &Request.BuildTransaction.disable_token_mint_and_burn/2
+      )
+      |> Util.stitch()
+
+    body = Request.BuildTransaction.add_actions(body, actions)
+
+    API.build_transaction(body, options)
+  end
+
+  @doc """
+  Builds a transaction of one or more unstake tokens actions.
+
+  ## Parameters
+    - `unstake_tokens_params_list`: List of unstake tokens params
+    - `fee_payer_address`: Fee payer address
+    - `options`: Keyword list that contains
+      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `version` (optional, integer): Version key in `at_state_identifier` map.
+      - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
+      - `epoch` (optional, integer): Epoch key in `at_state_identifier` map.
+      - `round` (optional, integer): Round key in `at_state_identifier` map.
+      - `message` (optional, string): Message to be included in transaction.
+      - `disable_token_mint_and_burn` (optional, boolean): Disable Token Mint and Burn.
+      - `unstake_percentage` (optional, integer): Percentage of currently staked XRD to unstake.
+  """
+  @spec build_unstake_tokens_transaction(
+          list(unstake_tokens_params),
+          fee_payer_address,
+          options
+        ) ::
+          {:ok, map()} | {:error, map | error_message}
+  def build_unstake_tokens_transaction(
+        unstake_tokens_params_list,
+        fee_payer_address,
+        options \\ []
+      ) do
+    {network, options} = Util.take_and_drop(options, [:network])
+
+    {at_state_identifier, options} =
+      Util.take_and_drop(options, [:version, :timestamp, :epoch, :round])
+
+    {message, options} = Util.take_and_drop(options, [:message])
+
+    {unstake_percentage, options} = Util.take_and_drop(options, [:unstake_percentage])
+
+    {disable_token_mint_and_burn, options} =
+      Util.take_and_drop(options, [:disable_token_mint_and_burn])
+
+    actions =
+      Enum.map(unstake_tokens_params_list, fn x ->
+        []
+        |> Request.BuildTransaction.Action.UnstakeTokens.type()
+        |> Request.BuildTransaction.Action.UnstakeTokens.from_validator(
+          address: x.from_validator_address
+        )
+        |> Request.BuildTransaction.Action.UnstakeTokens.to_account(address: x.to_address)
+        |> Request.BuildTransaction.Action.UnstakeTokens.amount(value: x.amount)
+        |> Request.BuildTransaction.Action.UnstakeTokens.token_identifier(rri: x.token_rri)
+        |> Util.maybe_create_stitch_plan(
+          unstake_percentage,
+          &Request.BuildTransaction.Action.UnstakeTokens.unstake_percentage/2
+        )
+        |> Util.stitch()
+      end)
+
+    body =
+      []
+      |> Request.BuildTransaction.network_identifier(network)
+      |> Request.BuildTransaction.at_state_identifier(at_state_identifier)
+      |> Request.BuildTransaction.fee_payer(address: fee_payer_address)
+      |> Util.maybe_create_stitch_plan(message, &Request.BuildTransaction.message/2)
+      |> Util.maybe_create_stitch_plan(
+        disable_token_mint_and_burn,
+        &Request.BuildTransaction.disable_token_mint_and_burn/2
+      )
+      |> Util.stitch()
+
+    body = Request.BuildTransaction.add_actions(body, actions)
+
+    API.build_transaction(body, options)
+  end
+
+  @doc """
+  Builds a transaction of one or more mint tokens actions.
+
+  ## Parameters
+    - `mint_tokens_params_list`: List of mint tokens params
+    - `fee_payer_address`: Fee payer address
+    - `options`: Keyword list that contains
+      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `version` (optional, integer): Version key in `at_state_identifier` map.
+      - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
+      - `epoch` (optional, integer): Epoch key in `at_state_identifier` map.
+      - `round` (optional, integer): Round key in `at_state_identifier` map.
+      - `message` (optional, string): Message to be included in transaction.
+      - `disable_token_mint_and_burn` (optional, boolean): Disable Token Mint and Burn.
+  """
+  @spec build_mint_tokens_transaction(
+          list(mint_tokens_params),
+          fee_payer_address,
+          options
+        ) ::
+          {:ok, map()} | {:error, map | error_message}
+  def build_mint_tokens_transaction(
+        mint_tokens_params_list,
+        fee_payer_address,
+        options \\ []
+      ) do
+    {network, options} = Util.take_and_drop(options, [:network])
+
+    {at_state_identifier, options} =
+      Util.take_and_drop(options, [:version, :timestamp, :epoch, :round])
+
+    {message, options} = Util.take_and_drop(options, [:message])
+
+    {disable_token_mint_and_burn, options} =
+      Util.take_and_drop(options, [:disable_token_mint_and_burn])
+
+    actions =
+      Enum.map(mint_tokens_params_list, fn x ->
+        []
+        |> Request.BuildTransaction.Action.MintTokens.type()
+        |> Request.BuildTransaction.Action.MintTokens.to_account(address: x.to_address)
+        |> Request.BuildTransaction.Action.MintTokens.amount(value: x.amount)
+        |> Request.BuildTransaction.Action.MintTokens.token_identifier(rri: x.token_rri)
+        |> Util.stitch()
+      end)
+
+    body =
+      []
+      |> Request.BuildTransaction.network_identifier(network)
+      |> Request.BuildTransaction.at_state_identifier(at_state_identifier)
+      |> Request.BuildTransaction.fee_payer(address: fee_payer_address)
+      |> Util.maybe_create_stitch_plan(message, &Request.BuildTransaction.message/2)
+      |> Util.maybe_create_stitch_plan(
+        disable_token_mint_and_burn,
+        &Request.BuildTransaction.disable_token_mint_and_burn/2
+      )
+      |> Util.stitch()
+
+    body = Request.BuildTransaction.add_actions(body, actions)
+
+    API.build_transaction(body, options)
+  end
+
+  @doc """
+  Builds a transaction of one or more burn tokens actions.
+
+  ## Parameters
+    - `burn_tokens_params_list`: List of burn tokens params
+    - `fee_payer_address`: Fee payer address
+    - `options`: Keyword list that contains
+      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `version` (optional, integer): Version key in `at_state_identifier` map.
+      - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
+      - `epoch` (optional, integer): Epoch key in `at_state_identifier` map.
+      - `round` (optional, integer): Round key in `at_state_identifier` map.
+      - `message` (optional, string): Message to be included in transaction.
+      - `disable_token_mint_and_burn` (optional, boolean): Disable Token Mint and Burn.
+  """
+  @spec build_burn_tokens_transaction(
+          list(burn_tokens_params),
+          fee_payer_address,
+          options
+        ) ::
+          {:ok, map()} | {:error, map | error_message}
+  def build_burn_tokens_transaction(
+        burn_tokens_params_list,
+        fee_payer_address,
+        options \\ []
+      ) do
+    {network, options} = Util.take_and_drop(options, [:network])
+
+    {at_state_identifier, options} =
+      Util.take_and_drop(options, [:version, :timestamp, :epoch, :round])
+
+    {message, options} = Util.take_and_drop(options, [:message])
+
+    {disable_token_mint_and_burn, options} =
+      Util.take_and_drop(options, [:disable_token_mint_and_burn])
+
+    actions =
+      Enum.map(burn_tokens_params_list, fn x ->
+        []
+        |> Request.BuildTransaction.Action.BurnTokens.type()
+        |> Request.BuildTransaction.Action.BurnTokens.from_account(address: x.from_address)
+        |> Request.BuildTransaction.Action.BurnTokens.amount(value: x.amount)
+        |> Request.BuildTransaction.Action.BurnTokens.token_identifier(rri: x.token_rri)
+        |> Util.stitch()
+      end)
+
+    body =
+      []
+      |> Request.BuildTransaction.network_identifier(network)
+      |> Request.BuildTransaction.at_state_identifier(at_state_identifier)
+      |> Request.BuildTransaction.fee_payer(address: fee_payer_address)
+      |> Util.maybe_create_stitch_plan(message, &Request.BuildTransaction.message/2)
+      |> Util.maybe_create_stitch_plan(
+        disable_token_mint_and_burn,
+        &Request.BuildTransaction.disable_token_mint_and_burn/2
+      )
+      |> Util.stitch()
+
+    body = Request.BuildTransaction.add_actions(body, actions)
+
+    API.build_transaction(body, options)
+  end
+
+  @doc """
+  Builds a transaction of one or more register validator actions.
+
+  ## Parameters
+    - `validator_addresses_list`: List of validator addresses
+    - `fee_payer_address`: Fee payer address
+    - `options`: Keyword list that contains
+      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `version` (optional, integer): Version key in `at_state_identifier` map.
+      - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
+      - `epoch` (optional, integer): Epoch key in `at_state_identifier` map.
+      - `round` (optional, integer): Round key in `at_state_identifier` map.
+      - `message` (optional, string): Message to be included in transaction.
+      - `disable_token_mint_and_burn` (optional, boolean): Disable Token Mint and Burn.
+  """
+  @spec build_register_validator_transaction(
+          list(validator_address),
+          fee_payer_address,
+          options
+        ) ::
+          {:ok, map()} | {:error, map | error_message}
+  def build_register_validator_transaction(
+        validator_addresses_list,
+        fee_payer_address,
+        options \\ []
+      ) do
+    {network, options} = Util.take_and_drop(options, [:network])
+
+    {at_state_identifier, options} =
+      Util.take_and_drop(options, [:version, :timestamp, :epoch, :round])
+
+    {message, options} = Util.take_and_drop(options, [:message])
+
+    {disable_token_mint_and_burn, options} =
+      Util.take_and_drop(options, [:disable_token_mint_and_burn])
+
+    actions =
+      Enum.map(validator_addresses_list, fn x ->
+        []
+        |> Request.BuildTransaction.Action.RegisterValidator.type()
+        |> Request.BuildTransaction.Action.RegisterValidator.validator(
+          address: x.validator_address
+        )
+        |> Util.stitch()
+      end)
+
+    body =
+      []
+      |> Request.BuildTransaction.network_identifier(network)
+      |> Request.BuildTransaction.at_state_identifier(at_state_identifier)
+      |> Request.BuildTransaction.fee_payer(address: fee_payer_address)
+      |> Util.maybe_create_stitch_plan(message, &Request.BuildTransaction.message/2)
+      |> Util.maybe_create_stitch_plan(
+        disable_token_mint_and_burn,
+        &Request.BuildTransaction.disable_token_mint_and_burn/2
+      )
+      |> Util.stitch()
+
+    body = Request.BuildTransaction.add_actions(body, actions)
+
+    API.build_transaction(body, options)
+  end
+
+  @doc """
+  Builds a transaction of one or more unregister validator actions.
+
+  ## Parameters
+    - `validator_addresses_list`: List of validator addresses
+    - `fee_payer_address`: Fee payer address
+    - `options`: Keyword list that contains
+      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `version` (optional, integer): Version key in `at_state_identifier` map.
+      - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
+      - `epoch` (optional, integer): Epoch key in `at_state_identifier` map.
+      - `round` (optional, integer): Round key in `at_state_identifier` map.
+      - `message` (optional, string): Message to be included in transaction.
+      - `disable_token_mint_and_burn` (optional, boolean): Disable Token Mint and Burn.
+  """
+  @spec build_unregister_validator_transaction(
+          list(validator_address),
+          fee_payer_address,
+          options
+        ) ::
+          {:ok, map()} | {:error, map | error_message}
+  def build_unregister_validator_transaction(
+        validator_addresses_list,
+        fee_payer_address,
+        options \\ []
+      ) do
+    {network, options} = Util.take_and_drop(options, [:network])
+
+    {at_state_identifier, options} =
+      Util.take_and_drop(options, [:version, :timestamp, :epoch, :round])
+
+    {message, options} = Util.take_and_drop(options, [:message])
+
+    {disable_token_mint_and_burn, options} =
+      Util.take_and_drop(options, [:disable_token_mint_and_burn])
+
+    actions =
+      Enum.map(validator_addresses_list, fn x ->
+        []
+        |> Request.BuildTransaction.Action.UnregisterValidator.type()
+        |> Request.BuildTransaction.Action.UnregisterValidator.validator(
+          address: x.validator_address
+        )
+        |> Util.stitch()
+      end)
+
+    body =
+      []
+      |> Request.BuildTransaction.network_identifier(network)
+      |> Request.BuildTransaction.at_state_identifier(at_state_identifier)
+      |> Request.BuildTransaction.fee_payer(address: fee_payer_address)
+      |> Util.maybe_create_stitch_plan(message, &Request.BuildTransaction.message/2)
+      |> Util.maybe_create_stitch_plan(
+        disable_token_mint_and_burn,
+        &Request.BuildTransaction.disable_token_mint_and_burn/2
+      )
+      |> Util.stitch()
+
+    body = Request.BuildTransaction.add_actions(body, actions)
+
+    API.build_transaction(body, options)
   end
 
   @doc """
