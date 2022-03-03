@@ -61,7 +61,7 @@ defmodule Radixir.Gateway.Request.BuildTransaction.Action.StakeTokens do
   ## Parameters
     - `stitch_plans`: On-going stitch plans that will be stitched into a map.
     - `params`: Keyword list that contains:
-      - `value` (required, string): Amount value.
+      - `amount` (required, string): Amount value.
   """
   @spec amount(stitch_plans, params) :: stitch_plans
   defdelegate amount(stitch_plans, params), to: StitchPlan

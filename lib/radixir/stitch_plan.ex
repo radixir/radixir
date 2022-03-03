@@ -320,11 +320,11 @@ defmodule Radixir.StitchPlan do
   ## Parameters
     - `stitch_plans`: On-going stitch plans that will be stitched into a map.
     - `params`: Keyword list that contains:
-      - `value` (required, string): Amount value.
+      - `amount` (required, string): Amount value.
     - `prefix_keys`: List of atoms that will be prefixed to `keys` list.
 
   ## Examples
-      iex> Radixir.StitchPlan.amount([], [value: "10"])
+      iex> Radixir.StitchPlan.amount([], [amount: "10"])
       [
         [
           keys: [:amount, :value],
@@ -335,17 +335,17 @@ defmodule Radixir.StitchPlan do
   @spec amount(stitch_plans, params, prefix_keys) :: stitch_plans
   def amount(stitch_plans, params, prefix_keys \\ []) do
     schema = [
-      value: [
+      amount: [
         type: :string,
         required: true
       ]
     ]
 
-    value =
+    amount =
       NimbleOptions.validate!(params, schema)
-      |> Keyword.get(:value)
+      |> Keyword.get(:amount)
 
-    stitch_plan = [[keys: prefix_keys ++ [:amount, :value], value: value]]
+    stitch_plan = [[keys: prefix_keys ++ [:amount, :value], value: amount]]
 
     stitch_plan ++ stitch_plans
   end

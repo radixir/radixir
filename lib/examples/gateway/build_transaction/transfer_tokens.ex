@@ -24,7 +24,7 @@ defmodule Examples.Gateway.BuildTransaction.TransferTokens do
       |> TransferTokens.type()
       |> TransferTokens.from_account(address: from)
       |> TransferTokens.to_account(address: to_1)
-      |> TransferTokens.amount(value: amount)
+      |> TransferTokens.amount(amount: amount)
       |> TransferTokens.token_identifier(rri: rri)
       |> Util.stitch()
 
@@ -33,7 +33,7 @@ defmodule Examples.Gateway.BuildTransaction.TransferTokens do
       |> TransferTokens.type()
       |> TransferTokens.from_account(address: from)
       |> TransferTokens.to_account(address: to_2)
-      |> TransferTokens.amount(value: amount)
+      |> TransferTokens.amount(amount: amount)
       |> TransferTokens.token_identifier(rri: rri)
       |> Util.stitch()
 

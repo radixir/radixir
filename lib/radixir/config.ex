@@ -128,6 +128,23 @@ defmodule Radixir.Config do
     end
   end
 
+  @doc """
+  Fetches the network's native token rri.
+
+  ## Note
+  The two possibilities are `xrd_rr1qy5wfsfh` for mainnet or `xrd_tr1qyf0x76s` for stokenet.
+  """
+  @spec network_native_token_rri() :: String.t()
+  def network_native_token_rri do
+    case network() do
+      "mainnet" ->
+        "xrd_rr1qy5wfsfh"
+
+      "stokenet" ->
+        "xrd_tr1qyf0x76s"
+    end
+  end
+
   defp process_usernames_passwords(nil, error_message), do: {:error, error_message}
 
   defp process_usernames_passwords(content, error_message) do

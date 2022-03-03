@@ -1,9 +1,11 @@
 defmodule Radixir.Gateway do
   alias Radixir.Gateway.API
   alias Radixir.Gateway.Request
+  alias Radixir.Key
   alias Radixir.Util
 
   @type public_key :: String.t()
+  @type private_key :: String.t()
   @type address :: String.t()
   @type rri :: String.t()
   @type symbol :: String.t()
@@ -44,7 +46,6 @@ defmodule Radixir.Gateway do
   @type unstake_tokens_params :: %{
           from_validator_address: String.t(),
           to_address: String.t(),
-          amount: String.t(),
           token_rri: String.t()
         }
   @type mint_tokens_params :: %{
@@ -63,7 +64,9 @@ defmodule Radixir.Gateway do
 
   ## Parameters
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - any other options one may way to pass along to the http layer - for example `headers`
   """
   def get_info(options \\ []) do
     API.get_info(options)
@@ -75,13 +78,15 @@ defmodule Radixir.Gateway do
   ## Parameters
     - `public_key`: Public key
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - any other options one may way to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
   """
   @spec derive_account_identifier(public_key, options) ::
           {:ok, map()} | {:error, map | error_message}
   def derive_account_identifier(public_key, options \\ []) do
-    {network, options} = Util.take_and_drop(options, [:network])
+    network = Keyword.take(options, [:network])
 
     body =
       []
@@ -89,7 +94,7 @@ defmodule Radixir.Gateway do
       |> Request.DeriveAccountIdentifier.public_key(hex: public_key)
       |> Util.stitch()
 
-    API.derive_account_identifier(body, options)
+    API.derive_account_identifier(body, Keyword.get(options, :api, []))
   end
 
   @doc """
@@ -98,7 +103,9 @@ defmodule Radixir.Gateway do
   ## Parameters
     - `address`: Radix address
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - any other options one may way to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
@@ -108,10 +115,9 @@ defmodule Radixir.Gateway do
   @spec get_account_balances(address, options) ::
           {:ok, map()} | {:error, map | error_message}
   def get_account_balances(address, options \\ []) do
-    {network, options} = Util.take_and_drop(options, [:network])
+    network = Keyword.take(options, [:network])
 
-    {at_state_identifier, options} =
-      Util.take_and_drop(options, [:version, :timestamp, :epoch, :round])
+    at_state_identifier = Keyword.take(options, [:version, :timestamp, :epoch, :round])
 
     body =
       []
@@ -120,7 +126,7 @@ defmodule Radixir.Gateway do
       |> Request.GetAccountBalances.at_state_identifier(at_state_identifier)
       |> Util.stitch()
 
-    API.get_account_balances(body, options)
+    API.get_account_balances(body, Keyword.get(options, :api, []))
   end
 
   @doc """
@@ -129,7 +135,9 @@ defmodule Radixir.Gateway do
   ## Parameters
     - `address`: Radix address
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - any other options one may way to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
@@ -139,10 +147,9 @@ defmodule Radixir.Gateway do
   @spec get_stake_positions(address, options) ::
           {:ok, map()} | {:error, map | error_message}
   def get_stake_positions(address, options \\ []) do
-    {network, options} = Util.take_and_drop(options, [:network])
+    network = Keyword.take(options, [:network])
 
-    {at_state_identifier, options} =
-      Util.take_and_drop(options, [:version, :timestamp, :epoch, :round])
+    at_state_identifier = Keyword.take(options, [:version, :timestamp, :epoch, :round])
 
     body =
       []
@@ -151,7 +158,7 @@ defmodule Radixir.Gateway do
       |> Request.GetStakePositions.at_state_identifier(at_state_identifier)
       |> Util.stitch()
 
-    API.get_stake_positions(body, options)
+    API.get_stake_positions(body, Keyword.get(options, :api, []))
   end
 
   @doc """
@@ -160,7 +167,9 @@ defmodule Radixir.Gateway do
   ## Parameters
     - `address`: Radix address
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - any other options one may way to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
@@ -170,10 +179,9 @@ defmodule Radixir.Gateway do
   @spec get_unstake_positions(address, options) ::
           {:ok, map()} | {:error, map | error_message}
   def get_unstake_positions(address, options \\ []) do
-    {network, options} = Util.take_and_drop(options, [:network])
+    network = Keyword.take(options, [:network])
 
-    {at_state_identifier, options} =
-      Util.take_and_drop(options, [:version, :timestamp, :epoch, :round])
+    at_state_identifier = Keyword.take(options, [:version, :timestamp, :epoch, :round])
 
     body =
       []
@@ -182,7 +190,7 @@ defmodule Radixir.Gateway do
       |> Request.GetUnstakePositions.at_state_identifier(at_state_identifier)
       |> Util.stitch()
 
-    API.get_unstake_positions(body, options)
+    API.get_unstake_positions(body, Keyword.get(options, :api, []))
   end
 
   @doc """
@@ -191,7 +199,9 @@ defmodule Radixir.Gateway do
   ## Parameters
     - `address`: Radix address
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - any other options one may way to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
@@ -201,14 +211,13 @@ defmodule Radixir.Gateway do
   @spec get_account_transactions(address, options) ::
           {:ok, map()} | {:error, map | error_message}
   def get_account_transactions(address, options \\ []) do
-    {network, options} = Util.take_and_drop(options, [:network])
+    network = Keyword.take(options, [:network])
 
-    {at_state_identifier, options} =
-      Util.take_and_drop(options, [:version, :timestamp, :epoch, :round])
+    at_state_identifier = Keyword.take(options, [:version, :timestamp, :epoch, :round])
 
-    {cursor, options} = Util.take_and_drop(options, [:cursor])
+    cursor = Keyword.take(options, [:cursor])
 
-    {limit, options} = Util.take_and_drop(options, [:limit])
+    limit = Keyword.take(options, [:limit])
 
     body =
       []
@@ -219,7 +228,7 @@ defmodule Radixir.Gateway do
       |> Util.maybe_create_stitch_plan(limit, &Request.GetAccountTransactions.limit/2)
       |> Util.stitch()
 
-    API.get_account_transactions(body, options)
+    API.get_account_transactions(body, Keyword.get(options, :api, []))
   end
 
   @doc """
@@ -227,7 +236,9 @@ defmodule Radixir.Gateway do
 
   ## Parameters
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - any other options one may way to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
@@ -237,10 +248,9 @@ defmodule Radixir.Gateway do
   @spec get_native_token_info(options) ::
           {:ok, map()} | {:error, map | error_message}
   def get_native_token_info(options \\ []) do
-    {network, options} = Util.take_and_drop(options, [:network])
+    network = Keyword.take(options, [:network])
 
-    {at_state_identifier, options} =
-      Util.take_and_drop(options, [:version, :timestamp, :epoch, :round])
+    at_state_identifier = Keyword.take(options, [:version, :timestamp, :epoch, :round])
 
     body =
       []
@@ -248,7 +258,7 @@ defmodule Radixir.Gateway do
       |> Request.GetNativeTokenInfo.at_state_identifier(at_state_identifier)
       |> Util.stitch()
 
-    API.get_native_token_info(body, options)
+    API.get_native_token_info(body, Keyword.get(options, :api, []))
   end
 
   @doc """
@@ -257,7 +267,9 @@ defmodule Radixir.Gateway do
   ## Parameters
     - `rri`: Radix Resource Identifier
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - any other options one may way to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
@@ -267,10 +279,9 @@ defmodule Radixir.Gateway do
   @spec get_token_info(rri, options) ::
           {:ok, map()} | {:error, map | error_message}
   def get_token_info(rri, options \\ []) do
-    {network, options} = Util.take_and_drop(options, [:network])
+    network = Keyword.take(options, [:network])
 
-    {at_state_identifier, options} =
-      Util.take_and_drop(options, [:version, :timestamp, :epoch, :round])
+    at_state_identifier = Keyword.take(options, [:version, :timestamp, :epoch, :round])
 
     body =
       []
@@ -279,7 +290,7 @@ defmodule Radixir.Gateway do
       |> Request.GetTokenInfo.at_state_identifier(at_state_identifier)
       |> Util.stitch()
 
-    API.get_token_info(body, options)
+    API.get_token_info(body, Keyword.get(options, :api, []))
   end
 
   @doc """
@@ -289,13 +300,15 @@ defmodule Radixir.Gateway do
     - `public_key`: Public key
     - `symbol`: Token symbol
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - any other options one may way to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
   """
   @spec derive_token_identifier(public_key, symbol, options) ::
           {:ok, map()} | {:error, map | error_message}
   def derive_token_identifier(public_key, symbol, options \\ []) do
-    {network, options} = Util.take_and_drop(options, [:network])
+    network = Keyword.take(options, [:network])
 
     body =
       []
@@ -304,7 +317,7 @@ defmodule Radixir.Gateway do
       |> Request.DeriveTokenIdentifier.symbol(symbol: symbol)
       |> Util.stitch()
 
-    API.derive_token_identifier(body, options)
+    API.derive_token_identifier(body, Keyword.get(options, :api, []))
   end
 
   @doc """
@@ -313,7 +326,9 @@ defmodule Radixir.Gateway do
   ## Parameters
     - `address`: Radix address
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - any other options one may way to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
@@ -323,10 +338,9 @@ defmodule Radixir.Gateway do
   @spec get_validator(address, options) ::
           {:ok, map()} | {:error, map | error_message}
   def get_validator(address, options \\ []) do
-    {network, options} = Util.take_and_drop(options, [:network])
+    network = Keyword.take(options, [:network])
 
-    {at_state_identifier, options} =
-      Util.take_and_drop(options, [:version, :timestamp, :epoch, :round])
+    at_state_identifier = Keyword.take(options, [:version, :timestamp, :epoch, :round])
 
     body =
       []
@@ -335,7 +349,7 @@ defmodule Radixir.Gateway do
       |> Request.GetValidator.at_state_identifier(at_state_identifier)
       |> Util.stitch()
 
-    API.get_validator(body, options)
+    API.get_validator(body, Keyword.get(options, :api, []))
   end
 
   @doc """
@@ -344,13 +358,15 @@ defmodule Radixir.Gateway do
   ## Parameters
     - `public_key`: Public key
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - any other options one may way to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
   """
   @spec derive_validator_identifier(public_key, options) ::
           {:ok, map()} | {:error, map | error_message}
   def derive_validator_identifier(public_key, options \\ []) do
-    {network, options} = Util.take_and_drop(options, [:network])
+    network = Keyword.take(options, [:network])
 
     body =
       []
@@ -358,7 +374,7 @@ defmodule Radixir.Gateway do
       |> Request.DeriveValidatorIdentifier.public_key(hex: public_key)
       |> Util.stitch()
 
-    API.derive_validator_identifier(body, options)
+    API.derive_validator_identifier(body, Keyword.get(options, :api, []))
   end
 
   @doc """
@@ -366,7 +382,9 @@ defmodule Radixir.Gateway do
 
   ## Parameters
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - any other options one may way to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
@@ -376,10 +394,9 @@ defmodule Radixir.Gateway do
   @spec get_validators(options) ::
           {:ok, map()} | {:error, map | error_message}
   def get_validators(options \\ []) do
-    {network, options} = Util.take_and_drop(options, [:network])
+    network = Keyword.take(options, [:network])
 
-    {at_state_identifier, options} =
-      Util.take_and_drop(options, [:version, :timestamp, :epoch, :round])
+    at_state_identifier = Keyword.take(options, [:version, :timestamp, :epoch, :round])
 
     body =
       []
@@ -387,7 +404,7 @@ defmodule Radixir.Gateway do
       |> Request.GetValidators.at_state_identifier(at_state_identifier)
       |> Util.stitch()
 
-    API.get_validators(body, options)
+    API.get_validators(body, Keyword.get(options, :api, []))
   end
 
   @doc """
@@ -396,7 +413,9 @@ defmodule Radixir.Gateway do
   ## Parameters
     - `address`: Radix address
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - any other options one may way to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
@@ -406,14 +425,13 @@ defmodule Radixir.Gateway do
   @spec get_validator_stakes(address, options) ::
           {:ok, map()} | {:error, map | error_message}
   def get_validator_stakes(address, options \\ []) do
-    {network, options} = Util.take_and_drop(options, [:network])
+    network = Keyword.take(options, [:network])
 
-    {at_state_identifier, options} =
-      Util.take_and_drop(options, [:version, :timestamp, :epoch, :round])
+    at_state_identifier = Keyword.take(options, [:version, :timestamp, :epoch, :round])
 
-    {cursor, options} = Util.take_and_drop(options, [:cursor])
+    cursor = Keyword.take(options, [:cursor])
 
-    {limit, options} = Util.take_and_drop(options, [:limit])
+    limit = Keyword.take(options, [:limit])
 
     body =
       []
@@ -424,7 +442,7 @@ defmodule Radixir.Gateway do
       |> Util.maybe_create_stitch_plan(limit, &Request.GetValidatorStakes.limit/2)
       |> Util.stitch()
 
-    API.get_validator_stakes(body, options)
+    API.get_validator_stakes(body, Keyword.get(options, :api, []))
   end
 
   @doc """
@@ -432,7 +450,9 @@ defmodule Radixir.Gateway do
 
   ## Parameters
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - any other options one may way to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
@@ -442,10 +462,9 @@ defmodule Radixir.Gateway do
   @spec get_transaction_rules(options) ::
           {:ok, map()} | {:error, map | error_message}
   def get_transaction_rules(options \\ []) do
-    {network, options} = Util.take_and_drop(options, [:network])
+    network = Keyword.take(options, [:network])
 
-    {at_state_identifier, options} =
-      Util.take_and_drop(options, [:version, :timestamp, :epoch, :round])
+    at_state_identifier = Keyword.take(options, [:version, :timestamp, :epoch, :round])
 
     body =
       []
@@ -453,7 +472,7 @@ defmodule Radixir.Gateway do
       |> Request.GetValidatorStakes.at_state_identifier(at_state_identifier)
       |> Util.stitch()
 
-    API.get_transaction_rules(body, options)
+    API.get_transaction_rules(body, Keyword.get(options, :api, []))
   end
 
   @doc """
@@ -463,7 +482,9 @@ defmodule Radixir.Gateway do
     - `create_token_params_list`: List of create token params
     - `fee_payer_address`: Fee payer address
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - any other options one may way to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
@@ -475,15 +496,13 @@ defmodule Radixir.Gateway do
   @spec build_create_token_transaction(list(create_token_params), fee_payer_address, options) ::
           {:ok, map()} | {:error, map | error_message}
   def build_create_token_transaction(create_token_params_list, fee_payer_address, options \\ []) do
-    {network, options} = Util.take_and_drop(options, [:network])
+    network = Keyword.take(options, [:network])
 
-    {at_state_identifier, options} =
-      Util.take_and_drop(options, [:version, :timestamp, :epoch, :round])
+    at_state_identifier = Keyword.take(options, [:version, :timestamp, :epoch, :round])
 
-    {message, options} = Util.take_and_drop(options, [:message])
+    message = Keyword.take(options, [:message])
 
-    {disable_token_mint_and_burn, options} =
-      Util.take_and_drop(options, [:disable_token_mint_and_burn])
+    disable_token_mint_and_burn = Keyword.take(options, [:disable_token_mint_and_burn])
 
     actions =
       Enum.map(create_token_params_list, fn x ->
@@ -519,7 +538,7 @@ defmodule Radixir.Gateway do
 
     body = Request.BuildTransaction.add_actions(body, actions)
 
-    API.build_transaction(body, options)
+    API.build_transaction(body, Keyword.get(options, :api, []))
     # create_token_params = %{
     #   name: "JEC Token",
     #   description: "jec tokens ftw",
@@ -542,7 +561,9 @@ defmodule Radixir.Gateway do
     - `transfer_tokens_params_list`: List of transfer tokens params
     - `fee_payer_address`: Fee payer address
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - any other options one may way to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
@@ -562,15 +583,13 @@ defmodule Radixir.Gateway do
         fee_payer_address,
         options \\ []
       ) do
-    {network, options} = Util.take_and_drop(options, [:network])
+    network = Keyword.take(options, [:network])
 
-    {at_state_identifier, options} =
-      Util.take_and_drop(options, [:version, :timestamp, :epoch, :round])
+    at_state_identifier = Keyword.take(options, [:version, :timestamp, :epoch, :round])
 
-    {message, options} = Util.take_and_drop(options, [:message])
+    message = Keyword.take(options, [:message])
 
-    {disable_token_mint_and_burn, options} =
-      Util.take_and_drop(options, [:disable_token_mint_and_burn])
+    disable_token_mint_and_burn = Keyword.take(options, [:disable_token_mint_and_burn])
 
     actions =
       Enum.map(transfer_tokens_params_list, fn x ->
@@ -578,7 +597,7 @@ defmodule Radixir.Gateway do
         |> Request.BuildTransaction.Action.TransferTokens.type()
         |> Request.BuildTransaction.Action.TransferTokens.from_account(address: x.from_address)
         |> Request.BuildTransaction.Action.TransferTokens.to_account(address: x.to_address)
-        |> Request.BuildTransaction.Action.TransferTokens.amount(value: x.amount)
+        |> Request.BuildTransaction.Action.TransferTokens.amount(amount: x.amount)
         |> Request.BuildTransaction.Action.TransferTokens.token_identifier(rri: x.token_rri)
         |> Util.stitch()
       end)
@@ -597,7 +616,7 @@ defmodule Radixir.Gateway do
 
     body = Request.BuildTransaction.add_actions(body, actions)
 
-    API.build_transaction(body, options)
+    API.build_transaction(body, Keyword.get(options, :api, []))
 
     # transfer_tokens_params = %{
     #   from_address: "tdx1qspf8f3eeg06955d5pzgvntz36c6nych7f8jw68mdmhlzvflj7pylqs9qzh0z",
@@ -614,7 +633,9 @@ defmodule Radixir.Gateway do
     - `stake_tokens_params_list`: List of stake tokens params
     - `fee_payer_address`: Fee payer address
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - any other options one may way to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
@@ -634,15 +655,13 @@ defmodule Radixir.Gateway do
         fee_payer_address,
         options \\ []
       ) do
-    {network, options} = Util.take_and_drop(options, [:network])
+    network = Keyword.take(options, [:network])
 
-    {at_state_identifier, options} =
-      Util.take_and_drop(options, [:version, :timestamp, :epoch, :round])
+    at_state_identifier = Keyword.take(options, [:version, :timestamp, :epoch, :round])
 
-    {message, options} = Util.take_and_drop(options, [:message])
+    message = Keyword.take(options, [:message])
 
-    {disable_token_mint_and_burn, options} =
-      Util.take_and_drop(options, [:disable_token_mint_and_burn])
+    disable_token_mint_and_burn = Keyword.take(options, [:disable_token_mint_and_burn])
 
     actions =
       Enum.map(stake_tokens_params_list, fn x ->
@@ -652,7 +671,7 @@ defmodule Radixir.Gateway do
         |> Request.BuildTransaction.Action.StakeTokens.to_validator(
           address: x.to_validator_address
         )
-        |> Request.BuildTransaction.Action.StakeTokens.amount(value: x.amount)
+        |> Request.BuildTransaction.Action.StakeTokens.amount(amount: x.amount)
         |> Request.BuildTransaction.Action.StakeTokens.token_identifier(rri: x.token_rri)
         |> Util.stitch()
       end)
@@ -671,7 +690,7 @@ defmodule Radixir.Gateway do
 
     body = Request.BuildTransaction.add_actions(body, actions)
 
-    API.build_transaction(body, options)
+    API.build_transaction(body, Keyword.get(options, :api, []))
   end
 
   @doc """
@@ -681,7 +700,9 @@ defmodule Radixir.Gateway do
     - `unstake_tokens_params_list`: List of unstake tokens params
     - `fee_payer_address`: Fee payer address
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - any other options one may way to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
@@ -689,6 +710,7 @@ defmodule Radixir.Gateway do
       - `round` (optional, integer): Round key in `at_state_identifier` map.
       - `message` (optional, string): Message to be included in transaction.
       - `disable_token_mint_and_burn` (optional, boolean): Disable Token Mint and Burn.
+      - `amount` (optional, string): Amount to unstake.
       - `unstake_percentage` (optional, integer): Percentage of currently staked XRD to unstake.
   """
   @spec build_unstake_tokens_transaction(
@@ -702,17 +724,16 @@ defmodule Radixir.Gateway do
         fee_payer_address,
         options \\ []
       ) do
-    {network, options} = Util.take_and_drop(options, [:network])
+    network = Keyword.take(options, [:network])
 
-    {at_state_identifier, options} =
-      Util.take_and_drop(options, [:version, :timestamp, :epoch, :round])
+    at_state_identifier = Keyword.take(options, [:version, :timestamp, :epoch, :round])
 
-    {message, options} = Util.take_and_drop(options, [:message])
+    message = Keyword.take(options, [:message])
 
-    {unstake_percentage, options} = Util.take_and_drop(options, [:unstake_percentage])
+    amount = Keyword.take(options, [:amount])
+    unstake_percentage = Keyword.take(options, [:unstake_percentage])
 
-    {disable_token_mint_and_burn, options} =
-      Util.take_and_drop(options, [:disable_token_mint_and_burn])
+    disable_token_mint_and_burn = Keyword.take(options, [:disable_token_mint_and_burn])
 
     actions =
       Enum.map(unstake_tokens_params_list, fn x ->
@@ -722,7 +743,10 @@ defmodule Radixir.Gateway do
           address: x.from_validator_address
         )
         |> Request.BuildTransaction.Action.UnstakeTokens.to_account(address: x.to_address)
-        |> Request.BuildTransaction.Action.UnstakeTokens.amount(value: x.amount)
+        |> Util.maybe_create_stitch_plan(
+          amount,
+          &Request.BuildTransaction.Action.UnstakeTokens.amount/2
+        )
         |> Request.BuildTransaction.Action.UnstakeTokens.token_identifier(rri: x.token_rri)
         |> Util.maybe_create_stitch_plan(
           unstake_percentage,
@@ -745,7 +769,7 @@ defmodule Radixir.Gateway do
 
     body = Request.BuildTransaction.add_actions(body, actions)
 
-    API.build_transaction(body, options)
+    API.build_transaction(body, Keyword.get(options, :api, []))
   end
 
   @doc """
@@ -755,7 +779,9 @@ defmodule Radixir.Gateway do
     - `mint_tokens_params_list`: List of mint tokens params
     - `fee_payer_address`: Fee payer address
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - any other options one may way to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
@@ -775,22 +801,20 @@ defmodule Radixir.Gateway do
         fee_payer_address,
         options \\ []
       ) do
-    {network, options} = Util.take_and_drop(options, [:network])
+    network = Keyword.take(options, [:network])
 
-    {at_state_identifier, options} =
-      Util.take_and_drop(options, [:version, :timestamp, :epoch, :round])
+    at_state_identifier = Keyword.take(options, [:version, :timestamp, :epoch, :round])
 
-    {message, options} = Util.take_and_drop(options, [:message])
+    message = Keyword.take(options, [:message])
 
-    {disable_token_mint_and_burn, options} =
-      Util.take_and_drop(options, [:disable_token_mint_and_burn])
+    disable_token_mint_and_burn = Keyword.take(options, [:disable_token_mint_and_burn])
 
     actions =
       Enum.map(mint_tokens_params_list, fn x ->
         []
         |> Request.BuildTransaction.Action.MintTokens.type()
         |> Request.BuildTransaction.Action.MintTokens.to_account(address: x.to_address)
-        |> Request.BuildTransaction.Action.MintTokens.amount(value: x.amount)
+        |> Request.BuildTransaction.Action.MintTokens.amount(amount: x.amount)
         |> Request.BuildTransaction.Action.MintTokens.token_identifier(rri: x.token_rri)
         |> Util.stitch()
       end)
@@ -809,7 +833,7 @@ defmodule Radixir.Gateway do
 
     body = Request.BuildTransaction.add_actions(body, actions)
 
-    API.build_transaction(body, options)
+    API.build_transaction(body, Keyword.get(options, :api, []))
   end
 
   @doc """
@@ -819,7 +843,9 @@ defmodule Radixir.Gateway do
     - `burn_tokens_params_list`: List of burn tokens params
     - `fee_payer_address`: Fee payer address
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - any other options one may way to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
@@ -839,22 +865,20 @@ defmodule Radixir.Gateway do
         fee_payer_address,
         options \\ []
       ) do
-    {network, options} = Util.take_and_drop(options, [:network])
+    network = Keyword.take(options, [:network])
 
-    {at_state_identifier, options} =
-      Util.take_and_drop(options, [:version, :timestamp, :epoch, :round])
+    at_state_identifier = Keyword.take(options, [:version, :timestamp, :epoch, :round])
 
-    {message, options} = Util.take_and_drop(options, [:message])
+    message = Keyword.take(options, [:message])
 
-    {disable_token_mint_and_burn, options} =
-      Util.take_and_drop(options, [:disable_token_mint_and_burn])
+    disable_token_mint_and_burn = Keyword.take(options, [:disable_token_mint_and_burn])
 
     actions =
       Enum.map(burn_tokens_params_list, fn x ->
         []
         |> Request.BuildTransaction.Action.BurnTokens.type()
         |> Request.BuildTransaction.Action.BurnTokens.from_account(address: x.from_address)
-        |> Request.BuildTransaction.Action.BurnTokens.amount(value: x.amount)
+        |> Request.BuildTransaction.Action.BurnTokens.amount(amount: x.amount)
         |> Request.BuildTransaction.Action.BurnTokens.token_identifier(rri: x.token_rri)
         |> Util.stitch()
       end)
@@ -873,7 +897,7 @@ defmodule Radixir.Gateway do
 
     body = Request.BuildTransaction.add_actions(body, actions)
 
-    API.build_transaction(body, options)
+    API.build_transaction(body, Keyword.get(options, :api, []))
   end
 
   @doc """
@@ -883,7 +907,9 @@ defmodule Radixir.Gateway do
     - `validator_addresses_list`: List of validator addresses
     - `fee_payer_address`: Fee payer address
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - any other options one may way to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
@@ -903,15 +929,13 @@ defmodule Radixir.Gateway do
         fee_payer_address,
         options \\ []
       ) do
-    {network, options} = Util.take_and_drop(options, [:network])
+    network = Keyword.take(options, [:network])
 
-    {at_state_identifier, options} =
-      Util.take_and_drop(options, [:version, :timestamp, :epoch, :round])
+    at_state_identifier = Keyword.take(options, [:version, :timestamp, :epoch, :round])
 
-    {message, options} = Util.take_and_drop(options, [:message])
+    message = Keyword.take(options, [:message])
 
-    {disable_token_mint_and_burn, options} =
-      Util.take_and_drop(options, [:disable_token_mint_and_burn])
+    disable_token_mint_and_burn = Keyword.take(options, [:disable_token_mint_and_burn])
 
     actions =
       Enum.map(validator_addresses_list, fn x ->
@@ -937,7 +961,7 @@ defmodule Radixir.Gateway do
 
     body = Request.BuildTransaction.add_actions(body, actions)
 
-    API.build_transaction(body, options)
+    API.build_transaction(body, Keyword.get(options, :api, []))
   end
 
   @doc """
@@ -947,7 +971,9 @@ defmodule Radixir.Gateway do
     - `validator_addresses_list`: List of validator addresses
     - `fee_payer_address`: Fee payer address
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - any other options one may way to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
@@ -967,15 +993,13 @@ defmodule Radixir.Gateway do
         fee_payer_address,
         options \\ []
       ) do
-    {network, options} = Util.take_and_drop(options, [:network])
+    network = Keyword.take(options, [:network])
 
-    {at_state_identifier, options} =
-      Util.take_and_drop(options, [:version, :timestamp, :epoch, :round])
+    at_state_identifier = Keyword.take(options, [:version, :timestamp, :epoch, :round])
 
-    {message, options} = Util.take_and_drop(options, [:message])
+    message = Keyword.take(options, [:message])
 
-    {disable_token_mint_and_burn, options} =
-      Util.take_and_drop(options, [:disable_token_mint_and_burn])
+    disable_token_mint_and_burn = Keyword.take(options, [:disable_token_mint_and_burn])
 
     actions =
       Enum.map(validator_addresses_list, fn x ->
@@ -1001,7 +1025,7 @@ defmodule Radixir.Gateway do
 
     body = Request.BuildTransaction.add_actions(body, actions)
 
-    API.build_transaction(body, options)
+    API.build_transaction(body, Keyword.get(options, :api, []))
   end
 
   @doc """
@@ -1012,7 +1036,9 @@ defmodule Radixir.Gateway do
     - `signature_public_key`: Public key that will sign transaction
     - `signature_bytes`: Bytes of signature
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - any other options one may way to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
       - `submit` (optional, boolean): If true, the transaction is immediately submitted after finalization.
   """
@@ -1024,9 +1050,9 @@ defmodule Radixir.Gateway do
         signature_bytes,
         options \\ []
       ) do
-    {network, options} = Util.take_and_drop(options, [:network])
+    network = Keyword.take(options, [:network])
 
-    {submit, options} = Util.take_and_drop(options, [:submit])
+    submit = Keyword.take(options, [:submit])
 
     body =
       []
@@ -1041,7 +1067,7 @@ defmodule Radixir.Gateway do
       |> Util.maybe_create_stitch_plan(submit, &Request.FinalizeTransaction.submit/2)
       |> Util.stitch()
 
-    API.finalize_transaction(body, options)
+    API.finalize_transaction(body, Keyword.get(options, :api, []))
   end
 
   @doc """
@@ -1050,13 +1076,15 @@ defmodule Radixir.Gateway do
   ## Parameters
     - `signed_transaction`: Signed transaction
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - any other options one may way to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
   """
   @spec submit_transaction(signed_transaction, options) ::
           {:ok, map()} | {:error, map | error_message}
   def submit_transaction(signed_transaction, options \\ []) do
-    {network, options} = Util.take_and_drop(options, [:network])
+    network = Keyword.take(options, [:network])
 
     body =
       []
@@ -1064,7 +1092,7 @@ defmodule Radixir.Gateway do
       |> Request.SubmitTransaction.signed_transaction(signed_transaction: signed_transaction)
       |> Util.stitch()
 
-    API.submit_transaction(body, options)
+    API.submit_transaction(body, Keyword.get(options, :api, []))
   end
 
   @doc """
@@ -1073,7 +1101,9 @@ defmodule Radixir.Gateway do
   ## Parameters
     - `transaction_hash`: Transaction hash
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - any other options one may way to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
@@ -1083,10 +1113,9 @@ defmodule Radixir.Gateway do
   @spec get_transaction_status(transaction_hash, options) ::
           {:ok, map()} | {:error, map | error_message}
   def get_transaction_status(transaction_hash, options \\ []) do
-    {network, options} = Util.take_and_drop(options, [:network])
+    network = Keyword.take(options, [:network])
 
-    {at_state_identifier, options} =
-      Util.take_and_drop(options, [:version, :timestamp, :epoch, :round])
+    at_state_identifier = Keyword.take(options, [:version, :timestamp, :epoch, :round])
 
     body =
       []
@@ -1095,6 +1124,376 @@ defmodule Radixir.Gateway do
       |> Request.GetTransactionStatus.at_state_identifier(at_state_identifier)
       |> Util.stitch()
 
-    API.get_transaction_status(body, options)
+    API.get_transaction_status(body, Keyword.get(options, :api, []))
+  end
+
+  @doc """
+  Creates tokens.
+
+  ## Parameters
+    - `create_token_params_list`: List of create token params
+    - `fee_payer_address`: Fee payer address
+    - `options`: Keyword list that contains
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - any other options one may way to pass along to the http layer - for example `headers`
+      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `version` (optional, integer): Version key in `at_state_identifier` map.
+      - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
+      - `epoch` (optional, integer): Epoch key in `at_state_identifier` map.
+      - `round` (optional, integer): Round key in `at_state_identifier` map.
+      - `message` (optional, string): Message to be included in transaction.
+      - `disable_token_mint_and_burn` (optional, boolean): Disable Token Mint and Burn.
+  """
+  @spec create_token(
+          list(create_token_params),
+          fee_payer_address,
+          private_key,
+          options
+        ) ::
+          {:ok, map()} | {:error, map | error_message}
+  def create_token(
+        create_token_params_list,
+        fee_payer_address,
+        private_key,
+        options \\ []
+      ) do
+    transaction_pipeline(
+      create_token_params_list,
+      fee_payer_address,
+      private_key,
+      options,
+      &build_create_token_transaction/3
+    )
+  end
+
+  @doc """
+  Transfers tokens.
+
+  ## Parameters
+    - `transfer_tokens_params_list`: List of transfer tokens params
+    - `fee_payer_address`: Fee payer address
+    - `options`: Keyword list that contains
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - any other options one may way to pass along to the http layer - for example `headers`
+      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `version` (optional, integer): Version key in `at_state_identifier` map.
+      - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
+      - `epoch` (optional, integer): Epoch key in `at_state_identifier` map.
+      - `round` (optional, integer): Round key in `at_state_identifier` map.
+      - `message` (optional, string): Message to be included in transaction.
+      - `disable_token_mint_and_burn` (optional, boolean): Disable Token Mint and Burn.
+  """
+  @spec transfer_tokens(
+          list(transfer_tokens_params),
+          fee_payer_address,
+          private_key,
+          options
+        ) ::
+          {:ok, map()} | {:error, map | error_message}
+  def transfer_tokens(
+        transfer_tokens_params_list,
+        fee_payer_address,
+        private_key,
+        options \\ []
+      ) do
+    transaction_pipeline(
+      transfer_tokens_params_list,
+      fee_payer_address,
+      private_key,
+      options,
+      &build_transfer_tokens_transaction/3
+    )
+  end
+
+  @doc """
+  Stakes tokens.
+
+  ## Parameters
+    - `stake_tokens_params_list`: List of stake tokens params
+    - `fee_payer_address`: Fee payer address
+    - `options`: Keyword list that contains
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - any other options one may way to pass along to the http layer - for example `headers`
+      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `version` (optional, integer): Version key in `at_state_identifier` map.
+      - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
+      - `epoch` (optional, integer): Epoch key in `at_state_identifier` map.
+      - `round` (optional, integer): Round key in `at_state_identifier` map.
+      - `message` (optional, string): Message to be included in transaction.
+      - `disable_token_mint_and_burn` (optional, boolean): Disable Token Mint and Burn.
+  """
+  @spec stake_tokens(
+          list(stake_tokens_params),
+          fee_payer_address,
+          private_key,
+          options
+        ) ::
+          {:ok, map()} | {:error, map | error_message}
+  def stake_tokens(
+        stake_tokens_params_list,
+        fee_payer_address,
+        private_key,
+        options \\ []
+      ) do
+    transaction_pipeline(
+      stake_tokens_params_list,
+      fee_payer_address,
+      private_key,
+      options,
+      &build_stake_tokens_transaction/3
+    )
+  end
+
+  @doc """
+  Unstakes tokens.
+
+  ## Parameters
+    - `unstake_tokens_params_list`: List of unstake tokens params
+    - `fee_payer_address`: Fee payer address
+    - `options`: Keyword list that contains
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - any other options one may way to pass along to the http layer - for example `headers`
+      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `version` (optional, integer): Version key in `at_state_identifier` map.
+      - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
+      - `epoch` (optional, integer): Epoch key in `at_state_identifier` map.
+      - `round` (optional, integer): Round key in `at_state_identifier` map.
+      - `message` (optional, string): Message to be included in transaction.
+      - `disable_token_mint_and_burn` (optional, boolean): Disable Token Mint and Burn.
+      - `amount` (optional, string): Amount to unstake.
+      - `unstake_percentage` (optional, integer): Percentage of currently staked XRD to unstake.
+  """
+  @spec unstake_tokens(
+          list(unstake_tokens_params),
+          fee_payer_address,
+          private_key,
+          options
+        ) ::
+          {:ok, map()} | {:error, map | error_message}
+  def unstake_tokens(
+        unstake_tokens_params_list,
+        fee_payer_address,
+        private_key,
+        options \\ []
+      ) do
+    transaction_pipeline(
+      unstake_tokens_params_list,
+      fee_payer_address,
+      private_key,
+      options,
+      &build_unstake_tokens_transaction/3
+    )
+  end
+
+  @doc """
+  Mint tokens.
+
+  ## Parameters
+    - `mint_tokens_params_list`: List of mint tokens params
+    - `fee_payer_address`: Fee payer address
+    - `options`: Keyword list that contains
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - any other options one may way to pass along to the http layer - for example `headers`
+      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `version` (optional, integer): Version key in `at_state_identifier` map.
+      - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
+      - `epoch` (optional, integer): Epoch key in `at_state_identifier` map.
+      - `round` (optional, integer): Round key in `at_state_identifier` map.
+      - `message` (optional, string): Message to be included in transaction.
+      - `disable_token_mint_and_burn` (optional, boolean): Disable Token Mint and Burn.
+  """
+  @spec mint_tokens(
+          list(mint_tokens_params),
+          fee_payer_address,
+          private_key,
+          options
+        ) ::
+          {:ok, map()} | {:error, map | error_message}
+  def mint_tokens(
+        mint_tokens_params_list,
+        fee_payer_address,
+        private_key,
+        options \\ []
+      ) do
+    transaction_pipeline(
+      mint_tokens_params_list,
+      fee_payer_address,
+      private_key,
+      options,
+      &build_mint_tokens_transaction/3
+    )
+  end
+
+  @doc """
+  Burn tokens.
+
+  ## Parameters
+    - `burn_tokens_params_list`: List of burn tokens params
+    - `fee_payer_address`: Fee payer address
+    - `options`: Keyword list that contains
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - any other options one may way to pass along to the http layer - for example `headers`
+      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `version` (optional, integer): Version key in `at_state_identifier` map.
+      - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
+      - `epoch` (optional, integer): Epoch key in `at_state_identifier` map.
+      - `round` (optional, integer): Round key in `at_state_identifier` map.
+      - `message` (optional, string): Message to be included in transaction.
+      - `disable_token_mint_and_burn` (optional, boolean): Disable Token Mint and Burn.
+  """
+  @spec burn_tokens(
+          list(burn_tokens_params),
+          fee_payer_address,
+          private_key,
+          options
+        ) ::
+          {:ok, map()} | {:error, map | error_message}
+  def burn_tokens(
+        burn_tokens_params_list,
+        fee_payer_address,
+        private_key,
+        options \\ []
+      ) do
+    transaction_pipeline(
+      burn_tokens_params_list,
+      fee_payer_address,
+      private_key,
+      options,
+      &build_burn_tokens_transaction/3
+    )
+  end
+
+  @doc """
+  Register validators.
+
+  ## Parameters
+    - `validator_addresses_list`: List of validator addresses
+    - `fee_payer_address`: Fee payer address
+    - `options`: Keyword list that contains
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - any other options one may way to pass along to the http layer - for example `headers`
+      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `version` (optional, integer): Version key in `at_state_identifier` map.
+      - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
+      - `epoch` (optional, integer): Epoch key in `at_state_identifier` map.
+      - `round` (optional, integer): Round key in `at_state_identifier` map.
+      - `message` (optional, string): Message to be included in transaction.
+      - `disable_token_mint_and_burn` (optional, boolean): Disable Token Mint and Burn.
+  """
+  @spec register_validator(
+          list(validator_address),
+          fee_payer_address,
+          private_key,
+          options
+        ) ::
+          {:ok, map()} | {:error, map | error_message}
+  def register_validator(
+        validator_addresses_list,
+        fee_payer_address,
+        private_key,
+        options \\ []
+      ) do
+    transaction_pipeline(
+      validator_addresses_list,
+      fee_payer_address,
+      private_key,
+      options,
+      &build_register_validator_transaction/3
+    )
+  end
+
+  @doc """
+  Unregister validators.
+
+  ## Parameters
+    - `validator_addresses_list`: List of validator addresses
+    - `fee_payer_address`: Fee payer address
+    - `options`: Keyword list that contains
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - any other options one may way to pass along to the http layer - for example `headers`
+      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `version` (optional, integer): Version key in `at_state_identifier` map.
+      - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
+      - `epoch` (optional, integer): Epoch key in `at_state_identifier` map.
+      - `round` (optional, integer): Round key in `at_state_identifier` map.
+      - `message` (optional, string): Message to be included in transaction.
+      - `disable_token_mint_and_burn` (optional, boolean): Disable Token Mint and Burn.
+  """
+  @spec unregister_validator(
+          list(validator_address),
+          fee_payer_address,
+          private_key,
+          options
+        ) ::
+          {:ok, map()} | {:error, map | error_message}
+  def unregister_validator(
+        validator_addresses_list,
+        fee_payer_address,
+        private_key,
+        options \\ []
+      ) do
+    transaction_pipeline(
+      validator_addresses_list,
+      fee_payer_address,
+      private_key,
+      options,
+      &build_unregister_validator_transaction/3
+    )
+  end
+
+  defp transaction_pipeline(
+         action_params_list,
+         fee_payer_address,
+         private_key,
+         options,
+         build_transaction
+       ) do
+    with {:ok, %{public_key: public_key}} <- Key.from_private_key(private_key),
+         {:ok, built_transaction} <-
+           build_transaction.(
+             action_params_list,
+             fee_payer_address,
+             options
+           ),
+         :ok <-
+           Util.verify_hash(
+             built_transaction["transaction_build"]["unsigned_transaction"],
+             built_transaction["transaction_build"]["payload_to_sign"]
+           ),
+         {:ok, signature_bytes} <-
+           Key.sign_data(built_transaction["transaction_build"]["payload_to_sign"], private_key),
+         {:ok, finalized_transaction} <-
+           finalize_transaction(
+             built_transaction["transaction_build"]["unsigned_transaction"],
+             public_key,
+             signature_bytes,
+             options
+           ) do
+      case submit_transaction(finalized_transaction["signed_transaction"], options) do
+        {:ok, submitted_transaction} ->
+          {:ok,
+           %{
+             built_transaction: built_transaction,
+             finalized_transaction: finalized_transaction,
+             submitted_transaction: submitted_transaction
+           }}
+
+        {:error, error} ->
+          {:error,
+           %{
+             built_transaction: built_transaction,
+             finalized_transaction: finalized_transaction,
+             submitted_transaction_error: error
+           }}
+      end
+    end
   end
 end
