@@ -15,6 +15,7 @@ defmodule Radixir.Gateway.API do
   ## Parameters
     - `options`: Keyword list that contains
       - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - any other options one may want to pass along to the http layer - for example `headers`
 
   ## Gateway API Documentation
     - [/gateway](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/radixdlt/radixdlt-network-gateway/1.1.1/gateway-api-spec.yaml#tag/Status/paths/~1gateway/post)
@@ -33,6 +34,7 @@ defmodule Radixir.Gateway.API do
     - `body`: Request body.
     - `options`: Keyword list that contains
       - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - any other options one may want to pass along to the http layer - for example `headers`
 
   ## Gateway API Documentation
     - [/account/derive](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/radixdlt/radixdlt-network-gateway/1.1.1/gateway-api-spec.yaml#tag/Account/paths/~1account~1derive/post)
@@ -51,6 +53,7 @@ defmodule Radixir.Gateway.API do
     - `body`: Request body.
     - `options`: Keyword list that contains
       - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - any other options one may want to pass along to the http layer - for example `headers`
 
   ## Gateway API Documentation
     - [/account/balances](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/radixdlt/radixdlt-network-gateway/1.1.1/gateway-api-spec.yaml#tag/Account/paths/~1account~1balances/post)
@@ -69,6 +72,7 @@ defmodule Radixir.Gateway.API do
     - `body`: Request body.
     - `options`: Keyword list that contains
       - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - any other options one may want to pass along to the http layer - for example `headers`
 
   ## Gateway API Documentation
     - [/account/stakes](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/radixdlt/radixdlt-network-gateway/1.1.1/gateway-api-spec.yaml#tag/Account/paths/~1account~1stakes/post)
@@ -87,6 +91,7 @@ defmodule Radixir.Gateway.API do
     - `body`: Request body.
     - `options`: Keyword list that contains
       - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - any other options one may want to pass along to the http layer - for example `headers`
 
   ## Gateway API Documentation
     - [/account/unstakes](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/radixdlt/radixdlt-network-gateway/1.1.1/gateway-api-spec.yaml#tag/Account/paths/~1account~1unstakes/post)
@@ -105,6 +110,7 @@ defmodule Radixir.Gateway.API do
     - `body`: Request body.
     - `options`: Keyword list that contains
       - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - any other options one may want to pass along to the http layer - for example `headers`
 
   ## Gateway API Documentation
     - [/account/transactions](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/radixdlt/radixdlt-network-gateway/1.1.1/gateway-api-spec.yaml#tag/Account/paths/~1account~1transactions/post)
@@ -123,6 +129,7 @@ defmodule Radixir.Gateway.API do
     - `body`: Request body.
     - `options`: Keyword list that contains
       - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - any other options one may want to pass along to the http layer - for example `headers`
 
   ## Gateway API Documentation
     - [/token/native](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/radixdlt/radixdlt-network-gateway/1.1.1/gateway-api-spec.yaml#tag/Token/paths/~1token~1native/post)
@@ -141,6 +148,7 @@ defmodule Radixir.Gateway.API do
     - `body`: Request body.
     - `options`: Keyword list that contains
       - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - any other options one may want to pass along to the http layer - for example `headers`
 
   ## Gateway API Documentation
     - [/token](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/radixdlt/radixdlt-network-gateway/1.1.1/gateway-api-spec.yaml#tag/Token/paths/~1token/post)
@@ -159,6 +167,7 @@ defmodule Radixir.Gateway.API do
     - `body`: Request body.
     - `options`: Keyword list that contains
       - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - any other options one may want to pass along to the http layer - for example `headers`
 
   ## Gateway API Documentation
     - [/token/derive](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/radixdlt/radixdlt-network-gateway/1.1.1/gateway-api-spec.yaml#tag/Token/paths/~1token~1derive/post)
@@ -177,6 +186,7 @@ defmodule Radixir.Gateway.API do
     - `body`: Request body.
     - `options`: Keyword list that contains
       - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - any other options one may want to pass along to the http layer - for example `headers`
 
   ## Gateway API Documentation
     - [/validator](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/radixdlt/radixdlt-network-gateway/1.1.1/gateway-api-spec.yaml#tag/Validator/paths/~1validator/post)
@@ -195,6 +205,7 @@ defmodule Radixir.Gateway.API do
     - `body`: Request body.
     - `options`: Keyword list that contains
       - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - any other options one may want to pass along to the http layer - for example `headers`
 
   ## Gateway API Documentation
     - [/validator/derive](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/radixdlt/radixdlt-network-gateway/1.1.1/gateway-api-spec.yaml#tag/Validator/paths/~1validator~1derive/post)
@@ -213,6 +224,7 @@ defmodule Radixir.Gateway.API do
     - `body`: Request body.
     - `options`: Keyword list that contains
       - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - any other options one may want to pass along to the http layer - for example `headers`
 
   ## Gateway API Documentation
     - [/validators](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/radixdlt/radixdlt-network-gateway/1.1.1/gateway-api-spec.yaml#tag/Validator/paths/~1validators/post)
@@ -231,6 +243,7 @@ defmodule Radixir.Gateway.API do
     - `body`: Request body.
     - `options`: Keyword list that contains
       - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - any other options one may want to pass along to the http layer - for example `headers`
 
   ## Gateway API Documentation
     - [/validator/stakes](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/radixdlt/radixdlt-network-gateway/1.1.1/gateway-api-spec.yaml#tag/Validator/paths/~1validator~1stakes/post)
@@ -249,6 +262,7 @@ defmodule Radixir.Gateway.API do
     - `body`: Request body.
     - `options`: Keyword list that contains
       - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - any other options one may want to pass along to the http layer - for example `headers`
 
   ## Gateway API Documentation
     - [/transaction/rules](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/radixdlt/radixdlt-network-gateway/1.1.1/gateway-api-spec.yaml#tag/Transaction/paths/~1transaction~1rules/post)
@@ -267,6 +281,7 @@ defmodule Radixir.Gateway.API do
     - `body`: Request body.
     - `options`: Keyword list that contains
       - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - any other options one may want to pass along to the http layer - for example `headers`
 
   ## Gateway API Documentation
     - [/transaction/build](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/radixdlt/radixdlt-network-gateway/1.1.1/gateway-api-spec.yaml#tag/Transaction/paths/~1transaction~1build/post)
@@ -285,6 +300,7 @@ defmodule Radixir.Gateway.API do
     - `body`: Request body.
     - `options`: Keyword list that contains
       - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - any other options one may want to pass along to the http layer - for example `headers`
 
   ## Gateway API Documentation
     - [/transaction/finalize](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/radixdlt/radixdlt-network-gateway/1.1.1/gateway-api-spec.yaml#tag/Transaction/paths/~1transaction~1finalize/post)
@@ -303,6 +319,7 @@ defmodule Radixir.Gateway.API do
     - `body`: Request body.
     - `options`: Keyword list that contains
       - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - any other options one may want to pass along to the http layer - for example `headers`
 
   ## Gateway API Documentation
     - [/transaction/submit](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/radixdlt/radixdlt-network-gateway/1.1.1/gateway-api-spec.yaml#tag/Transaction/paths/~1transaction~1submit/post)
@@ -321,6 +338,7 @@ defmodule Radixir.Gateway.API do
     - `body`: Request body.
     - `options`: Keyword list that contains
       - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - any other options one may want to pass along to the http layer - for example `headers`
 
   ## Gateway API Documentation
     - [/transaction/status](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/radixdlt/radixdlt-network-gateway/1.1.1/gateway-api-spec.yaml#tag/Transaction/paths/~1transaction~1status/post)

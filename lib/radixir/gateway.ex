@@ -70,10 +70,10 @@ defmodule Radixir.Gateway do
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
-        - any other options one may way to pass along to the http layer - for example `headers`
+        - any other options one may want to pass along to the http layer - for example `headers`
   """
   def get_info(options \\ []) do
-    API.get_info(options)
+    API.get_info(Keyword.get(options, :api, []))
   end
 
   @doc """
@@ -84,7 +84,7 @@ defmodule Radixir.Gateway do
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
-        - any other options one may way to pass along to the http layer - for example `headers`
+        - any other options one may want to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
   """
   @spec derive_account_identifier(public_key, options) ::
@@ -109,7 +109,7 @@ defmodule Radixir.Gateway do
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
-        - any other options one may way to pass along to the http layer - for example `headers`
+        - any other options one may want to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
@@ -141,7 +141,7 @@ defmodule Radixir.Gateway do
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
-        - any other options one may way to pass along to the http layer - for example `headers`
+        - any other options one may want to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
@@ -173,7 +173,7 @@ defmodule Radixir.Gateway do
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
-        - any other options one may way to pass along to the http layer - for example `headers`
+        - any other options one may want to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
@@ -205,7 +205,7 @@ defmodule Radixir.Gateway do
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
-        - any other options one may way to pass along to the http layer - for example `headers`
+        - any other options one may want to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
@@ -242,7 +242,7 @@ defmodule Radixir.Gateway do
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
-        - any other options one may way to pass along to the http layer - for example `headers`
+        - any other options one may want to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
@@ -273,7 +273,7 @@ defmodule Radixir.Gateway do
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
-        - any other options one may way to pass along to the http layer - for example `headers`
+        - any other options one may want to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
@@ -306,7 +306,7 @@ defmodule Radixir.Gateway do
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
-        - any other options one may way to pass along to the http layer - for example `headers`
+        - any other options one may want to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
   """
   @spec derive_token_identifier(public_key, symbol, options) ::
@@ -332,7 +332,7 @@ defmodule Radixir.Gateway do
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
-        - any other options one may way to pass along to the http layer - for example `headers`
+        - any other options one may want to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
@@ -364,7 +364,7 @@ defmodule Radixir.Gateway do
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
-        - any other options one may way to pass along to the http layer - for example `headers`
+        - any other options one may want to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
   """
   @spec derive_validator_identifier(public_key, options) ::
@@ -388,7 +388,7 @@ defmodule Radixir.Gateway do
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
-        - any other options one may way to pass along to the http layer - for example `headers`
+        - any other options one may want to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
@@ -419,7 +419,7 @@ defmodule Radixir.Gateway do
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
-        - any other options one may way to pass along to the http layer - for example `headers`
+        - any other options one may want to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
@@ -456,7 +456,7 @@ defmodule Radixir.Gateway do
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
-        - any other options one may way to pass along to the http layer - for example `headers`
+        - any other options one may want to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
@@ -488,7 +488,7 @@ defmodule Radixir.Gateway do
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
-        - any other options one may way to pass along to the http layer - for example `headers`
+        - any other options one may want to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
@@ -554,7 +554,7 @@ defmodule Radixir.Gateway do
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
-        - any other options one may way to pass along to the http layer - for example `headers`
+        - any other options one may want to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
@@ -619,7 +619,7 @@ defmodule Radixir.Gateway do
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
-        - any other options one may way to pass along to the http layer - for example `headers`
+        - any other options one may want to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
@@ -686,7 +686,7 @@ defmodule Radixir.Gateway do
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
-        - any other options one may way to pass along to the http layer - for example `headers`
+        - any other options one may want to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
@@ -765,7 +765,7 @@ defmodule Radixir.Gateway do
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
-        - any other options one may way to pass along to the http layer - for example `headers`
+        - any other options one may want to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
@@ -829,7 +829,7 @@ defmodule Radixir.Gateway do
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
-        - any other options one may way to pass along to the http layer - for example `headers`
+        - any other options one may want to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
@@ -893,7 +893,7 @@ defmodule Radixir.Gateway do
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
-        - any other options one may way to pass along to the http layer - for example `headers`
+        - any other options one may want to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
@@ -957,7 +957,7 @@ defmodule Radixir.Gateway do
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
-        - any other options one may way to pass along to the http layer - for example `headers`
+        - any other options one may want to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
@@ -1022,7 +1022,7 @@ defmodule Radixir.Gateway do
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
-        - any other options one may way to pass along to the http layer - for example `headers`
+        - any other options one may want to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
       - `submit` (optional, boolean): If true, the transaction is immediately submitted after finalization.
   """
@@ -1062,7 +1062,7 @@ defmodule Radixir.Gateway do
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
-        - any other options one may way to pass along to the http layer - for example `headers`
+        - any other options one may want to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
   """
   @spec submit_transaction(signed_transaction, options) ::
@@ -1087,7 +1087,7 @@ defmodule Radixir.Gateway do
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
-        - any other options one may way to pass along to the http layer - for example `headers`
+        - any other options one may want to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
@@ -1120,7 +1120,7 @@ defmodule Radixir.Gateway do
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
-        - any other options one may way to pass along to the http layer - for example `headers`
+        - any other options one may want to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
@@ -1160,7 +1160,7 @@ defmodule Radixir.Gateway do
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
-        - any other options one may way to pass along to the http layer - for example `headers`
+        - any other options one may want to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
@@ -1200,7 +1200,7 @@ defmodule Radixir.Gateway do
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
-        - any other options one may way to pass along to the http layer - for example `headers`
+        - any other options one may want to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
@@ -1240,7 +1240,7 @@ defmodule Radixir.Gateway do
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
-        - any other options one may way to pass along to the http layer - for example `headers`
+        - any other options one may want to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
@@ -1282,7 +1282,7 @@ defmodule Radixir.Gateway do
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
-        - any other options one may way to pass along to the http layer - for example `headers`
+        - any other options one may want to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
@@ -1322,7 +1322,7 @@ defmodule Radixir.Gateway do
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
-        - any other options one may way to pass along to the http layer - for example `headers`
+        - any other options one may want to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
@@ -1362,7 +1362,7 @@ defmodule Radixir.Gateway do
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
-        - any other options one may way to pass along to the http layer - for example `headers`
+        - any other options one may want to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
@@ -1402,7 +1402,7 @@ defmodule Radixir.Gateway do
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
-        - any other options one may way to pass along to the http layer - for example `headers`
+        - any other options one may want to pass along to the http layer - for example `headers`
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.

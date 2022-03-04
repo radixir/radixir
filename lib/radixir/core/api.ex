@@ -15,6 +15,7 @@ defmodule Radixir.Core.API do
   ## Parameters
     - `options`: Keyword list that contains
       - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - any other options one may want to pass along to the http layer - for example `headers`
       - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
       - `username`: (optional, string): `username` to be used for endpoint authentication.
       - `password`: (optional, string): `password` to be used for endpoint authentication.
@@ -52,6 +53,7 @@ defmodule Radixir.Core.API do
     - `body`: Request body.
     - `options`: Keyword list that contains
       - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - any other options one may want to pass along to the http layer - for example `headers`
       - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
       - `username`: (optional, string): `username` to be used for endpoint authentication.
       - `password`: (optional, string): `password` to be used for endpoint authentication.
@@ -89,6 +91,7 @@ defmodule Radixir.Core.API do
     - `body`: Request body.
     - `options`: Keyword list that contains
       - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - any other options one may want to pass along to the http layer - for example `headers`
       - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
       - `username`: (optional, string): `username` to be used for endpoint authentication.
       - `password`: (optional, string): `password` to be used for endpoint authentication.
@@ -126,6 +129,7 @@ defmodule Radixir.Core.API do
     - `body`: Request body.
     - `options`: Keyword list that contains
       - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - any other options one may want to pass along to the http layer - for example `headers`
       - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
       - `username`: (optional, string): `username` to be used for endpoint authentication.
       - `password`: (optional, string): `password` to be used for endpoint authentication.
@@ -163,6 +167,7 @@ defmodule Radixir.Core.API do
     - `body`: Request body.
     - `options`: Keyword list that contains
       - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - any other options one may want to pass along to the http layer - for example `headers`
       - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
       - `username`: (optional, string): `username` to be used for endpoint authentication.
       - `password`: (optional, string): `password` to be used for endpoint authentication.
@@ -200,6 +205,7 @@ defmodule Radixir.Core.API do
     - `body`: Request body.
     - `options`: Keyword list that contains
       - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - any other options one may want to pass along to the http layer - for example `headers`
       - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
       - `username`: (optional, string): `username` to be used for endpoint authentication.
       - `password`: (optional, string): `password` to be used for endpoint authentication.
@@ -237,6 +243,7 @@ defmodule Radixir.Core.API do
     - `body`: Request body.
     - `options`: Keyword list that contains
       - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - any other options one may want to pass along to the http layer - for example `headers`
       - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
       - `username`: (optional, string): `username` to be used for endpoint authentication.
       - `password`: (optional, string): `password` to be used for endpoint authentication.
@@ -274,6 +281,7 @@ defmodule Radixir.Core.API do
     - `body`: Request body.
     - `options`: Keyword list that contains
       - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - any other options one may want to pass along to the http layer - for example `headers`
       - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
       - `username`: (optional, string): `username` to be used for endpoint authentication.
       - `password`: (optional, string): `password` to be used for endpoint authentication.
@@ -311,6 +319,7 @@ defmodule Radixir.Core.API do
     - `body`: Request body.
     - `options`: Keyword list that contains
       - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - any other options one may want to pass along to the http layer - for example `headers`
       - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
       - `username`: (optional, string): `username` to be used for endpoint authentication.
       - `password`: (optional, string): `password` to be used for endpoint authentication.
@@ -348,6 +357,7 @@ defmodule Radixir.Core.API do
     - `body`: Request body.
     - `options`: Keyword list that contains
       - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - any other options one may want to pass along to the http layer - for example `headers`
       - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
       - `username`: (optional, string): `username` to be used for endpoint authentication.
       - `password`: (optional, string): `password` to be used for endpoint authentication.
@@ -385,6 +395,7 @@ defmodule Radixir.Core.API do
     - `body`: Request body.
     - `options`: Keyword list that contains
       - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - any other options one may want to pass along to the http layer - for example `headers`
       - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
       - `username`: (optional, string): `username` to be used for endpoint authentication.
       - `password`: (optional, string): `password` to be used for endpoint authentication.
@@ -422,6 +433,7 @@ defmodule Radixir.Core.API do
     - `body`: Request body.
     - `options`: Keyword list that contains
       - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - any other options one may want to pass along to the http layer - for example `headers`
       - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
       - `username`: (optional, string): `username` to be used for endpoint authentication.
       - `password`: (optional, string): `password` to be used for endpoint authentication.
@@ -459,6 +471,7 @@ defmodule Radixir.Core.API do
     - `body`: Request body.
     - `options`: Keyword list that contains
       - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - any other options one may want to pass along to the http layer - for example `headers`
       - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
       - `username`: (optional, string): `username` to be used for endpoint authentication.
       - `password`: (optional, string): `password` to be used for endpoint authentication.
@@ -496,6 +509,7 @@ defmodule Radixir.Core.API do
     - `body`: Request body.
     - `options`: Keyword list that contains
       - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - any other options one may want to pass along to the http layer - for example `headers`
       - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
       - `username`: (optional, string): `username` to be used for endpoint authentication.
       - `password`: (optional, string): `password` to be used for endpoint authentication.
