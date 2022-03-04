@@ -20,6 +20,8 @@ defmodule Radixir.Util do
   @type payload_to_sign :: String.t()
   @type error_message :: String.t()
   @type keys_values :: list(keyword())
+  @type rounding ::
+          :down | :half_up | :half_even | :ceiling | :floor | :half_down | :up
 
   @doc """
   Encrypts `message` with `private_key` and `address`.
@@ -165,28 +167,17 @@ defmodule Radixir.Util do
 
   ## Examples
       iex> Radixir.Util.xrd_to_atto("1.5")
-      {:ok, "1500000000000000000"}
+      "1500000000000000000"
   """
-  @spec xrd_to_atto(xrd) :: {:ok, atto} | {:error, error_message}
-  def xrd_to_atto(xrd) do
-    case Decimal.parse(xrd) do
-      :error ->
-        {:error, "could not parse #{xrd} into float"}
+  @spec xrd_to_atto(xrd) :: atto
+  def xrd_to_atto(xrd) when is_binary(xrd) do
+    Decimal.Context.set(%Decimal.Context{Decimal.Context.get() | precision: 100})
 
-      {value, _} ->
-        {value, _} =
-          value
-          |> Decimal.mult(Integer.pow(10, 18))
-          |> Decimal.to_string()
-          |> Float.parse()
-
-        result =
-          value
-          |> trunc()
-          |> Integer.to_string()
-
-        {:ok, result}
-    end
+    Decimal.new(xrd)
+    |> Decimal.mult(Integer.pow(10, 18))
+    |> Decimal.to_string(:normal)
+    |> String.split(".")
+    |> List.first()
   end
 
   @doc """
@@ -197,23 +188,207 @@ defmodule Radixir.Util do
 
   ## Examples
       iex> Radixir.Util.atto_to_xrd("1500000000000000000")
-      {:ok, "1.5"}
+      "1.5"
   """
-  @spec atto_to_xrd(atto) :: {:ok, xrd} | {:error, error_message}
-  def atto_to_xrd(atto) do
-    case Decimal.parse(atto) do
-      :error ->
-        {:error, "could not parse #{atto} into integer"}
+  @spec atto_to_xrd(atto) :: xrd
+  def atto_to_xrd(atto) when is_binary(atto) do
+    Decimal.Context.set(%Decimal.Context{Decimal.Context.get() | precision: 100})
 
-      {value, _} ->
-        result =
-          value
-          |> Decimal.div(Integer.pow(10, 18))
-          |> Decimal.to_string(:normal)
-
-        {:ok, result}
-    end
+    atto
+    |> String.split(".")
+    |> List.first()
+    |> Decimal.new()
+    |> Decimal.div(Integer.pow(10, 18))
+    |> Decimal.to_string(:normal)
   end
+
+  @doc """
+  Absolute value of XRD amount.
+
+  ## Parameters
+    - `num`: Amount of XRD.
+  """
+  @spec xrd_abs(String.t()) :: String.t()
+  def xrd_abs(num), do: Decimal.new(num) |> Decimal.abs() |> Decimal.to_string(:normal)
+
+  @doc """
+  Adds two XRD amounts.
+
+  ## Parameters
+    - `num1`: Amount of XRD.
+    - `num2`: Amount of XRD.
+  """
+  @spec xrd_add(String.t(), String.t()) :: String.t()
+  def xrd_add(num1, num2), do: Decimal.add(num1, num2) |> Decimal.to_string(:normal)
+
+  @doc """
+  Compares two XRD amounts.
+
+  ## Parameters
+    - `num1`: Amount of XRD.
+    - `num2`: Amount of XRD.
+  """
+  @spec xrd_compare(String.t(), String.t()) :: atom
+  def xrd_compare(num1, num2), do: Decimal.compare(num1, num2)
+
+  @doc """
+  Divides two XRD amounts.
+
+  ## Parameters
+    - `num1`: Amount of XRD.
+    - `num2`: Amount of XRD.
+  """
+  @spec xrd_div(String.t(), String.t()) :: String.t()
+  def xrd_div(num1, num2), do: Decimal.div(num1, num2) |> Decimal.to_string(:normal)
+
+  @doc """
+  Divides two XRD amounts and returns the integer part.
+
+  ## Parameters
+    - `num1`: Amount of XRD.
+    - `num2`: Amount of XRD.
+  """
+  @spec xrd_div_int(String.t(), String.t()) :: String.t()
+  def xrd_div_int(num1, num2), do: Decimal.div_int(num1, num2) |> Decimal.to_string(:normal)
+
+  @doc """
+  Divides two XRD amounts and returns the integer part and remainder part.
+
+  ## Parameters
+    - `num1`: Amount of XRD.
+    - `num2`: Amount of XRD.
+  """
+  @spec xrd_div_rem(String.t(), String.t()) :: {String.t(), String.t()}
+  def xrd_div_rem(num1, num2) do
+    {integer_value, remainder_value} = Decimal.div_rem(num1, num2)
+    {Decimal.to_string(integer_value, :normal), Decimal.to_string(remainder_value, :normal)}
+  end
+
+  @doc """
+  Checks if two XRD amounts are equal.
+
+  ## Parameters
+    - `num1`: Amount of XRD.
+    - `num2`: Amount of XRD.
+  """
+  @spec xrd_equal?(String.t(), String.t()) :: boolean
+  def xrd_equal?(num1, num2), do: Decimal.equal?(num1, num2)
+
+  @doc """
+  Checks if num1 is greater than num2.
+
+  ## Parameters
+    - `num1`: Amount of XRD.
+    - `num2`: Amount of XRD.
+  """
+  @spec xrd_gt?(String.t(), String.t()) :: boolean
+  def xrd_gt?(num1, num2), do: Decimal.gt?(num1, num2)
+
+  @doc """
+  Checks if num1 is less than num2.
+
+  ## Parameters
+    - `num1`: Amount of XRD.
+    - `num2`: Amount of XRD.
+  """
+  @spec xrd_lt?(String.t(), String.t()) :: boolean
+  def xrd_lt?(num1, num2), do: Decimal.lt?(num1, num2)
+
+  @doc """
+  Returns the max of two XRD amounts.
+
+  ## Parameters
+    - `num1`: Amount of XRD.
+    - `num2`: Amount of XRD.
+  """
+  @spec xrd_max(String.t(), String.t()) :: String.t()
+  def xrd_max(num1, num2), do: Decimal.max(num1, num2) |> Decimal.to_string(:normal)
+
+  @doc """
+  Returns the min of two XRD amounts.
+
+  ## Parameters
+    - `num1`: Amount of XRD.
+    - `num2`: Amount of XRD.
+  """
+  @spec xrd_min(String.t(), String.t()) :: String.t()
+  def xrd_min(num1, num2), do: Decimal.min(num1, num2) |> Decimal.to_string(:normal)
+
+  @doc """
+  Multiplies two XRD amounts.
+
+  ## Parameters
+    - `num1`: Amount of XRD.
+    - `num2`: Amount of XRD.
+  """
+  @spec xrd_mult(String.t(), String.t()) :: String.t()
+  def xrd_mult(num1, num2), do: Decimal.mult(num1, num2) |> Decimal.to_string(:normal)
+
+  @doc """
+  Negates the given XRD amount.
+
+  ## Parameters
+    - `num`: Amount of XRD.
+  """
+  @spec xrd_negate(String.t()) :: String.t()
+  def xrd_negate(num), do: Decimal.negate(num) |> Decimal.to_string(:normal)
+
+  @doc """
+  Checks if an XRD amount is negative.
+
+  ## Parameters
+    - `num`: Amount of XRD.
+  """
+  @spec xrd_negative?(String.t()) :: boolean
+  def xrd_negative?(num), do: Decimal.new(num) |> Decimal.negative?()
+
+  @doc """
+  Checks if an XRD amount is positive.
+
+  ## Parameters
+    - `num`: Amount of XRD.
+  """
+  @spec xrd_positive?(String.t()) :: boolean
+  def xrd_positive?(num), do: Decimal.new(num) |> Decimal.positive?()
+
+  @doc """
+  Returns the remainder of integer division of two XRD amounts.
+
+  ## Parameters
+    - `num1`: Amount of XRD.
+    - `num2`: Amount of XRD.
+  """
+  @spec xrd_rem(String.t(), String.t()) :: String.t()
+  def xrd_rem(num1, num2), do: Decimal.rem(num1, num2) |> Decimal.to_string(:normal)
+
+  @doc """
+  Rounds an XRD amount.
+
+  ## Parameters
+    - `num`: Amount of XRD.
+  """
+  @spec xrd_round(String.t(), integer, rounding) :: String.t()
+  def xrd_round(num, places \\ 0, mode \\ :half_up),
+    do: Decimal.round(num, places, mode) |> Decimal.to_string(:normal)
+
+  @doc """
+  Finds square root of XRD amount.
+
+  ## Parameters
+    - `num`: Amount of XRD.
+  """
+  @spec xrd_sqrt(String.t()) :: String.t()
+  def xrd_sqrt(num), do: Decimal.sqrt(num) |> Decimal.to_string(:normal)
+
+  @doc """
+  Subtracts two XRD amounts.
+
+  ## Parameters
+    - `num1`: Amount of XRD.
+    - `num2`: Amount of XRD.
+  """
+  @spec xrd_sub(String.t(), String.t()) :: String.t()
+  def xrd_sub(num1, num2), do: Decimal.sub(num1, num2) |> Decimal.to_string(:normal)
 
   defp do_decode_message("0000" <> message), do: decode16(message, "message")
 
