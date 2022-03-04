@@ -1,4 +1,8 @@
 defmodule Radixir.Gateway do
+  @moduledoc """
+  Provides high level interaction with the Gateway API.
+  """
+
   alias Radixir.Gateway.API
   alias Radixir.Gateway.Request
   alias Radixir.Key
@@ -539,19 +543,6 @@ defmodule Radixir.Gateway do
     body = Request.BuildTransaction.add_actions(body, actions)
 
     API.build_transaction(body, Keyword.get(options, :api, []))
-    # create_token_params = %{
-    #   name: "JEC Token",
-    #   description: "jec tokens ftw",
-    #   icon_url: "https://me.me/icon",
-    #   url: "https://me.me",
-    #   symbol: "jec",
-    #   is_supply_mutable: true,
-    #   granularity: "1",
-    #   owner_address: "tdx1qspf8f3eeg06955d5pzgvntz36c6nych7f8jw68mdmhlzvflj7pylqs9qzh0z",
-    #   token_supply: "0",
-    #   token_rri: "jec_tr1qvnc03t4m6te6zlkcy03q4sst5ddcad49urt6ggr7lvq6he0sq",
-    #   to_account_address: "tdx1qspf8f3eeg06955d5pzgvntz36c6nych7f8jw68mdmhlzvflj7pylqs9qzh0z"
-    # }
   end
 
   @doc """
@@ -617,13 +608,6 @@ defmodule Radixir.Gateway do
     body = Request.BuildTransaction.add_actions(body, actions)
 
     API.build_transaction(body, Keyword.get(options, :api, []))
-
-    # transfer_tokens_params = %{
-    #   from_address: "tdx1qspf8f3eeg06955d5pzgvntz36c6nych7f8jw68mdmhlzvflj7pylqs9qzh0z",
-    #   to_address: "tdx1qspa8jmwnd8se6u3qmpdljryets2mv3e5u8eh2cnwmz6jquh5c2zs8src9qxu",
-    #   amount: "10000000000000000",
-    #   token_rri: "xrd_tr1qyf0x76s"
-    # }
   end
 
   @doc """

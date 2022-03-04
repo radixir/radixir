@@ -209,7 +209,10 @@ defmodule Radixir.Util do
     - `num`: Amount of XRD.
   """
   @spec xrd_abs(String.t()) :: String.t()
-  def xrd_abs(num), do: Decimal.new(num) |> Decimal.abs() |> Decimal.to_string(:normal)
+  def xrd_abs(num) do
+    Decimal.Context.set(%Decimal.Context{Decimal.Context.get() | precision: 100})
+    Decimal.new(num) |> Decimal.abs() |> Decimal.to_string(:normal)
+  end
 
   @doc """
   Adds two XRD amounts.
@@ -219,7 +222,10 @@ defmodule Radixir.Util do
     - `num2`: Amount of XRD.
   """
   @spec xrd_add(String.t(), String.t()) :: String.t()
-  def xrd_add(num1, num2), do: Decimal.add(num1, num2) |> Decimal.to_string(:normal)
+  def xrd_add(num1, num2) do
+    Decimal.Context.set(%Decimal.Context{Decimal.Context.get() | precision: 100})
+    Decimal.add(num1, num2) |> Decimal.to_string(:normal)
+  end
 
   @doc """
   Compares two XRD amounts.
@@ -229,7 +235,10 @@ defmodule Radixir.Util do
     - `num2`: Amount of XRD.
   """
   @spec xrd_compare(String.t(), String.t()) :: atom
-  def xrd_compare(num1, num2), do: Decimal.compare(num1, num2)
+  def xrd_compare(num1, num2) do
+    Decimal.Context.set(%Decimal.Context{Decimal.Context.get() | precision: 100})
+    Decimal.compare(num1, num2)
+  end
 
   @doc """
   Divides two XRD amounts.
@@ -239,7 +248,10 @@ defmodule Radixir.Util do
     - `num2`: Amount of XRD.
   """
   @spec xrd_div(String.t(), String.t()) :: String.t()
-  def xrd_div(num1, num2), do: Decimal.div(num1, num2) |> Decimal.to_string(:normal)
+  def xrd_div(num1, num2) do
+    Decimal.Context.set(%Decimal.Context{Decimal.Context.get() | precision: 100})
+    Decimal.div(num1, num2) |> Decimal.to_string(:normal)
+  end
 
   @doc """
   Divides two XRD amounts and returns the integer part.
@@ -249,7 +261,10 @@ defmodule Radixir.Util do
     - `num2`: Amount of XRD.
   """
   @spec xrd_div_int(String.t(), String.t()) :: String.t()
-  def xrd_div_int(num1, num2), do: Decimal.div_int(num1, num2) |> Decimal.to_string(:normal)
+  def xrd_div_int(num1, num2) do
+    Decimal.Context.set(%Decimal.Context{Decimal.Context.get() | precision: 100})
+    Decimal.div_int(num1, num2) |> Decimal.to_string(:normal)
+  end
 
   @doc """
   Divides two XRD amounts and returns the integer part and remainder part.
@@ -260,6 +275,7 @@ defmodule Radixir.Util do
   """
   @spec xrd_div_rem(String.t(), String.t()) :: {String.t(), String.t()}
   def xrd_div_rem(num1, num2) do
+    Decimal.Context.set(%Decimal.Context{Decimal.Context.get() | precision: 100})
     {integer_value, remainder_value} = Decimal.div_rem(num1, num2)
     {Decimal.to_string(integer_value, :normal), Decimal.to_string(remainder_value, :normal)}
   end
@@ -272,7 +288,10 @@ defmodule Radixir.Util do
     - `num2`: Amount of XRD.
   """
   @spec xrd_equal?(String.t(), String.t()) :: boolean
-  def xrd_equal?(num1, num2), do: Decimal.equal?(num1, num2)
+  def xrd_equal?(num1, num2) do
+    Decimal.Context.set(%Decimal.Context{Decimal.Context.get() | precision: 100})
+    Decimal.equal?(num1, num2)
+  end
 
   @doc """
   Checks if num1 is greater than num2.
@@ -282,7 +301,10 @@ defmodule Radixir.Util do
     - `num2`: Amount of XRD.
   """
   @spec xrd_gt?(String.t(), String.t()) :: boolean
-  def xrd_gt?(num1, num2), do: Decimal.gt?(num1, num2)
+  def xrd_gt?(num1, num2) do
+    Decimal.Context.set(%Decimal.Context{Decimal.Context.get() | precision: 100})
+    Decimal.gt?(num1, num2)
+  end
 
   @doc """
   Checks if num1 is less than num2.
@@ -292,7 +314,10 @@ defmodule Radixir.Util do
     - `num2`: Amount of XRD.
   """
   @spec xrd_lt?(String.t(), String.t()) :: boolean
-  def xrd_lt?(num1, num2), do: Decimal.lt?(num1, num2)
+  def xrd_lt?(num1, num2) do
+    Decimal.Context.set(%Decimal.Context{Decimal.Context.get() | precision: 100})
+    Decimal.lt?(num1, num2)
+  end
 
   @doc """
   Returns the max of two XRD amounts.
@@ -302,7 +327,10 @@ defmodule Radixir.Util do
     - `num2`: Amount of XRD.
   """
   @spec xrd_max(String.t(), String.t()) :: String.t()
-  def xrd_max(num1, num2), do: Decimal.max(num1, num2) |> Decimal.to_string(:normal)
+  def xrd_max(num1, num2) do
+    Decimal.Context.set(%Decimal.Context{Decimal.Context.get() | precision: 100})
+    Decimal.max(num1, num2) |> Decimal.to_string(:normal)
+  end
 
   @doc """
   Returns the min of two XRD amounts.
@@ -312,7 +340,10 @@ defmodule Radixir.Util do
     - `num2`: Amount of XRD.
   """
   @spec xrd_min(String.t(), String.t()) :: String.t()
-  def xrd_min(num1, num2), do: Decimal.min(num1, num2) |> Decimal.to_string(:normal)
+  def xrd_min(num1, num2) do
+    Decimal.Context.set(%Decimal.Context{Decimal.Context.get() | precision: 100})
+    Decimal.min(num1, num2) |> Decimal.to_string(:normal)
+  end
 
   @doc """
   Multiplies two XRD amounts.
@@ -322,7 +353,10 @@ defmodule Radixir.Util do
     - `num2`: Amount of XRD.
   """
   @spec xrd_mult(String.t(), String.t()) :: String.t()
-  def xrd_mult(num1, num2), do: Decimal.mult(num1, num2) |> Decimal.to_string(:normal)
+  def xrd_mult(num1, num2) do
+    Decimal.Context.set(%Decimal.Context{Decimal.Context.get() | precision: 100})
+    Decimal.mult(num1, num2) |> Decimal.to_string(:normal)
+  end
 
   @doc """
   Negates the given XRD amount.
@@ -331,7 +365,10 @@ defmodule Radixir.Util do
     - `num`: Amount of XRD.
   """
   @spec xrd_negate(String.t()) :: String.t()
-  def xrd_negate(num), do: Decimal.negate(num) |> Decimal.to_string(:normal)
+  def xrd_negate(num) do
+    Decimal.Context.set(%Decimal.Context{Decimal.Context.get() | precision: 100})
+    Decimal.negate(num) |> Decimal.to_string(:normal)
+  end
 
   @doc """
   Checks if an XRD amount is negative.
@@ -340,7 +377,10 @@ defmodule Radixir.Util do
     - `num`: Amount of XRD.
   """
   @spec xrd_negative?(String.t()) :: boolean
-  def xrd_negative?(num), do: Decimal.new(num) |> Decimal.negative?()
+  def xrd_negative?(num) do
+    Decimal.Context.set(%Decimal.Context{Decimal.Context.get() | precision: 100})
+    Decimal.new(num) |> Decimal.negative?()
+  end
 
   @doc """
   Checks if an XRD amount is positive.
@@ -349,7 +389,10 @@ defmodule Radixir.Util do
     - `num`: Amount of XRD.
   """
   @spec xrd_positive?(String.t()) :: boolean
-  def xrd_positive?(num), do: Decimal.new(num) |> Decimal.positive?()
+  def xrd_positive?(num) do
+    Decimal.Context.set(%Decimal.Context{Decimal.Context.get() | precision: 100})
+    Decimal.new(num) |> Decimal.positive?()
+  end
 
   @doc """
   Returns the remainder of integer division of two XRD amounts.
@@ -359,7 +402,10 @@ defmodule Radixir.Util do
     - `num2`: Amount of XRD.
   """
   @spec xrd_rem(String.t(), String.t()) :: String.t()
-  def xrd_rem(num1, num2), do: Decimal.rem(num1, num2) |> Decimal.to_string(:normal)
+  def xrd_rem(num1, num2) do
+    Decimal.Context.set(%Decimal.Context{Decimal.Context.get() | precision: 100})
+    Decimal.rem(num1, num2) |> Decimal.to_string(:normal)
+  end
 
   @doc """
   Rounds an XRD amount.
@@ -368,8 +414,10 @@ defmodule Radixir.Util do
     - `num`: Amount of XRD.
   """
   @spec xrd_round(String.t(), integer, rounding) :: String.t()
-  def xrd_round(num, places \\ 0, mode \\ :half_up),
-    do: Decimal.round(num, places, mode) |> Decimal.to_string(:normal)
+  def xrd_round(num, places \\ 0, mode \\ :half_up) do
+    Decimal.Context.set(%Decimal.Context{Decimal.Context.get() | precision: 100})
+    Decimal.round(num, places, mode) |> Decimal.to_string(:normal)
+  end
 
   @doc """
   Finds square root of XRD amount.
@@ -378,7 +426,10 @@ defmodule Radixir.Util do
     - `num`: Amount of XRD.
   """
   @spec xrd_sqrt(String.t()) :: String.t()
-  def xrd_sqrt(num), do: Decimal.sqrt(num) |> Decimal.to_string(:normal)
+  def xrd_sqrt(num) do
+    Decimal.Context.set(%Decimal.Context{Decimal.Context.get() | precision: 100})
+    Decimal.sqrt(num) |> Decimal.to_string(:normal)
+  end
 
   @doc """
   Subtracts two XRD amounts.
@@ -388,7 +439,10 @@ defmodule Radixir.Util do
     - `num2`: Amount of XRD.
   """
   @spec xrd_sub(String.t(), String.t()) :: String.t()
-  def xrd_sub(num1, num2), do: Decimal.sub(num1, num2) |> Decimal.to_string(:normal)
+  def xrd_sub(num1, num2) do
+    Decimal.Context.set(%Decimal.Context{Decimal.Context.get() | precision: 100})
+    Decimal.sub(num1, num2) |> Decimal.to_string(:normal)
+  end
 
   defp do_decode_message("0000" <> message), do: decode16(message, "message")
 
