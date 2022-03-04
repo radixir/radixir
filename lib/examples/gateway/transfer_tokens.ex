@@ -1,5 +1,5 @@
-defmodule Examples.Gateway do
-  def transfer_tokens() do
+defmodule Examples.Gateway.TransferTokens do
+  def go() do
     {:ok, %{testnet: %{account_address: account_address}, private_key: private_key}} =
       Radixir.Key.from_mnemonic()
 
@@ -16,7 +16,7 @@ defmodule Examples.Gateway do
       token_rri: token_rri
     }
 
-    options = [headers: ["X-Radixdlt-Target-Gw-Api": "1.0.2"]]
+    options = [api: [headers: ["X-Radixdlt-Target-Gw-Api": "1.0.2"]]]
 
     Radixir.Gateway.transfer_tokens(
       [transfer_tokens_params],
