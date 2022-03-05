@@ -349,7 +349,10 @@ defmodule Radixir.Core do
       |> Request.DeriveEntityIdentifier.Metadata.PreparedStakes.validator(
         address: validator_address
       )
-      |> Util.maybe_create_stitch_plan(sub_entity, &Request.DeriveEntityIdentifier.sub_entity/2)
+      |> Util.maybe_create_stitch_plan(
+        sub_entity,
+        &Request.DeriveEntityIdentifier.Metadata.PreparedStakes.sub_entity/2
+      )
       |> Util.stitch()
 
     API.derive_entity_identifier(body, Keyword.get(options, :api, []))
@@ -435,7 +438,10 @@ defmodule Radixir.Core do
       |> Request.DeriveEntityIdentifier.Metadata.ExitingUnstakes.validator(
         address: validator_address
       )
-      |> Util.maybe_create_stitch_plan(sub_entity, &Request.DeriveEntityIdentifier.sub_entity/2)
+      |> Util.maybe_create_stitch_plan(
+        sub_entity,
+        &Request.DeriveEntityIdentifier.Metadata.ExitingUnstakes.sub_entity/2
+      )
       |> Request.DeriveEntityIdentifier.Metadata.ExitingUnstakes.epoch_unlock(
         epoch_unlock: epoch_unlock
       )
