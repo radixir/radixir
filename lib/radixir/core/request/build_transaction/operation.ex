@@ -55,7 +55,7 @@ defmodule Radixir.Core.Request.BuildTransaction.Operation do
   ## Parameters
     - `stitch_plans`: On-going stitch plans that will be stitched into a map.
     - `params`: Keyword list that contains:
-      - `address` (required, string): Sub Entity address.
+      - `sub_entity_address` (required, string): Sub Entity address.
       - `validator_address` (optional, string): Validator address.
       - `epoch_unlock` (optional, integer): Epoch unlock.
   """

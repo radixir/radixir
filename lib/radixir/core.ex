@@ -13,9 +13,12 @@ defmodule Radixir.Core do
   @type address :: String.t()
   @type rri :: String.t()
   @type symbol :: String.t()
+  @type state_version :: integer
   @type options :: keyword()
   @type error_message :: String.t()
   @type unsigned_transaction :: String.t()
+  @type transaction :: String.t()
+  @type signed :: boolean
   @type signed_transaction :: String.t()
   @type signature_bytes :: String.t()
   @type signature_public_key :: String.t()
@@ -45,7 +48,7 @@ defmodule Radixir.Core do
   end
 
   @doc """
-  Submits request to `/network/status`.
+  Gets network status.
 
   ## Parameters
     - `options`: Keyword list that contains
@@ -71,5 +74,211 @@ defmodule Radixir.Core do
       |> Util.stitch()
 
     API.get_network_status(body, Keyword.get(options, :api, []))
+  end
+
+  @doc """
+  Gets entity information.
+
+  ## Parameters
+    - `address`: Radix address.
+    - `options`: Keyword list that contains
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - any other options one may want to pass along to the http layer - for example `headers`
+        - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
+        - `username`: (optional, string): `username` to be used for endpoint authentication.
+        - `password`: (optional, string): `password` to be used for endpoint authentication.
+      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `sub_entity_address` (optional, string): Sub entity address.
+      - `validator_address` (optional, string): Validator address.
+      - `epoch_unlock` (optional, integer): Epoch unlock.
+
+  ## Note
+    - Either `username` and `password` or `auth_index` must be provided.
+    - If all three are provided `auth_index` is used.
+  """
+  @spec get_entity_information(address, options) :: {:ok, map} | {:error, map | error_message}
+  def get_entity_information(address, options \\ []) do
+    network = Keyword.take(options, [:network])
+    sub_entity = Keyword.take(options, [:sub_entity_address, :validator_address, :epoch_unlock])
+
+    body =
+      []
+      |> Request.GetEntityInformation.network_identifier(network)
+      |> Request.GetEntityInformation.entity_identifier(address: address)
+      |> Request.GetEntityInformation.sub_entity(sub_entity)
+      |> Util.stitch()
+
+    API.get_entity_information(body, Keyword.get(options, :api, []))
+  end
+
+  @doc """
+  Gets mempool transactions.
+
+  ## Parameters
+    - `options`: Keyword list that contains
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - any other options one may want to pass along to the http layer - for example `headers`
+        - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
+        - `username`: (optional, string): `username` to be used for endpoint authentication.
+        - `password`: (optional, string): `password` to be used for endpoint authentication.
+      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+
+  ## Note
+    - Either `username` and `password` or `auth_index` must be provided.
+    - If all three are provided `auth_index` is used.
+  """
+  @spec get_mempool_transactions(options) :: {:ok, map} | {:error, map | error_message}
+  def get_mempool_transactions(options \\ []) do
+    network = Keyword.take(options, [:network])
+
+    body =
+      []
+      |> Request.GetMempoolTransactions.network_identifier(network)
+      |> Util.stitch()
+
+    API.get_mempool_transactions(body, Keyword.get(options, :api, []))
+  end
+
+  @doc """
+  Gets mempool transaction.
+
+  ## Parameters
+    - `transaction_hash`: Transaction hash.
+    - `options`: Keyword list that contains
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - any other options one may want to pass along to the http layer - for example `headers`
+        - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
+        - `username`: (optional, string): `username` to be used for endpoint authentication.
+        - `password`: (optional, string): `password` to be used for endpoint authentication.
+      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+
+  ## Note
+    - Either `username` and `password` or `auth_index` must be provided.
+    - If all three are provided `auth_index` is used.
+  """
+  @spec get_mempool_transaction(transaction_hash, options) ::
+          {:ok, map} | {:error, map | error_message}
+  def get_mempool_transaction(transaction_hash, options \\ []) do
+    network = Keyword.take(options, [:network])
+
+    body =
+      []
+      |> Request.GetMempoolTransaction.network_identifier(network)
+      |> Request.GetMempoolTransaction.transaction_identifier(hash: transaction_hash)
+      |> Util.stitch()
+
+    API.get_mempool_transaction(body, Keyword.get(options, :api, []))
+  end
+
+  @doc """
+  Gets committed transactions.
+
+  ## Parameters
+    - `state_version`: State version.
+    - `options`: Keyword list that contains
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - any other options one may want to pass along to the http layer - for example `headers`
+        - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
+        - `username`: (optional, string): `username` to be used for endpoint authentication.
+        - `password`: (optional, string): `password` to be used for endpoint authentication.
+      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `transaction_accumulator` (optional, string): Transaction accumulator.
+      - `limit` (optional, integer): Maximum number of transactions that will be returned.
+
+  ## Note
+    - Either `username` and `password` or `auth_index` must be provided.
+    - If all three are provided `auth_index` is used.
+  """
+  @spec get_committed_transactions(state_version, options) ::
+          {:ok, map} | {:error, map | error_message}
+  def get_committed_transactions(state_version, options \\ []) do
+    network = Keyword.take(options, [:network])
+    limit = Keyword.take(options, [:limit])
+    state_version = [state_version: state_version]
+    transaction_accumulator = Keyword.take(options, [:transaction_accumulator])
+    state_version = Keyword.merge(state_version, transaction_accumulator)
+
+    body =
+      []
+      |> Request.GetCommittedTransactions.network_identifier(network)
+      |> Request.GetCommittedTransactions.state_identifier(state_version)
+      |> Request.GetCommittedTransactions.limit(limit)
+      |> Util.stitch()
+
+    API.get_committed_transactions(body, Keyword.get(options, :api, []))
+  end
+
+  # TODO: construction here ##############
+
+  @doc """
+  Parses transaction.
+
+  ## Parameters
+    - `transaction`: Transaction to parse.
+    - `signed`: Whether the transaction is signed or not.
+    - `options`: Keyword list that contains
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - any other options one may want to pass along to the http layer - for example `headers`
+        - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
+        - `username`: (optional, string): `username` to be used for endpoint authentication.
+        - `password`: (optional, string): `password` to be used for endpoint authentication.
+      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+
+  ## Note
+    - Either `username` and `password` or `auth_index` must be provided.
+    - If all three are provided `auth_index` is used.
+  """
+  @spec parse_transaction(transaction, signed, options) ::
+          {:ok, map} | {:error, map | error_message}
+  def parse_transaction(transaction, signed, options \\ []) do
+    network = Keyword.take(options, [:network])
+
+    body =
+      []
+      |> Request.ParseTransaction.network_identifier(network)
+      |> Request.ParseTransaction.transaction(transaction: transaction)
+      |> Request.ParseTransaction.signed(signed: signed)
+      |> Util.stitch()
+
+    API.parse_transaction(body, Keyword.get(options, :api, []))
+  end
+
+  @doc """
+  Signs transaction.
+
+  ## Parameters
+    - `unsigned_transaction`: Unsigned Transaction.
+    - `public_key`: Public key.
+    - `options`: Keyword list that contains
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - any other options one may want to pass along to the http layer - for example `headers`
+        - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
+        - `username`: (optional, string): `username` to be used for endpoint authentication.
+        - `password`: (optional, string): `password` to be used for endpoint authentication.
+      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+
+  ## Note
+    - Either `username` and `password` or `auth_index` must be provided.
+    - If all three are provided `auth_index` is used.
+  """
+  @spec sign_transaction(unsigned_transaction, public_key, options) ::
+          {:ok, map} | {:error, map | error_message}
+  def sign_transaction(unsigned_transaction, public_key, options \\ []) do
+    network = Keyword.take(options, [:network])
+
+    body =
+      []
+      |> Request.SignTransaction.network_identifier(network)
+      |> Request.SignTransaction.unsigned_transaction(unsigned_transaction: unsigned_transaction)
+      |> Request.SignTransaction.public_key(hex: public_key)
+      |> Util.stitch()
+
+    API.sign_transaction(body, Keyword.get(options, :api, []))
   end
 end
