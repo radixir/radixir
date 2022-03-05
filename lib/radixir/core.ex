@@ -499,7 +499,8 @@ defmodule Radixir.Core do
       - `sub_entity_address` (optional, string): Sub entity address.
       - `validator_address` (optional, string): Validator address.
       - `epoch_unlock` (optional, integer): Epoch unlock.
-
+      - `message` (optional, string): Message to be included in transaction.
+      - `disable_resource_allocate_and_destroy` (optional, boolean): Disable resource allocate and destroy.
   ## Note
     - Either `username` and `password` or `auth_index` must be provided.
     - If all three are provided `auth_index` is used.
