@@ -16,6 +16,7 @@ defmodule Radixir.Core do
   @type state_version :: integer
   @type options :: keyword()
   @type error_message :: String.t()
+  @type epoch_unlock :: integer
   @type unsigned_transaction :: String.t()
   @type transaction :: String.t()
   @type signed :: boolean
@@ -210,6 +211,270 @@ defmodule Radixir.Core do
       |> Util.stitch()
 
     API.get_committed_transactions(body, Keyword.get(options, :api, []))
+  end
+
+  @doc """
+  Derives `Account` entity identifier.
+
+  ## Parameters
+    - `public_key`: Public key.
+    - `options`: Keyword list that contains
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - any other options one may want to pass along to the http layer - for example `headers`
+        - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
+        - `username`: (optional, string): `username` to be used for endpoint authentication.
+        - `password`: (optional, string): `password` to be used for endpoint authentication.
+      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+
+  ## Note
+    - Either `username` and `password` or `auth_index` must be provided.
+    - If all three are provided `auth_index` is used.
+  """
+  @spec derive_account_entity_identifier(public_key, options) ::
+          {:ok, map} | {:error, map | error_message}
+  def derive_account_entity_identifier(public_key, options \\ []) do
+    network = Keyword.take(options, [:network])
+
+    body =
+      []
+      |> Request.DeriveEntityIdentifier.network_identifier(network)
+      |> Request.DeriveEntityIdentifier.public_key(hex: public_key)
+      |> Request.DeriveEntityIdentifier.Metadata.Account.type()
+      |> Util.stitch()
+
+    API.derive_entity_identifier(body, Keyword.get(options, :api, []))
+  end
+
+  @doc """
+  Derives `Validator` entity identifier.
+
+  ## Parameters
+    - `public_key`: Public key.
+    - `options`: Keyword list that contains
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - any other options one may want to pass along to the http layer - for example `headers`
+        - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
+        - `username`: (optional, string): `username` to be used for endpoint authentication.
+        - `password`: (optional, string): `password` to be used for endpoint authentication.
+      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+
+  ## Note
+    - Either `username` and `password` or `auth_index` must be provided.
+    - If all three are provided `auth_index` is used.
+  """
+  @spec derive_validator_entity_identifier(public_key, options) ::
+          {:ok, map} | {:error, map | error_message}
+  def derive_validator_entity_identifier(public_key, options \\ []) do
+    network = Keyword.take(options, [:network])
+
+    body =
+      []
+      |> Request.DeriveEntityIdentifier.network_identifier(network)
+      |> Request.DeriveEntityIdentifier.public_key(hex: public_key)
+      |> Request.DeriveEntityIdentifier.Metadata.Validator.type()
+      |> Util.stitch()
+
+    API.derive_entity_identifier(body, Keyword.get(options, :api, []))
+  end
+
+  @doc """
+  Derives `Token` entity identifier.
+
+  ## Parameters
+    - `public_key`: Public key.
+    - `options`: Keyword list that contains
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - any other options one may want to pass along to the http layer - for example `headers`
+        - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
+        - `username`: (optional, string): `username` to be used for endpoint authentication.
+        - `password`: (optional, string): `password` to be used for endpoint authentication.
+      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+
+  ## Note
+    - Either `username` and `password` or `auth_index` must be provided.
+    - If all three are provided `auth_index` is used.
+  """
+  @spec derive_token_entity_identifier(public_key, symbol, options) ::
+          {:ok, map} | {:error, map | error_message}
+  def derive_token_entity_identifier(public_key, symbol, options \\ []) do
+    network = Keyword.take(options, [:network])
+
+    body =
+      []
+      |> Request.DeriveEntityIdentifier.network_identifier(network)
+      |> Request.DeriveEntityIdentifier.public_key(hex: public_key)
+      |> Request.DeriveEntityIdentifier.Metadata.Token.type()
+      |> Request.DeriveEntityIdentifier.Metadata.Token.symbol(symbol: symbol)
+      |> Util.stitch()
+
+    API.derive_entity_identifier(body, Keyword.get(options, :api, []))
+  end
+
+  @doc """
+  Derives `PreparedStakes` entity identifier.
+
+  ## Parameters
+    - `public_key`: Public key.
+    - `validator_address`: Radix address.
+    - `options`: Keyword list that contains
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - any other options one may want to pass along to the http layer - for example `headers`
+        - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
+        - `username`: (optional, string): `username` to be used for endpoint authentication.
+        - `password`: (optional, string): `password` to be used for endpoint authentication.
+      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `sub_entity_address` (optional, string): Sub entity address.
+      - `validator_address` (optional, string): Validator address.
+      - `epoch_unlock` (optional, integer): Epoch unlock.
+
+  ## Note
+    - Either `username` and `password` or `auth_index` must be provided.
+    - If all three are provided `auth_index` is used.
+  """
+  @spec derive_prepared_stakes_entity_identifier(public_key, validator_address, options) ::
+          {:ok, map} | {:error, map | error_message}
+  def derive_prepared_stakes_entity_identifier(public_key, validator_address, options \\ []) do
+    network = Keyword.take(options, [:network])
+    sub_entity = Keyword.take(options, [:sub_entity_address, :validator_address, :epoch_unlock])
+
+    body =
+      []
+      |> Request.DeriveEntityIdentifier.network_identifier(network)
+      |> Request.DeriveEntityIdentifier.public_key(hex: public_key)
+      |> Request.DeriveEntityIdentifier.Metadata.PreparedStakes.type()
+      |> Request.DeriveEntityIdentifier.Metadata.PreparedStakes.validator(
+        address: validator_address
+      )
+      |> Request.DeriveEntityIdentifier.Metadata.PreparedStakes.sub_entity(sub_entity)
+      |> Util.stitch()
+
+    API.derive_entity_identifier(body, Keyword.get(options, :api, []))
+  end
+
+  @doc """
+  Derives `PreparedUnstakes` entity identifier.
+
+  ## Parameters
+    - `public_key`: Public key.
+    - `options`: Keyword list that contains
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - any other options one may want to pass along to the http layer - for example `headers`
+        - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
+        - `username`: (optional, string): `username` to be used for endpoint authentication.
+        - `password`: (optional, string): `password` to be used for endpoint authentication.
+      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+
+  ## Note
+    - Either `username` and `password` or `auth_index` must be provided.
+    - If all three are provided `auth_index` is used.
+  """
+  @spec derive_prepared_unstakes_entity_identifier(public_key, options) ::
+          {:ok, map} | {:error, map | error_message}
+  def derive_prepared_unstakes_entity_identifier(public_key, options \\ []) do
+    network = Keyword.take(options, [:network])
+
+    body =
+      []
+      |> Request.DeriveEntityIdentifier.network_identifier(network)
+      |> Request.DeriveEntityIdentifier.public_key(hex: public_key)
+      |> Request.DeriveEntityIdentifier.Metadata.PreparedUnstakes.type()
+      |> Util.stitch()
+
+    API.derive_entity_identifier(body, Keyword.get(options, :api, []))
+  end
+
+  @doc """
+  Derives `ExitingUnstakes` entity identifier.
+
+  ## Parameters
+    - `public_key`: Public key.
+    - `validator_address`: Radix address.
+    - `epoch_unlock`: Epoch unlock.
+    - `options`: Keyword list that contains
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - any other options one may want to pass along to the http layer - for example `headers`
+        - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
+        - `username`: (optional, string): `username` to be used for endpoint authentication.
+        - `password`: (optional, string): `password` to be used for endpoint authentication.
+      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `sub_entity_address` (optional, string): Sub entity address.
+      - `validator_address` (optional, string): Validator address.
+      - `epoch_unlock` (optional, integer): Epoch unlock.
+
+  ## Note
+    - Either `username` and `password` or `auth_index` must be provided.
+    - If all three are provided `auth_index` is used.
+  """
+  @spec derive_exiting_unstakes_entity_identifier(
+          public_key,
+          validator_address,
+          epoch_unlock,
+          options
+        ) ::
+          {:ok, map} | {:error, map | error_message}
+  def derive_exiting_unstakes_entity_identifier(
+        public_key,
+        validator_address,
+        epoch_unlock,
+        options \\ []
+      ) do
+    network = Keyword.take(options, [:network])
+    sub_entity = Keyword.take(options, [:sub_entity_address, :validator_address, :epoch_unlock])
+
+    body =
+      []
+      |> Request.DeriveEntityIdentifier.network_identifier(network)
+      |> Request.DeriveEntityIdentifier.public_key(hex: public_key)
+      |> Request.DeriveEntityIdentifier.Metadata.ExitingUnstakes.type()
+      |> Request.DeriveEntityIdentifier.Metadata.ExitingUnstakes.validator(
+        address: validator_address
+      )
+      |> Request.DeriveEntityIdentifier.Metadata.ExitingUnstakes.sub_entity(sub_entity)
+      |> Request.DeriveEntityIdentifier.Metadata.ExitingUnstakes.epoch_unlock(
+        epoch_unlock: epoch_unlock
+      )
+      |> Util.stitch()
+
+    API.derive_entity_identifier(body, Keyword.get(options, :api, []))
+  end
+
+  @doc """
+  Derives `ValidatorSystem` entity identifier.
+
+  ## Parameters
+    - `public_key`: Public key.
+    - `options`: Keyword list that contains
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - any other options one may want to pass along to the http layer - for example `headers`
+        - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
+        - `username`: (optional, string): `username` to be used for endpoint authentication.
+        - `password`: (optional, string): `password` to be used for endpoint authentication.
+      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+
+  ## Note
+    - Either `username` and `password` or `auth_index` must be provided.
+    - If all three are provided `auth_index` is used.
+  """
+  @spec derive_validator_system_entity_identifier(public_key, options) ::
+          {:ok, map} | {:error, map | error_message}
+  def derive_validator_system_entity_identifier(public_key, options \\ []) do
+    network = Keyword.take(options, [:network])
+
+    body =
+      []
+      |> Request.DeriveEntityIdentifier.network_identifier(network)
+      |> Request.DeriveEntityIdentifier.public_key(hex: public_key)
+      |> Request.DeriveEntityIdentifier.Metadata.ValidatorSystem.type()
+      |> Util.stitch()
+
+    API.derive_entity_identifier(body, Keyword.get(options, :api, []))
   end
 
   # TODO: construction here ##############
