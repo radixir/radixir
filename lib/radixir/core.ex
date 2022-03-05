@@ -107,7 +107,7 @@ defmodule Radixir.Core do
       []
       |> Request.GetEntityInformation.network_identifier(network)
       |> Request.GetEntityInformation.entity_identifier(address: address)
-      |> Request.GetEntityInformation.sub_entity(sub_entity)
+      |> Util.maybe_create_stitch_plan(sub_entity, &Request.GetEntityInformation.sub_entity/2)
       |> Util.stitch()
 
     API.get_entity_information(body, Keyword.get(options, :api, []))
@@ -187,7 +187,7 @@ defmodule Radixir.Core do
         - `username`: (optional, string): `username` to be used for endpoint authentication.
         - `password`: (optional, string): `password` to be used for endpoint authentication.
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
-      - `transaction_accumulator` (optional, string): Transaction accumulator.
+      - `transaction_accumulator` (optional, string): Transaction accumulator in state identifier map.
       - `limit` (optional, integer): Maximum number of transactions that will be returned.
 
   ## Note
@@ -207,7 +207,7 @@ defmodule Radixir.Core do
       []
       |> Request.GetCommittedTransactions.network_identifier(network)
       |> Request.GetCommittedTransactions.state_identifier(state_version)
-      |> Request.GetCommittedTransactions.limit(limit)
+      |> Util.maybe_create_stitch_plan(limit, &Request.GetCommittedTransactions.limit/2)
       |> Util.stitch()
 
     API.get_committed_transactions(body, Keyword.get(options, :api, []))
@@ -349,7 +349,7 @@ defmodule Radixir.Core do
       |> Request.DeriveEntityIdentifier.Metadata.PreparedStakes.validator(
         address: validator_address
       )
-      |> Request.DeriveEntityIdentifier.Metadata.PreparedStakes.sub_entity(sub_entity)
+      |> Util.maybe_create_stitch_plan(sub_entity, &Request.DeriveEntityIdentifier.sub_entity/2)
       |> Util.stitch()
 
     API.derive_entity_identifier(body, Keyword.get(options, :api, []))
@@ -435,7 +435,7 @@ defmodule Radixir.Core do
       |> Request.DeriveEntityIdentifier.Metadata.ExitingUnstakes.validator(
         address: validator_address
       )
-      |> Request.DeriveEntityIdentifier.Metadata.ExitingUnstakes.sub_entity(sub_entity)
+      |> Util.maybe_create_stitch_plan(sub_entity, &Request.DeriveEntityIdentifier.sub_entity/2)
       |> Request.DeriveEntityIdentifier.Metadata.ExitingUnstakes.epoch_unlock(
         epoch_unlock: epoch_unlock
       )
@@ -477,7 +477,57 @@ defmodule Radixir.Core do
     API.derive_entity_identifier(body, Keyword.get(options, :api, []))
   end
 
-  # TODO: construction here ##############
+  @doc """
+  Builds a transaction.
+
+  ## Parameters
+    - `fee_payer_address`: Fee payer address.
+    - `options`: Keyword list that contains
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - any other options one may want to pass along to the http layer - for example `headers`
+        - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
+        - `username`: (optional, string): `username` to be used for endpoint authentication.
+        - `password`: (optional, string): `password` to be used for endpoint authentication.
+      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `sub_entity_address` (optional, string): Sub entity address.
+      - `validator_address` (optional, string): Validator address.
+      - `epoch_unlock` (optional, integer): Epoch unlock.
+
+  ## Note
+    - Either `username` and `password` or `auth_index` must be provided.
+    - If all three are provided `auth_index` is used.
+  """
+  @spec build_transaction(
+          fee_payer_address,
+          options
+        ) ::
+          {:ok, map} | {:error, map | error_message}
+  def build_transaction(
+        fee_payer_address,
+        options \\ []
+      ) do
+    network = Keyword.take(options, [:network])
+    sub_entity = Keyword.take(options, [:sub_entity_address, :validator_address, :epoch_unlock])
+    message = Keyword.take(options, [:message])
+
+    disable_resource_allocate_and_destroy =
+      Keyword.take(options, [:disable_resource_allocate_and_destroy])
+
+    body =
+      []
+      |> Request.BuildTransaction.network_identifier(network)
+      |> Request.BuildTransaction.fee_payer(address: fee_payer_address)
+      |> Util.maybe_create_stitch_plan(sub_entity, &Request.BuildTransaction.sub_entity/2)
+      |> Util.maybe_create_stitch_plan(message, &Request.BuildTransaction.message/2)
+      |> Util.maybe_create_stitch_plan(
+        disable_resource_allocate_and_destroy,
+        &Request.BuildTransaction.disable_resource_allocate_and_destroy/2
+      )
+      |> Util.stitch()
+
+    API.build_transaction(body, Keyword.get(options, :api, []))
+  end
 
   @doc """
   Parses transaction.
