@@ -651,6 +651,12 @@ defmodule Radixir.Core do
   def build_operation(type, entity_identifier, options \\ []) do
   end
 
+  @doc """
+  Builds an operation group.
+
+  ## Parameters
+    - `operations`: List of operation maps.
+  """
   @spec build_operation_group(list(map)) :: map
   def build_operation_group(operations) do
     Request.BuildTransaction.OperationGroup.create(operations)
@@ -753,8 +759,8 @@ defmodule Radixir.Core do
 
   ## Parameters
     - `unsigned_transaction`: Unsigned ransaction.
-    - `signature_bytes`: Signature bytes.
     - `signature_public_key`: Signature public key.
+    - `signature_bytes`: Signature bytes.
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
@@ -768,12 +774,12 @@ defmodule Radixir.Core do
     - Either `username` and `password` or `auth_index` must be provided.
     - If all three are provided `auth_index` is used.
   """
-  @spec finalize_transaction(unsigned_transaction, signature_bytes, signature_public_key, options) ::
+  @spec finalize_transaction(unsigned_transaction, signature_public_key, signature_bytes, options) ::
           {:ok, map} | {:error, map | error_message}
   def finalize_transaction(
         unsigned_transaction,
-        signature_bytes,
         signature_public_key,
+        signature_bytes,
         options \\ []
       ) do
     network = Keyword.take(options, [:network])
@@ -861,6 +867,36 @@ defmodule Radixir.Core do
   end
 
   @doc """
+  Gets public keys.
+
+  ## Parameters
+    - `options`: Keyword list that contains
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - any other options one may want to pass along to the http layer - for example `headers`
+        - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
+        - `username`: (optional, string): `username` to be used for endpoint authentication.
+        - `password`: (optional, string): `password` to be used for endpoint authentication.
+      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+
+  ## Note
+    - Either `username` and `password` or `auth_index` must be provided.
+    - If all three are provided `auth_index` is used.
+  """
+  @spec get_public_keys(options) ::
+          {:ok, map} | {:error, map | error_message}
+  def get_public_keys(options \\ []) do
+    network = Keyword.take(options, [:network])
+
+    body =
+      []
+      |> Request.GetPublicKeys.network_identifier(network)
+      |> Util.stitch()
+
+    API.get_public_keys(body, Keyword.get(options, :api, []))
+  end
+
+  @doc """
   Signs a transaction.
 
   ## Parameters
@@ -892,5 +928,83 @@ defmodule Radixir.Core do
       |> Util.stitch()
 
     API.sign_transaction(body, Keyword.get(options, :api, []))
+  end
+
+  @doc """
+  Sends a transaction.
+
+  ## Parameters
+    - `operation_groups`: Operation groups.
+    - `fee_payer_address`: Fee payer address.
+    - `private_key`: Private key to sign transaction.
+    - `options`: Keyword list that contains
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - any other options one may want to pass along to the http layer - for example `headers`
+        - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
+        - `username`: (optional, string): `username` to be used for endpoint authentication.
+        - `password`: (optional, string): `password` to be used for endpoint authentication.
+      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `sub_entity_address` (optional, string): Sub entity address.
+      - `validator_address` (optional, string): Validator address.
+      - `epoch_unlock` (optional, integer): Epoch unlock.
+      - `message` (optional, string): Message to be included in transaction.
+      - `disable_resource_allocate_and_destroy` (optional, boolean): Disable resource allocate and destroy.
+  ## Note
+    - Either `username` and `password` or `auth_index` must be provided.
+    - If all three are provided `auth_index` is used.
+  """
+  @spec send_transaction(
+          operation_groups,
+          fee_payer_address,
+          private_key,
+          options
+        ) ::
+          {:ok, map} | {:error, map | error_message}
+  def send_transaction(
+        operation_groups,
+        fee_payer_address,
+        private_key,
+        options \\ []
+      ) do
+    with {:ok, %{public_key: public_key}} <- Key.from_private_key(private_key),
+         {:ok, built_transaction} <-
+           build_transaction(
+             operation_groups,
+             fee_payer_address,
+             options
+           ),
+         :ok <-
+           Util.verify_hash(
+             built_transaction["unsigned_transaction"],
+             built_transaction["payload_to_sign"]
+           ),
+         {:ok, signature_bytes} <-
+           Key.sign_data(built_transaction["payload_to_sign"], private_key),
+         {:ok, finalized_transaction} <-
+           finalize_transaction(
+             built_transaction["unsigned_transaction"],
+             public_key,
+             signature_bytes,
+             options
+           ) do
+      case submit_transaction(finalized_transaction["signed_transaction"], options) do
+        {:ok, submitted_transaction} ->
+          {:ok,
+           %{
+             built_transaction: built_transaction,
+             finalized_transaction: finalized_transaction,
+             submitted_transaction: submitted_transaction
+           }}
+
+        {:error, error} ->
+          {:error,
+           %{
+             built_transaction: built_transaction,
+             finalized_transaction: finalized_transaction,
+             submitted_transaction_error: error
+           }}
+      end
+    end
   end
 end
