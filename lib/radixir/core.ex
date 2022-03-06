@@ -14,7 +14,7 @@ defmodule Radixir.Core do
   @type rri :: String.t()
   @type symbol :: String.t()
   @type state_version :: integer
-  @type options :: keyword()
+  @type options :: keyword
   @type error_message :: String.t()
   @type epoch_unlock :: integer
   @type unsigned_transaction :: String.t()
@@ -26,6 +26,7 @@ defmodule Radixir.Core do
   @type transaction_hash :: String.t()
   @type fee_payer_address :: String.t()
   @type validator_address :: String.t()
+  @type operation_groups :: list
 
   @doc """
   Gets network configuration.
@@ -487,6 +488,7 @@ defmodule Radixir.Core do
   Builds a transaction.
 
   ## Parameters
+    - `operation_groups`: Operation groups.
     - `fee_payer_address`: Fee payer address.
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
@@ -505,12 +507,15 @@ defmodule Radixir.Core do
     - Either `username` and `password` or `auth_index` must be provided.
     - If all three are provided `auth_index` is used.
   """
+
   @spec build_transaction(
+          operation_groups,
           fee_payer_address,
           options
         ) ::
           {:ok, map} | {:error, map | error_message}
   def build_transaction(
+        operation_groups,
         fee_payer_address,
         options \\ []
       ) do
@@ -533,11 +538,13 @@ defmodule Radixir.Core do
       )
       |> Util.stitch()
 
+    body = Request.BuildTransaction.add_operation_groups(body, operation_groups)
+
     API.build_transaction(body, Keyword.get(options, :api, []))
   end
 
   @doc """
-  Parses transaction.
+  Parses a transaction.
 
   ## Parameters
     - `transaction`: Transaction to parse.
@@ -571,7 +578,7 @@ defmodule Radixir.Core do
   end
 
   @doc """
-  Finalizes transaction.
+  Finalizes a transaction.
 
   ## Parameters
     - `unsigned_transaction`: Unsigned ransaction.
@@ -648,7 +655,7 @@ defmodule Radixir.Core do
   end
 
   @doc """
-  Submits transaction.
+  Submits a transaction.
 
   ## Parameters
     - `signed_transaction`: Signed ransaction.
@@ -683,7 +690,7 @@ defmodule Radixir.Core do
   end
 
   @doc """
-  Signs transaction.
+  Signs a transaction.
 
   ## Parameters
     - `unsigned_transaction`: Unsigned Transaction.
