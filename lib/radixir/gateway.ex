@@ -88,7 +88,7 @@ defmodule Radixir.Gateway do
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
   """
   @spec derive_account_identifier(public_key, options) ::
-          {:ok, map()} | {:error, map | error_message}
+          {:ok, map} | {:error, map | error_message}
   def derive_account_identifier(public_key, options \\ []) do
     network = Keyword.take(options, [:network])
 
@@ -117,7 +117,7 @@ defmodule Radixir.Gateway do
       - `round` (optional, integer): Round key in `at_state_identifier` map.
   """
   @spec get_account_balances(address, options) ::
-          {:ok, map()} | {:error, map | error_message}
+          {:ok, map} | {:error, map | error_message}
   def get_account_balances(address, options \\ []) do
     network = Keyword.take(options, [:network])
 
@@ -149,7 +149,7 @@ defmodule Radixir.Gateway do
       - `round` (optional, integer): Round key in `at_state_identifier` map.
   """
   @spec get_stake_positions(address, options) ::
-          {:ok, map()} | {:error, map | error_message}
+          {:ok, map} | {:error, map | error_message}
   def get_stake_positions(address, options \\ []) do
     network = Keyword.take(options, [:network])
 
@@ -181,7 +181,7 @@ defmodule Radixir.Gateway do
       - `round` (optional, integer): Round key in `at_state_identifier` map.
   """
   @spec get_unstake_positions(address, options) ::
-          {:ok, map()} | {:error, map | error_message}
+          {:ok, map} | {:error, map | error_message}
   def get_unstake_positions(address, options \\ []) do
     network = Keyword.take(options, [:network])
 
@@ -213,7 +213,7 @@ defmodule Radixir.Gateway do
       - `round` (optional, integer): Round key in `at_state_identifier` map.
   """
   @spec get_account_transactions(address, options) ::
-          {:ok, map()} | {:error, map | error_message}
+          {:ok, map} | {:error, map | error_message}
   def get_account_transactions(address, options \\ []) do
     network = Keyword.take(options, [:network])
 
@@ -250,7 +250,7 @@ defmodule Radixir.Gateway do
       - `round` (optional, integer): Round key in `at_state_identifier` map.
   """
   @spec get_native_token_info(options) ::
-          {:ok, map()} | {:error, map | error_message}
+          {:ok, map} | {:error, map | error_message}
   def get_native_token_info(options \\ []) do
     network = Keyword.take(options, [:network])
 
@@ -281,7 +281,7 @@ defmodule Radixir.Gateway do
       - `round` (optional, integer): Round key in `at_state_identifier` map.
   """
   @spec get_token_info(rri, options) ::
-          {:ok, map()} | {:error, map | error_message}
+          {:ok, map} | {:error, map | error_message}
   def get_token_info(rri, options \\ []) do
     network = Keyword.take(options, [:network])
 
@@ -310,7 +310,7 @@ defmodule Radixir.Gateway do
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
   """
   @spec derive_token_identifier(public_key, symbol, options) ::
-          {:ok, map()} | {:error, map | error_message}
+          {:ok, map} | {:error, map | error_message}
   def derive_token_identifier(public_key, symbol, options \\ []) do
     network = Keyword.take(options, [:network])
 
@@ -340,7 +340,7 @@ defmodule Radixir.Gateway do
       - `round` (optional, integer): Round key in `at_state_identifier` map.
   """
   @spec get_validator(address, options) ::
-          {:ok, map()} | {:error, map | error_message}
+          {:ok, map} | {:error, map | error_message}
   def get_validator(address, options \\ []) do
     network = Keyword.take(options, [:network])
 
@@ -368,7 +368,7 @@ defmodule Radixir.Gateway do
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
   """
   @spec derive_validator_identifier(public_key, options) ::
-          {:ok, map()} | {:error, map | error_message}
+          {:ok, map} | {:error, map | error_message}
   def derive_validator_identifier(public_key, options \\ []) do
     network = Keyword.take(options, [:network])
 
@@ -396,7 +396,7 @@ defmodule Radixir.Gateway do
       - `round` (optional, integer): Round key in `at_state_identifier` map.
   """
   @spec get_validators(options) ::
-          {:ok, map()} | {:error, map | error_message}
+          {:ok, map} | {:error, map | error_message}
   def get_validators(options \\ []) do
     network = Keyword.take(options, [:network])
 
@@ -427,7 +427,7 @@ defmodule Radixir.Gateway do
       - `round` (optional, integer): Round key in `at_state_identifier` map.
   """
   @spec get_validator_stakes(address, options) ::
-          {:ok, map()} | {:error, map | error_message}
+          {:ok, map} | {:error, map | error_message}
   def get_validator_stakes(address, options \\ []) do
     network = Keyword.take(options, [:network])
 
@@ -464,7 +464,7 @@ defmodule Radixir.Gateway do
       - `round` (optional, integer): Round key in `at_state_identifier` map.
   """
   @spec get_transaction_rules(options) ::
-          {:ok, map()} | {:error, map | error_message}
+          {:ok, map} | {:error, map | error_message}
   def get_transaction_rules(options \\ []) do
     network = Keyword.take(options, [:network])
 
@@ -498,7 +498,7 @@ defmodule Radixir.Gateway do
       - `disable_token_mint_and_burn` (optional, boolean): Disable Token Mint and Burn.
   """
   @spec build_create_token_transaction(list(create_token_params), fee_payer_address, options) ::
-          {:ok, map()} | {:error, map | error_message}
+          {:ok, map} | {:error, map | error_message}
   def build_create_token_transaction(create_token_params_list, fee_payer_address, options \\ []) do
     network = Keyword.take(options, [:network])
 
@@ -568,7 +568,7 @@ defmodule Radixir.Gateway do
           fee_payer_address,
           options
         ) ::
-          {:ok, map()} | {:error, map | error_message}
+          {:ok, map} | {:error, map | error_message}
   def build_transfer_tokens_transaction(
         transfer_tokens_params_list,
         fee_payer_address,
@@ -633,7 +633,7 @@ defmodule Radixir.Gateway do
           fee_payer_address,
           options
         ) ::
-          {:ok, map()} | {:error, map | error_message}
+          {:ok, map} | {:error, map | error_message}
   def build_stake_tokens_transaction(
         stake_tokens_params_list,
         fee_payer_address,
@@ -702,7 +702,7 @@ defmodule Radixir.Gateway do
           fee_payer_address,
           options
         ) ::
-          {:ok, map()} | {:error, map | error_message}
+          {:ok, map} | {:error, map | error_message}
   def build_unstake_tokens_transaction(
         unstake_tokens_params_list,
         fee_payer_address,
@@ -779,7 +779,7 @@ defmodule Radixir.Gateway do
           fee_payer_address,
           options
         ) ::
-          {:ok, map()} | {:error, map | error_message}
+          {:ok, map} | {:error, map | error_message}
   def build_mint_tokens_transaction(
         mint_tokens_params_list,
         fee_payer_address,
@@ -843,7 +843,7 @@ defmodule Radixir.Gateway do
           fee_payer_address,
           options
         ) ::
-          {:ok, map()} | {:error, map | error_message}
+          {:ok, map} | {:error, map | error_message}
   def build_burn_tokens_transaction(
         burn_tokens_params_list,
         fee_payer_address,
@@ -907,7 +907,7 @@ defmodule Radixir.Gateway do
           fee_payer_address,
           options
         ) ::
-          {:ok, map()} | {:error, map | error_message}
+          {:ok, map} | {:error, map | error_message}
   def build_register_validator_transaction(
         validator_addresses_list,
         fee_payer_address,
@@ -971,7 +971,7 @@ defmodule Radixir.Gateway do
           fee_payer_address,
           options
         ) ::
-          {:ok, map()} | {:error, map | error_message}
+          {:ok, map} | {:error, map | error_message}
   def build_unregister_validator_transaction(
         validator_addresses_list,
         fee_payer_address,
@@ -1027,7 +1027,7 @@ defmodule Radixir.Gateway do
       - `submit` (optional, boolean): If true, the transaction is immediately submitted after finalization.
   """
   @spec finalize_transaction(unsigned_transaction, signature_public_key, signature_bytes, options) ::
-          {:ok, map()} | {:error, map | error_message}
+          {:ok, map} | {:error, map | error_message}
   def finalize_transaction(
         unsigned_transaction,
         signature_public_key,
@@ -1066,7 +1066,7 @@ defmodule Radixir.Gateway do
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
   """
   @spec submit_transaction(signed_transaction, options) ::
-          {:ok, map()} | {:error, map | error_message}
+          {:ok, map} | {:error, map | error_message}
   def submit_transaction(signed_transaction, options \\ []) do
     network = Keyword.take(options, [:network])
 
@@ -1095,7 +1095,7 @@ defmodule Radixir.Gateway do
       - `round` (optional, integer): Round key in `at_state_identifier` map.
   """
   @spec get_transaction_status(transaction_hash, options) ::
-          {:ok, map()} | {:error, map | error_message}
+          {:ok, map} | {:error, map | error_message}
   def get_transaction_status(transaction_hash, options \\ []) do
     network = Keyword.take(options, [:network])
 
@@ -1135,7 +1135,7 @@ defmodule Radixir.Gateway do
           private_key,
           options
         ) ::
-          {:ok, map()} | {:error, map | error_message}
+          {:ok, map} | {:error, map | error_message}
   def create_token(
         create_token_params_list,
         fee_payer_address,
@@ -1175,7 +1175,7 @@ defmodule Radixir.Gateway do
           private_key,
           options
         ) ::
-          {:ok, map()} | {:error, map | error_message}
+          {:ok, map} | {:error, map | error_message}
   def transfer_tokens(
         transfer_tokens_params_list,
         fee_payer_address,
@@ -1215,7 +1215,7 @@ defmodule Radixir.Gateway do
           private_key,
           options
         ) ::
-          {:ok, map()} | {:error, map | error_message}
+          {:ok, map} | {:error, map | error_message}
   def stake_tokens(
         stake_tokens_params_list,
         fee_payer_address,
@@ -1257,7 +1257,7 @@ defmodule Radixir.Gateway do
           private_key,
           options
         ) ::
-          {:ok, map()} | {:error, map | error_message}
+          {:ok, map} | {:error, map | error_message}
   def unstake_tokens(
         unstake_tokens_params_list,
         fee_payer_address,
@@ -1297,7 +1297,7 @@ defmodule Radixir.Gateway do
           private_key,
           options
         ) ::
-          {:ok, map()} | {:error, map | error_message}
+          {:ok, map} | {:error, map | error_message}
   def mint_tokens(
         mint_tokens_params_list,
         fee_payer_address,
@@ -1337,7 +1337,7 @@ defmodule Radixir.Gateway do
           private_key,
           options
         ) ::
-          {:ok, map()} | {:error, map | error_message}
+          {:ok, map} | {:error, map | error_message}
   def burn_tokens(
         burn_tokens_params_list,
         fee_payer_address,
@@ -1377,7 +1377,7 @@ defmodule Radixir.Gateway do
           private_key,
           options
         ) ::
-          {:ok, map()} | {:error, map | error_message}
+          {:ok, map} | {:error, map | error_message}
   def register_validator(
         validator_addresses_list,
         fee_payer_address,
@@ -1417,7 +1417,7 @@ defmodule Radixir.Gateway do
           private_key,
           options
         ) ::
-          {:ok, map()} | {:error, map | error_message}
+          {:ok, map} | {:error, map | error_message}
   def unregister_validator(
         validator_addresses_list,
         fee_payer_address,

@@ -10,10 +10,17 @@ defmodule Radixir.Core do
 
   @type public_key :: String.t()
   @type private_key :: String.t()
+  @type type :: String.t()
   @type address :: String.t()
+  @type amount :: String.t()
   @type rri :: String.t()
   @type symbol :: String.t()
+  @type round :: integer
+  @type epoch :: integer
+  @type timestamp :: integer
   @type state_version :: integer
+  @type action :: String.t()
+  @type substate_data_hex :: String.t()
   @type options :: keyword
   @type error_message :: String.t()
   @type epoch_unlock :: integer
@@ -27,6 +34,8 @@ defmodule Radixir.Core do
   @type fee_payer_address :: String.t()
   @type validator_address :: String.t()
   @type operation_groups :: list
+  @type substate_operation :: String.t()
+  @type substate_identifier :: String.t()
 
   @doc """
   Gets network configuration.
@@ -485,6 +494,169 @@ defmodule Radixir.Core do
   end
 
   @doc """
+  Builds type map in an operation.
+
+  ## Parameters
+    - `type`: Can be Resource, Data, or ResourceAndData.
+  """
+  @spec build_operation_type(type) :: map
+  def build_operation_type(type) do
+    []
+    |> Request.BuildTransaction.Operation.type(type: type)
+    |> Util.stitch()
+  end
+
+  @doc """
+  Builds entity identifier map in operation.
+
+  ## Parameters
+    - `address`: Radix address.
+    - `options`: Keyword list that contains
+      - `sub_entity_address` (optional, string): Sub entity address.
+      - `validator_address` (optional, string): Validator address.
+      - `epoch_unlock` (optional, integer): Epoch unlock.
+  """
+  @spec build_operation_entity_identifier(address, options) :: map
+  def build_operation_entity_identifier(address, options \\ []) do
+    sub_entity = Keyword.take(options, [:sub_entity_address, :validator_address, :epoch_unlock])
+
+    []
+    |> Request.BuildTransaction.Operation.entity_identifier(address: address)
+    |> Util.maybe_create_stitch_plan(sub_entity, &Request.BuildTransaction.Operation.sub_entity/2)
+    |> Util.stitch()
+  end
+
+  @doc """
+  Builds substate map in operation.
+
+  ## Parameters
+    - `substate_operation`: Substate operation - can be "BOOTUP" or "SHUTDOWN".
+    - `substate_identifier`: Substate identifier
+  """
+  @spec build_operation_substate(substate_operation, substate_identifier) :: map
+  def build_operation_substate(substate_operation, substate_identifier) do
+    []
+    |> Request.BuildTransaction.Operation.substate(
+      substate_operation: substate_operation,
+      identifier: substate_identifier
+    )
+    |> Util.stitch()
+  end
+
+  @doc """
+  Builds amount map in operation where resource type is token.
+
+  ## Parameters
+    - `amount`: Amount.
+    - `rri`: Token rri.
+  """
+  @spec build_operation_amount_token(amount, rri) :: map
+  def build_operation_amount_token(amount, rri) do
+    []
+    |> Request.BuildTransaction.Operation.amount(amount: amount)
+    |> Request.BuildTransaction.Operation.ResourceIdentifier.token(rri: rri)
+    |> Util.stitch()
+  end
+
+  @doc """
+  Builds amount map in operation where resource type is stake unit.
+
+  ## Parameters
+    - `amount`: Amount.
+    - `validator_address`: Validator addres.
+  """
+  @spec build_operation_amount_stake_unit(amount, validator_address) :: map
+  def build_operation_amount_stake_unit(amount, validator_address) do
+    []
+    |> Request.BuildTransaction.Operation.amount(amount: amount)
+    |> Request.BuildTransaction.Operation.ResourceIdentifier.stake_unit(
+      validator_address: validator_address
+    )
+    |> Util.stitch()
+  end
+
+  @doc """
+  Builds data map in operation where data type is UnclaimedRadixEngineAddress.
+
+  ## Parameters
+    - `action`: Action - can be "CREATE" or "DELETE".
+  """
+  @spec build_operation_data_unclaimed_radix_engine_address(action) :: map
+  def build_operation_data_unclaimed_radix_engine_address(action) do
+    []
+    |> Request.BuildTransaction.Operation.data(action: action)
+    |> Request.BuildTransaction.Operation.DataObject.UnclaimedRadixEngineAddress.type()
+    |> Util.stitch()
+  end
+
+  @doc """
+  Builds data map in operation where data type is RoundData.
+
+  ## Parameters
+    - `action`: Action - can be "CREATE" or "DELETE".
+    - `round`: Round
+    - `timestamp`: Timestamp
+  """
+  @spec build_operation_data_round_data(action, round, timestamp) :: map
+  def build_operation_data_round_data(action, round, timestamp) do
+    []
+    |> Request.BuildTransaction.Operation.data(action: action)
+    |> Request.BuildTransaction.Operation.DataObject.RoundData.type()
+    |> Request.BuildTransaction.Operation.DataObject.RoundData.round(round: round)
+    |> Request.BuildTransaction.Operation.DataObject.RoundData.timestamp(timestamp: timestamp)
+    |> Util.stitch()
+  end
+
+  @doc """
+  Builds data map in operation where data type is EpochData.
+
+  ## Parameters
+    - `action`: Action - can be "CREATE" or "DELETE".
+    - `epoch`: Epoch
+  """
+  @spec build_operation_data_epoch_data(action, epoch) :: map
+  def build_operation_data_epoch_data(action, epoch) do
+    []
+    |> Request.BuildTransaction.Operation.data(action: action)
+    |> Request.BuildTransaction.Operation.DataObject.EpochData.type()
+    |> Request.BuildTransaction.Operation.DataObject.EpochData.epoch(epoch: epoch)
+    |> Util.stitch()
+  end
+
+  @doc """
+  Builds metadata map in operation.
+
+  ## Parameters
+    - `substate_data_hex`: Substate data hex.
+  """
+  @spec build_operation_metadata(substate_data_hex) :: map
+  def build_operation_metadata(substate_data_hex) do
+    []
+    |> Request.BuildTransaction.Operation.metadata(substate_data_hex: substate_data_hex)
+    |> Util.stitch()
+  end
+
+  @doc """
+  Builds an operation.
+
+  ## Parameters
+    - `type`: Type map - can be Resource, Data, or ResourceAndData.
+    - `entity_identifier`: Fee payer address.
+    - `options`: Keyword list that contains
+      - `substate` (optional, map): Substate map.
+      - `amount` (optional, map): Amount map.
+      - `data` (optional, map): Data map.
+      - `metadata` (optional, map): Metadata map.
+  """
+  def build_operation(type, entity_identifier, options \\ []) do
+  end
+
+  @spec build_operation_group(list(map)) :: map
+  def build_operation_group(operations) do
+    Request.BuildTransaction.OperationGroup.create(operations)
+  end
+
+  @doc """
   Builds a transaction.
 
   ## Parameters
@@ -507,7 +679,6 @@ defmodule Radixir.Core do
     - Either `username` and `password` or `auth_index` must be provided.
     - If all three are provided `auth_index` is used.
   """
-
   @spec build_transaction(
           operation_groups,
           fee_payer_address,

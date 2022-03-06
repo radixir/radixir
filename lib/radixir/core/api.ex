@@ -5,7 +5,7 @@ defmodule Radixir.Core.API do
   alias Radixir.HTTP
   alias Radixir.Util
 
-  @type body :: map()
+  @type body :: map
   @type options :: keyword()
   @type error_message :: String.t()
 

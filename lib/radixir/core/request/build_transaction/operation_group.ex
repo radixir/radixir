@@ -3,8 +3,8 @@ defmodule Radixir.Core.Request.BuildTransaction.OperationGroup do
   Method to create an operation group map.
   """
 
-  @type operations :: list(map())
+  @type operations :: list(map)
 
-  @spec create(operations) :: map()
+  @spec create(operations) :: map
   def create(operations), do: %{operations: operations}
 end

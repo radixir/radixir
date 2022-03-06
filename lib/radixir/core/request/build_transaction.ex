@@ -7,8 +7,8 @@ defmodule Radixir.Core.Request.BuildTransaction do
 
   @type stitch_plans :: list(keyword())
   @type params :: keyword()
-  @type request :: map()
-  @type operations_groups :: list(map())
+  @type request :: map
+  @type operations_groups :: list(map)
 
   @doc """
   Generates stitch plan for `network_identifier` map in `BuildTransaction` request body.
@@ -28,7 +28,7 @@ defmodule Radixir.Core.Request.BuildTransaction do
     - `request`: Request body.
     - `operation_groups`: List of operation maps to be added to request body.
   """
-  @spec add_operation_groups(request, operations_groups) :: map()
+  @spec add_operation_groups(request, operations_groups) :: map
   def add_operation_groups(request, operations_groups) do
     Util.map_put(request, [:operation_groups], operations_groups)
   end

@@ -257,7 +257,7 @@ defmodule Radixir.Key do
         testnet: "gok_tr1qdjusppk2dqe2r08xlnlauuaedn9rtuttz2c6g76jq3qezz2ds"
       }
   """
-  @spec generate_token_rri(public_key, symbol) :: {:ok, map()} | {:error, error_message}
+  @spec generate_token_rri(public_key, symbol) :: {:ok, map} | {:error, error_message}
   def generate_token_rri(public_key, symbol) do
     with public_key <- String.downcase(public_key),
          symbol <- String.downcase(symbol),
