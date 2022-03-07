@@ -19,27 +19,27 @@ defmodule Radixir.Core.Request.BuildTransaction.Operation.DataObject.ValidatorSy
   end
 
   @doc """
-  Generates stitch plan for `date` map in `ValidatorSystemMetadata` map.
+  Generates stitch plan for `data` map in `ValidatorSystemMetadata` map.
 
   ## Parameters
     - `stitch_plans`: On-going stitch plans that will be stitched into a map.
     - `params`: Keyword list that contains:
-      - `date` (required, string): Date.
+      - `data` (required, string): Data.
   """
-  @spec date(stitch_plans, params) :: stitch_plans
-  def date(stitch_plans, params) do
+  @spec data(stitch_plans, params) :: stitch_plans
+  def data(stitch_plans, params) do
     schema = [
-      date: [
+      data: [
         type: :string,
         required: true
       ]
     ]
 
-    date =
+    data =
       NimbleOptions.validate!(params, schema)
-      |> Keyword.get(:date)
+      |> Keyword.get(:data)
 
-    stitch_plan = [[keys: [:data, :data_object, :date], value: date]]
+    stitch_plan = [[keys: [:data, :data_object, :date], value: data]]
 
     stitch_plan ++ stitch_plans
   end

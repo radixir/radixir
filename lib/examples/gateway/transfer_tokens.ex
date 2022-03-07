@@ -6,7 +6,7 @@ defmodule Examples.Gateway.TransferTokens do
     {:ok, %{testnet: %{account_address: to_address}}} =
       Radixir.Key.from_mnemonic(address_index: 1)
 
-    {:ok, amount} = Radixir.Util.xrd_to_atto("1.0")
+    amount = Radixir.Util.xrd_to_atto("1.0")
     token_rri = Radixir.Config.network_native_token_rri()
 
     transfer_tokens_params = %{

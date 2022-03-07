@@ -39,6 +39,13 @@ defmodule Radixir.Core do
   @type granularity :: integer
   @type is_mutable :: boolean
   @type registered :: boolean
+  @type fee :: integer
+  @type name :: String.t()
+  @type url :: String.t()
+  @type proposals_completed :: integer
+  @type proposals_missed :: integer
+  @type allow_delegation :: boolean
+  @type data :: String.t()
 
   @doc """
   Gets network configuration.
@@ -579,7 +586,7 @@ defmodule Radixir.Core do
   end
 
   @doc """
-  Builds data map in operation where data type is UnclaimedRadixEngineAddress.
+  Builds data map in operation where data object type is UnclaimedRadixEngineAddress.
 
   ## Parameters
     - `action`: Action - can be "CREATE" or "DELETE".
@@ -593,7 +600,7 @@ defmodule Radixir.Core do
   end
 
   @doc """
-  Builds data map in operation where data type is RoundData.
+  Builds data map in operation where data object type is RoundData.
 
   ## Parameters
     - `action`: Action - can be "CREATE" or "DELETE".
@@ -611,7 +618,7 @@ defmodule Radixir.Core do
   end
 
   @doc """
-  Builds data map in operation where data type is EpochData.
+  Builds data map in operation where data object type is EpochData.
 
   ## Parameters
     - `action`: Action - can be "CREATE" or "DELETE".
@@ -627,7 +634,7 @@ defmodule Radixir.Core do
   end
 
   @doc """
-  Builds data map in operation where data type is TokenData.
+  Builds data map in operation where data object type is TokenData.
 
   ## Parameters
     - `action`: Action - can be "CREATE" or "DELETE".
@@ -664,7 +671,7 @@ defmodule Radixir.Core do
   end
 
   @doc """
-  Builds data map in operation where data type is TokenMetaData.
+  Builds data map in operation where data object type is TokenMetaData.
 
   ## Parameters
     - `action`: Action - can be "CREATE" or "DELETE".
@@ -706,7 +713,7 @@ defmodule Radixir.Core do
   end
 
   @doc """
-  Builds data map in operation where data type is TokenMetaData.
+  Builds data map in operation where data object type is TokenMetaData.
 
   ## Parameters
     - `action`: Action - can be "CREATE" or "DELETE".
@@ -733,6 +740,170 @@ defmodule Radixir.Core do
   end
 
   @doc """
+  Builds data map in operation where data object type is PreparedValidatorOwner.
+
+  ## Parameters
+    - `action`: Action - can be "CREATE" or "DELETE".
+    - `address`: Owner address
+    - `options`: Keyword list that contains
+      - `sub_entity_address` (optional, string): Sub entity address.
+      - `validator_address` (optional, string): Validator address.
+      - `epoch_unlock` (optional, integer): Epoch unlock.
+  """
+  @spec build_operation_data_prepared_validator_owner(action, address, options) :: map
+  def build_operation_data_prepared_validator_owner(action, address, options \\ []) do
+    sub_entity = Keyword.take(options, [:sub_entity_address, :validator_address, :epoch_unlock])
+
+    []
+    |> Request.BuildTransaction.Operation.data(action: action)
+    |> Request.BuildTransaction.Operation.DataObject.PreparedValidatorOwner.type()
+    |> Request.BuildTransaction.Operation.DataObject.PreparedValidatorOwner.owner(
+      address: address
+    )
+    |> Util.maybe_create_stitch_plan(
+      sub_entity,
+      &Request.BuildTransaction.Operation.DataObject.PreparedValidatorOwner.sub_entity/2
+    )
+    |> Util.stitch()
+  end
+
+  @doc """
+  Builds data map in operation where data object type is PreparedValidatorFee.
+
+  ## Parameters
+    - `action`: Action - can be "CREATE" or "DELETE".
+    - `fee`: Validator fee.
+    - `options`: Keyword list that contains
+      - `epoch` (optional, integer): Epoch.
+  """
+  @spec build_operation_data_prepared_validator_fee(action, fee, options) :: map
+  def build_operation_data_prepared_validator_fee(action, fee, options \\ []) do
+    epoch = Keyword.take(options, [:epoch])
+
+    []
+    |> Request.BuildTransaction.Operation.data(action: action)
+    |> Request.BuildTransaction.Operation.DataObject.PreparedValidatorFee.type()
+    |> Request.BuildTransaction.Operation.DataObject.PreparedValidatorFee.fee(fee: fee)
+    |> Util.maybe_create_stitch_plan(
+      epoch,
+      &Request.BuildTransaction.Operation.DataObject.PreparedValidatorFee.epoch/2
+    )
+    |> Util.stitch()
+  end
+
+  @doc """
+  Builds data map in operation where data object type is ValidatorMetadata.
+
+  ## Parameters
+    - `action`: Action - can be "CREATE" or "DELETE".
+    - `name`: Validator name.
+    - `url`: Validator url.
+  """
+  @spec build_operation_data_validator_metadata(action, name, url) :: map
+  def build_operation_data_validator_metadata(action, name, url) do
+    []
+    |> Request.BuildTransaction.Operation.data(action: action)
+    |> Request.BuildTransaction.Operation.DataObject.ValidatorMetadata.name(name: name)
+    |> Request.BuildTransaction.Operation.DataObject.ValidatorMetadata.url(url: url)
+    |> Util.stitch()
+  end
+
+  @doc """
+  Builds data map in operation where data object type is ValidatorBFTData.
+
+  ## Parameters
+    - `action`: Action - can be "CREATE" or "DELETE".
+    - `proposals_completed`: Number of completed proposals by this validator as a leader in the current epoch.
+    - `proposals_missed`:  Number of missed proposals by this validator as a leader in the current epoch.
+  """
+  @spec build_operation_data_validator_bft_data(action, proposals_completed, proposals_missed) ::
+          map
+  def build_operation_data_validator_bft_data(action, proposals_completed, proposals_missed) do
+    []
+    |> Request.BuildTransaction.Operation.data(action: action)
+    |> Request.BuildTransaction.Operation.DataObject.ValidatorBFTdata.proposals_completed(
+      proposals_completed: proposals_completed
+    )
+    |> Request.BuildTransaction.Operation.DataObject.ValidatorBFTdata.proposals_missed(
+      proposals_missed: proposals_missed
+    )
+    |> Util.stitch()
+  end
+
+  @doc """
+  Builds data map in operation where data object type is ValidatorAllowDelegation.
+
+  ## Parameters
+    - `action`: Action - can be "CREATE" or "DELETE".
+    - `allow_delegation`: If validator allows delegation.
+  """
+  @spec build_operation_data_validator_allow_delegation(action, allow_delegation) ::
+          map
+  def build_operation_data_validator_allow_delegation(action, allow_delegation) do
+    []
+    |> Request.BuildTransaction.Operation.data(action: action)
+    |> Request.BuildTransaction.Operation.DataObject.ValidatorAllowDelegation.allow_delegation(
+      allow_delegation: allow_delegation
+    )
+    |> Util.stitch()
+  end
+
+  @doc """
+  Builds data map in operation where data object type is ValidatorData.
+
+  ## Parameters
+    - `action`: Action - can be "CREATE" or "DELETE".
+    - `address`: Owner address
+    - `registered`: If validator is registered or not.
+    - `fee`: Validator fee.
+    - `options`: Keyword list that contains
+      - `sub_entity_address` (optional, string): Sub entity address.
+      - `validator_address` (optional, string): Validator address.
+      - `epoch_unlock` (optional, integer): Epoch unlock.
+  """
+  @spec build_operation_data_prepared_validator_data(action, address, registered, fee, options) ::
+          map
+  def build_operation_data_prepared_validator_data(
+        action,
+        address,
+        registered,
+        fee,
+        options \\ []
+      ) do
+    sub_entity = Keyword.take(options, [:sub_entity_address, :validator_address, :epoch_unlock])
+
+    []
+    |> Request.BuildTransaction.Operation.data(action: action)
+    |> Request.BuildTransaction.Operation.DataObject.ValidatorData.type()
+    |> Request.BuildTransaction.Operation.DataObject.ValidatorData.owner(address: address)
+    |> Util.maybe_create_stitch_plan(
+      sub_entity,
+      &Request.BuildTransaction.Operation.DataObject.ValidatorData.sub_entity/2
+    )
+    |> Request.BuildTransaction.Operation.DataObject.ValidatorData.registered(
+      registered: registered
+    )
+    |> Request.BuildTransaction.Operation.DataObject.ValidatorData.fee(fee: fee)
+    |> Util.stitch()
+  end
+
+  @doc """
+  Builds data map in operation where data object type is ValidatorSystemMetadata.
+
+  ## Parameters
+    - `action`: Action - can be "CREATE" or "DELETE".
+    - `data`: Hex encoded byte array.
+  """
+  @spec build_operation_data_validator_system_metadata(action, data) ::
+          map
+  def build_operation_data_validator_system_metadata(action, data) do
+    []
+    |> Request.BuildTransaction.Operation.data(action: action)
+    |> Request.BuildTransaction.Operation.DataObject.ValidatorSystemMetadata.data(data: data)
+    |> Util.stitch()
+  end
+
+  @doc """
   Builds metadata map in operation.
 
   ## Parameters
@@ -749,8 +920,8 @@ defmodule Radixir.Core do
   Builds an operation.
 
   ## Parameters
-    - `type`: Type map - can be Resource, Data, or ResourceAndData.
-    - `entity_identifier`: Fee payer address.
+    - `type`: Type map.
+    - `entity_identifier`: Entity identifier map.
     - `options`: Keyword list that contains
       - `substate` (optional, map): Substate map.
       - `amount` (optional, map): Amount map.
@@ -758,6 +929,17 @@ defmodule Radixir.Core do
       - `metadata` (optional, map): Metadata map.
   """
   def build_operation(type, entity_identifier, options \\ []) do
+    substate = Keyword.get(options, :substate, %{})
+    amount = Keyword.get(options, :amount, %{})
+    data = Keyword.get(options, :data, %{})
+    metadata = Keyword.get(options, :metadata, %{})
+
+    type
+    |> Map.merge(entity_identifier)
+    |> Map.merge(substate)
+    |> Map.merge(amount)
+    |> Map.merge(data)
+    |> Map.merge(metadata)
   end
 
   @doc """
