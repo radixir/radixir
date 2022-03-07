@@ -36,6 +36,9 @@ defmodule Radixir.Core do
   @type operation_groups :: list
   @type substate_operation :: String.t()
   @type substate_identifier :: String.t()
+  @type granularity :: integer
+  @type is_mutable :: boolean
+  @type registered :: boolean
 
   @doc """
   Gets network configuration.
@@ -620,6 +623,112 @@ defmodule Radixir.Core do
     |> Request.BuildTransaction.Operation.data(action: action)
     |> Request.BuildTransaction.Operation.DataObject.EpochData.type()
     |> Request.BuildTransaction.Operation.DataObject.EpochData.epoch(epoch: epoch)
+    |> Util.stitch()
+  end
+
+  @doc """
+  Builds data map in operation where data type is TokenData.
+
+  ## Parameters
+    - `action`: Action - can be "CREATE" or "DELETE".
+    - `granularity`: Granularity
+    - `is_mutable`: If the token is mutable.
+    - `options`: Keyword list that contains
+      - `address` (optional, string): Owner address
+      - `sub_entity_address` (optional, string): Sub entity address.
+      - `validator_address` (optional, string): Validator address.
+      - `epoch_unlock` (optional, integer): Epoch unlock.
+  """
+  @spec build_operation_data_token_data(action, granularity, is_mutable, options) :: map
+  def build_operation_data_token_data(action, granularity, is_mutable, options \\ []) do
+    owner_address = Keyword.take(options, [:address])
+
+    sub_entity = Keyword.take(options, [:sub_entity_address, :validator_address, :epoch_unlock])
+
+    []
+    |> Request.BuildTransaction.Operation.data(action: action)
+    |> Request.BuildTransaction.Operation.DataObject.TokenData.type()
+    |> Request.BuildTransaction.Operation.DataObject.TokenData.granularity(
+      granularity: granularity
+    )
+    |> Request.BuildTransaction.Operation.DataObject.TokenData.is_mutable(is_mutable: is_mutable)
+    |> Util.maybe_create_stitch_plan(
+      owner_address,
+      &Request.BuildTransaction.Operation.DataObject.TokenData.owner/2
+    )
+    |> Util.maybe_create_stitch_plan(
+      sub_entity,
+      &Request.BuildTransaction.Operation.DataObject.TokenData.sub_entity/2
+    )
+    |> Util.stitch()
+  end
+
+  @doc """
+  Builds data map in operation where data type is TokenMetaData.
+
+  ## Parameters
+    - `action`: Action - can be "CREATE" or "DELETE".
+    - `symbol`: Token symbol
+    - `options`: Keyword list that contains
+      - `name` (optional, string): Token name.
+      - `description` (optional, string): Token description.
+      - `url` (optional, string): Token url.
+      - `icon_url` (optional, string): Token icon_url.
+  """
+  @spec build_operation_data_token_metadata(action, symbol, options) :: map
+  def build_operation_data_token_metadata(action, symbol, options \\ []) do
+    name = Keyword.take(options, [:name])
+    description = Keyword.take(options, [:description])
+    url = Keyword.take(options, [:url])
+    icon_url = Keyword.take(options, [:icon_url])
+
+    []
+    |> Request.BuildTransaction.Operation.data(action: action)
+    |> Request.BuildTransaction.Operation.DataObject.TokenMetaData.type()
+    |> Request.BuildTransaction.Operation.DataObject.TokenMetaData.symbol(symbol: symbol)
+    |> Util.maybe_create_stitch_plan(
+      name,
+      &Request.BuildTransaction.Operation.DataObject.TokenMetaData.name/2
+    )
+    |> Util.maybe_create_stitch_plan(
+      description,
+      &Request.BuildTransaction.Operation.DataObject.TokenMetaData.description/2
+    )
+    |> Util.maybe_create_stitch_plan(
+      url,
+      &Request.BuildTransaction.Operation.DataObject.TokenMetaData.url/2
+    )
+    |> Util.maybe_create_stitch_plan(
+      icon_url,
+      &Request.BuildTransaction.Operation.DataObject.TokenMetaData.icon_url/2
+    )
+    |> Util.stitch()
+  end
+
+  @doc """
+  Builds data map in operation where data type is TokenMetaData.
+
+  ## Parameters
+    - `action`: Action - can be "CREATE" or "DELETE".
+    - `symbol`: Token symbol
+    - `options`: Keyword list that contains
+      - `epoch` (options, integer): Epoch.
+
+  """
+  @spec build_operation_data_prepared_validator_registered(action, registered, options) :: map
+  def build_operation_data_prepared_validator_registered(action, registered, options \\ []) do
+    epoch = Keyword.take(options, [:epoch])
+
+    []
+    |> Request.BuildTransaction.Operation.data(action: action)
+    |> Request.BuildTransaction.Operation.DataObject.PreparedValidatorRegistered.type()
+    |> Request.BuildTransaction.Operation.DataObject.PreparedValidatorRegistered.registered(
+      registered: registered
+    )
+    |> Util.maybe_create_stitch_plan(
+      epoch,
+      &Request.BuildTransaction.Operation.DataObject.PreparedValidatorRegistered.epoch/2
+    )
     |> Util.stitch()
   end
 
