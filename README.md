@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://github.com/radixir/radixir">
-    <img alt="radixir" src="https://raw.githubusercontent.com/radixir/radixir/develop/assets/logo.png" width="435">
+    <img alt="radixir" src="https://raw.githubusercontent.com/radixir/radixir/develop/assets/logo_small.png" width="435">
   </a>
 </p>
 
