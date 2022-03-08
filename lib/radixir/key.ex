@@ -4,6 +4,7 @@ defmodule Radixir.Key do
   """
 
   alias BlockKeys.Encoding
+  alias Radixir.Bech32
   alias Radixir.Util
 
   @type private_key :: String.t()

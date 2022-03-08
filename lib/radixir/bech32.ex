@@ -1,4 +1,4 @@
-defmodule Bech32 do
+defmodule Radixir.Bech32 do
   @moduledoc false
   # @moduledoc """
   # This is an implementation of BIP-0173

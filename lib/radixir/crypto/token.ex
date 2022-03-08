@@ -1,7 +1,7 @@
-defmodule Crypto.Token do
+defmodule Radixir.Crypto.Token do
   @moduledoc false
   # @moduledoc """
-  # Use `Crypto.Token` to create unforgeable HMAC tokens that expire after a TTL.
+  # Use `Radixir.Crypto.Token` to create unforgeable HMAC tokens that expire after a TTL.
 
   # Tokens created with this module have the following properties:
 
@@ -17,10 +17,10 @@ defmodule Crypto.Token do
 
   #     iex> payload = %{"user_id" => 12345}
   #     iex> encoded_payload = Poison.encode!(payload)
-  #     iex> {:ok, secret} = Crypto.generate_aes_key(:aes_256, :bytes)
-  #     iex> {:ok, token} = Crypto.Token.create(encoded_payload, secret)
+  #     iex> {:ok, secret} = Radixir.Crypto.generate_aes_key(:aes_256, :bytes)
+  #     iex> {:ok, token} = Radixir.Crypto.Token.create(encoded_payload, secret)
   #     iex> ttl = (15 * 60)  # 15 minute TTL (in seconds)
-  #     iex> {:ok, verified_payload} = Crypto.Token.verify(token, secret, ttl)
+  #     iex> {:ok, verified_payload} = Radixir.Crypto.Token.verify(token, secret, ttl)
   #     iex> decoded_verified_payload = Poison.decode!(verified_payload)
   #     iex> assert(decoded_verified_payload == payload)
   #     iex> Map.get(decoded_verified_payload, "user_id")
@@ -35,7 +35,7 @@ defmodule Crypto.Token do
   # - store the secret on a given record (e.g. user record) if using a unique secret for each user
 
   # """
-  alias Crypto.HMAC
+  alias Radixir.Crypto.HMAC
   require Logger
 
   # type specs
@@ -55,9 +55,9 @@ defmodule Crypto.Token do
   #### Examples
 
       iex> payload = "my binary payload"
-      iex> {:ok, secret} = Crypto.generate_aes_key(:aes_256, :bytes)
-      iex> {:ok, token} = Crypto.Token.create(payload, secret)
-      iex> Crypto.Token.is_token?(token)
+      iex> {:ok, secret} = Radixir.Crypto.generate_aes_key(:aes_256, :bytes)
+      iex> {:ok, token} = Radixir.Crypto.Token.create(payload, secret)
+      iex> Radixir.Crypto.Token.is_token?(token)
       true
 
   """
@@ -65,7 +65,7 @@ defmodule Crypto.Token do
   def create(payload, secret, opts \\ []) do
     sig_dt = Keyword.get(opts, :date_time, :calendar.universal_time())
     sig_ts = dt_to_ts(sig_dt)
-    {:ok, iv} = Crypto.rand_bytes(16)
+    {:ok, iv} = Radixir.Crypto.rand_bytes(16)
 
     case HMAC.hmac([iv, "#{sig_ts}", payload], secret) do
       {:ok, mac} ->
@@ -94,12 +94,12 @@ defmodule Crypto.Token do
   #### Examples
 
       iex> payload = "my binary payload"
-      iex> {:ok, secret} = Crypto.generate_aes_key(:aes_256, :bytes)
-      iex> {:ok, token} = Crypto.Token.create(payload, secret)
-      iex> Crypto.Token.is_token?(token)
+      iex> {:ok, secret} = Radixir.Crypto.generate_aes_key(:aes_256, :bytes)
+      iex> {:ok, token} = Radixir.Crypto.Token.create(payload, secret)
+      iex> Radixir.Crypto.Token.is_token?(token)
       true
       iex> ttl = (15 * 60)  # 15 minute TTL (in seconds)
-      iex> {:ok, verified_payload} = Crypto.Token.verify(token, secret, ttl)
+      iex> {:ok, verified_payload} = Radixir.Crypto.Token.verify(token, secret, ttl)
       iex> verified_payload == payload
       true
 
@@ -156,15 +156,15 @@ defmodule Crypto.Token do
   #### Examples
 
       iex> payload = "my binary payload"
-      iex> {:ok, secret} = Crypto.generate_aes_key(:aes_256, :bytes)
-      iex> {:ok, token} = Crypto.Token.create(payload, secret)
-      iex> Crypto.Token.is_token?(token)
+      iex> {:ok, secret} = Radixir.Crypto.generate_aes_key(:aes_256, :bytes)
+      iex> {:ok, token} = Radixir.Crypto.Token.create(payload, secret)
+      iex> Radixir.Crypto.Token.is_token?(token)
       true
       iex> ttl = (15 * 60)  # 15 minute TTL (in seconds)
-      iex> {:ok, {update_token, update_payload}} = Crypto.Token.update(token, secret, ttl)
+      iex> {:ok, {update_token, update_payload}} = Radixir.Crypto.Token.update(token, secret, ttl)
       iex> update_payload == payload
       true
-      iex> {:ok, verified_payload} = Crypto.Token.verify(update_token, secret, ttl)
+      iex> {:ok, verified_payload} = Radixir.Crypto.Token.verify(update_token, secret, ttl)
       iex> verified_payload == payload
       true
 
@@ -184,9 +184,9 @@ defmodule Crypto.Token do
   #### Examples
 
       iex> payload = "my binary payload"
-      iex> {:ok, secret} = Crypto.generate_aes_key(:aes_256, :bytes)
-      iex> {:ok, token} = Crypto.Token.create(payload, secret)
-      iex> Crypto.Token.is_token?(token)
+      iex> {:ok, secret} = Radixir.Crypto.generate_aes_key(:aes_256, :bytes)
+      iex> {:ok, token} = Radixir.Crypto.Token.create(payload, secret)
+      iex> Radixir.Crypto.Token.is_token?(token)
       true
 
   """

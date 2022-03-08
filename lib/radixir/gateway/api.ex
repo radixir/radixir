@@ -3,6 +3,7 @@ defmodule Radixir.Gateway.API do
   Submits requests to Gateway API.
   """
   alias Radixir.Util
+  alias Radixir.HTTP
 
   @type body :: map
   @type options :: keyword()

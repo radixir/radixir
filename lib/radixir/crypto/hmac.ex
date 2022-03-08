@@ -1,4 +1,4 @@
-defmodule Crypto.HMAC do
+defmodule Radixir.Crypto.HMAC do
   @moduledoc false
   def hmac(data, key) do
     hmac(data, key, type: :sha256)

@@ -3,6 +3,7 @@ defmodule Radixir.Core.API do
   Submits requests to Core API.
   """
   alias Radixir.Util
+  alias Radixir.HTTP
 
   @type body :: map
   @type options :: keyword()

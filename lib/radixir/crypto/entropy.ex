@@ -1,4 +1,4 @@
-defmodule Crypto.Entropy do
+defmodule Radixir.Crypto.Entropy do
   @moduledoc false
   @doc """
   Compute the Shannon entropy of a binary value.

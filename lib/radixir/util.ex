@@ -3,6 +3,7 @@ defmodule Radixir.Util do
   Utility functions that do various things.
   """
   alias Radixir.Config
+  alias Radixir.Crypto
   alias Radixir.Key
 
   @type private_key :: String.t()

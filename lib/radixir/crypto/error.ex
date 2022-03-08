@@ -1,8 +1,8 @@
-defmodule Crypto.Error do
+defmodule Radixir.Crypto.Error do
   @moduledoc false
   defexception reason: nil
 
   def message(exception) do
-    "Crypto.Error: #{exception.reason}"
+    "Radixir.Crypto.Error: #{exception.reason}"
   end
 end

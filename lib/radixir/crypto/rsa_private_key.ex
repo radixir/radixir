@@ -1,4 +1,4 @@
-defmodule Crypto.PublicKey.RSAPrivateKey do
+defmodule Radixir.Crypto.PublicKey.RSAPrivateKey do
   @moduledoc false
   defstruct version: nil,
             public_modulus: nil,
@@ -11,7 +11,7 @@ defmodule Crypto.PublicKey.RSAPrivateKey do
             ctr_coefficient: nil,
             other_prime_infos: nil
 
-  @type t :: %Crypto.PublicKey.RSAPrivateKey{
+  @type t :: %Radixir.Crypto.PublicKey.RSAPrivateKey{
           version: atom,
           public_modulus: integer,
           public_exponent: integer,
@@ -25,7 +25,7 @@ defmodule Crypto.PublicKey.RSAPrivateKey do
         }
 
   def from_sequence(rsa_key_seq) do
-    %Crypto.PublicKey.RSAPrivateKey{}
+    %Radixir.Crypto.PublicKey.RSAPrivateKey{}
     |> struct(
       version: maybe_convert_version_to_atom(elem(rsa_key_seq, 1)),
       public_modulus: elem(rsa_key_seq, 2),
@@ -59,7 +59,7 @@ defmodule Crypto.PublicKey.RSAPrivateKey do
          }}
 
       _ ->
-        {:error, "invalid Crypto.PublicKey.RSAPrivateKey: #{inspect(rsa_private_key)}"}
+        {:error, "invalid Radixir.Crypto.PublicKey.RSAPrivateKey: #{inspect(rsa_private_key)}"}
     end
   end
 
@@ -77,7 +77,7 @@ defmodule Crypto.PublicKey.RSAPrivateKey do
   end
 
   def get_public(rsa_private_key = %__MODULE__{}) do
-    %Crypto.RSAPublicKey{
+    %Radixir.Crypto.RSAPublicKey{
       public_modulus: rsa_private_key.public_modulus,
       public_exponent: rsa_private_key.public_exponent
     }
@@ -85,7 +85,7 @@ defmodule Crypto.PublicKey.RSAPrivateKey do
 
   def get_fingerprint(rsa_private_key = %__MODULE__{}, opts \\ []) do
     get_public(rsa_private_key)
-    |> Crypto.RSAPublicKey.get_fingerprint(opts)
+    |> Radixir.Crypto.RSAPublicKey.get_fingerprint(opts)
   end
 
   # Protocols
@@ -98,7 +98,7 @@ defmodule Crypto.PublicKey.RSAPrivateKey do
 
     example:
     ```
-    #Crypto.PublicKey.RSAPrivateKey<
+    #Radixir.Crypto.PublicKey.RSAPrivateKey<
      fingerprint_sha256=7a:40:1c:b9:4b:b8:a5:bb:6b:98:b6:1b:8b:7a:24:8d:45:9b:e5:54
       17:7e:66:26:7e:95:11:9d:39:14:7b:b2>
     ```
@@ -107,7 +107,7 @@ defmodule Crypto.PublicKey.RSAPrivateKey do
       fp_opts = [format: :sha256, colons: true]
 
       fp_sha256_parts_doc =
-        Crypto.PublicKey.RSAPrivateKey.get_fingerprint(data, fp_opts)
+        Radixir.Crypto.PublicKey.RSAPrivateKey.get_fingerprint(data, fp_opts)
         |> String.split(":")
         |> fold_doc(fn doc, acc -> glue(doc, ":", acc) end)
 
@@ -116,7 +116,7 @@ defmodule Crypto.PublicKey.RSAPrivateKey do
         |> group()
         |> nest(2)
 
-      glue("#Crypto.PublicKey.RSAPrivateKey<", "", fp_sha256_doc)
+      glue("#Radixir.Crypto.PublicKey.RSAPrivateKey<", "", fp_sha256_doc)
       |> concat(">")
       |> nest(2)
     end

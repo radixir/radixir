@@ -1,4 +1,4 @@
-defmodule HTTP do
+defmodule Radixir.HTTP do
   @moduledoc false
   def post(url, path, body, options \\ []) do
     Req.post!(

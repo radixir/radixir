@@ -1,4 +1,4 @@
-defmodule Crypto.Hash do
+defmodule Radixir.Crypto.Hash do
   @moduledoc false
   def sha256(data) do
     try do

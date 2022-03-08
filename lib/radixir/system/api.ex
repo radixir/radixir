@@ -3,6 +3,7 @@ defmodule Radixir.System.API do
   Submits requests to System API.
   """
   alias Radixir.Util
+  alias Radixir.HTTP
 
   @type options :: keyword()
   @type error_message :: String.t()

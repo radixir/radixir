@@ -1,12 +1,12 @@
-defmodule Crypto do
+defmodule Radixir.Crypto do
   @moduledoc false
   # @moduledoc """
-  # The Crypto module exposes a subset of functionality from the Erlang `crypto`
+  # The Radixir.Crypto module exposes a subset of functionality from the Erlang `crypto`
   # module with the goal of making it easier to include strong cryptography in your
   # Elixir applications.
 
   # This module provides functions for symmetric-key cryptographic operations using
-  # AES in GCM and CBC mode. The Crypto module attempts to reduce complexity by providing
+  # AES in GCM and CBC mode. The Radixir.Crypto module attempts to reduce complexity by providing
   # some sane default values for common operations.
   # """
   @epoch :calendar.datetime_to_gregorian_seconds({{1970, 1, 1}, {0, 0, 0}})
@@ -15,7 +15,7 @@ defmodule Crypto do
   @bitlength_error "IV must be exactly 128 bits and key must be exactly 128, 192 or 256 bits"
   defmacro __using__(_) do
     quote do
-      import Crypto
+      import Radixir.Crypto
     end
   end
 
@@ -48,15 +48,15 @@ defmodule Crypto do
 
   ## Examples
 
-      iex> rand_string = Crypto.rand_chars(24)
+      iex> rand_string = Radixir.Crypto.rand_chars(24)
       iex> assert(String.length(rand_string) == 24)
       true
 
-      iex> rand_string = Crypto.rand_chars(32)
+      iex> rand_string = Radixir.Crypto.rand_chars(32)
       iex> assert(String.length(rand_string) == 32)
       true
 
-      iex> rand_string = Crypto.rand_chars(44)
+      iex> rand_string = Radixir.Crypto.rand_chars(44)
       iex> assert(String.length(rand_string) == 44)
       true
 
@@ -89,31 +89,31 @@ defmodule Crypto do
 
   ## Examples
 
-      iex> rand_int = Crypto.rand_int(2, 20)
+      iex> rand_int = Radixir.Crypto.rand_int(2, 20)
       iex> assert(rand_int >= 2)
       true
       iex> assert(rand_int <= 20)
       true
 
-      iex> rand_int = Crypto.rand_int(23, 99)
+      iex> rand_int = Radixir.Crypto.rand_int(23, 99)
       iex> assert(rand_int >= 23)
       true
       iex> assert(rand_int <= 99)
       true
 
-      iex> rand_int = Crypto.rand_int(212, 736)
+      iex> rand_int = Radixir.Crypto.rand_int(212, 736)
       iex> assert(rand_int >= 212)
       true
       iex> assert(rand_int <= 736)
       true
 
-      iex> rand_int = Crypto.rand_int(-100, -1)
+      iex> rand_int = Radixir.Crypto.rand_int(-100, -1)
       iex> assert(rand_int >= -100)
       true
       iex> assert(rand_int <= -1)
       true
 
-      iex> rand_int = Crypto.rand_int(-100, 100)
+      iex> rand_int = Radixir.Crypto.rand_int(-100, 100)
       iex> assert(rand_int >= -100)
       true
       iex> assert(rand_int <= 100)
@@ -134,19 +134,19 @@ defmodule Crypto do
 
   ## Examples
 
-      iex> {:ok, rand_bytes} = Crypto.rand_bytes(16)
+      iex> {:ok, rand_bytes} = Radixir.Crypto.rand_bytes(16)
       iex> assert(byte_size(rand_bytes) == 16)
       true
       iex> assert(bit_size(rand_bytes) == 128)
       true
 
-      iex> {:ok, rand_bytes} = Crypto.rand_bytes(24)
+      iex> {:ok, rand_bytes} = Radixir.Crypto.rand_bytes(24)
       iex> assert(byte_size(rand_bytes) == 24)
       true
       iex> assert(bit_size(rand_bytes) == 192)
       true
 
-      iex> {:ok, rand_bytes} = Crypto.rand_bytes(32)
+      iex> {:ok, rand_bytes} = Radixir.Crypto.rand_bytes(32)
       iex> assert(byte_size(rand_bytes) == 32)
       true
       iex> assert(bit_size(rand_bytes) == 256)
@@ -157,7 +157,7 @@ defmodule Crypto do
   def rand_bytes(length) do
     {:ok, :crypto.strong_rand_bytes(length)}
   catch
-    kind, error -> Crypto.PublicKey.normalize_error(__STACKTRACE__, kind, error)
+    kind, error -> Radixir.Crypto.PublicKey.normalize_error(__STACKTRACE__, kind, error)
   end
 
   @spec rand_bytes!(integer) :: binary
@@ -176,27 +176,27 @@ defmodule Crypto do
 
   ## Examples
 
-      iex> {:ok, key} = Crypto.generate_aes_key(:aes_256, :bytes)
+      iex> {:ok, key} = Radixir.Crypto.generate_aes_key(:aes_256, :bytes)
       iex> assert bit_size(key) == 256
       true
 
-      iex> {:ok, key} = Crypto.generate_aes_key(:aes_256, :base64)
+      iex> {:ok, key} = Radixir.Crypto.generate_aes_key(:aes_256, :base64)
       iex> assert String.length(key) == 44
       true
 
-      iex> {:ok, key} = Crypto.generate_aes_key(:aes_192, :bytes)
+      iex> {:ok, key} = Radixir.Crypto.generate_aes_key(:aes_192, :bytes)
       iex> assert bit_size(key) == 192
       true
 
-      iex> {:ok, key} = Crypto.generate_aes_key(:aes_192, :base64)
+      iex> {:ok, key} = Radixir.Crypto.generate_aes_key(:aes_192, :base64)
       iex> assert String.length(key) == 32
       true
 
-      iex> {:ok, key} = Crypto.generate_aes_key(:aes_128, :bytes)
+      iex> {:ok, key} = Radixir.Crypto.generate_aes_key(:aes_128, :bytes)
       iex> assert bit_size(key) == 128
       true
 
-      iex> {:ok, key} = Crypto.generate_aes_key(:aes_128, :base64)
+      iex> {:ok, key} = Radixir.Crypto.generate_aes_key(:aes_128, :base64)
       iex> assert String.length(key) == 24
       true
 
@@ -231,9 +231,9 @@ defmodule Crypto do
 
       iex> clear_text = "my-clear-text"
       iex> auth_data = "my-auth-data"
-      iex> {:ok, aes_256_key} = Crypto.generate_aes_key(:aes_256, :bytes)
-      iex> {:ok, iv} = Crypto.rand_bytes(16)
-      iex> {:ok, {_ad, payload}} = Crypto.encrypt(aes_256_key, auth_data, iv, clear_text)
+      iex> {:ok, aes_256_key} = Radixir.Crypto.generate_aes_key(:aes_256, :bytes)
+      iex> {:ok, iv} = Radixir.Crypto.rand_bytes(16)
+      iex> {:ok, {_ad, payload}} = Radixir.Crypto.encrypt(aes_256_key, auth_data, iv, clear_text)
       iex> {_iv, cipher_text, cipher_tag} = payload
       iex> assert(is_bitstring(cipher_text))
       true
@@ -261,8 +261,8 @@ defmodule Crypto do
   ## Examples
 
       iex> clear_text = "my-clear-text"
-      iex> {:ok, aes_256_key} = Crypto.generate_aes_key(:aes_256, :bytes)
-      iex> {:ok, {_iv, cipher_text}} = Crypto.encrypt(aes_256_key, clear_text)
+      iex> {:ok, aes_256_key} = Radixir.Crypto.generate_aes_key(:aes_256, :bytes)
+      iex> {:ok, {_iv, cipher_text}} = Radixir.Crypto.encrypt(aes_256_key, clear_text)
       iex> assert(is_bitstring(cipher_text))
       true
 
@@ -290,9 +290,9 @@ defmodule Crypto do
   ## Examples
 
       iex> clear_text = "my-clear-text"
-      iex> {:ok, aes_256_key} = Crypto.generate_aes_key(:aes_256, :bytes)
-      iex> {:ok, init_vec} = Crypto.rand_bytes(16)
-      iex> {:ok, {_iv, cipher_text}} = Crypto.encrypt(aes_256_key, clear_text, %{initialization_vector: init_vec})
+      iex> {:ok, aes_256_key} = Radixir.Crypto.generate_aes_key(:aes_256, :bytes)
+      iex> {:ok, init_vec} = Radixir.Crypto.rand_bytes(16)
+      iex> {:ok, {_iv, cipher_text}} = Radixir.Crypto.encrypt(aes_256_key, clear_text, %{initialization_vector: init_vec})
       iex> assert(is_bitstring(cipher_text))
       true
 
@@ -305,8 +305,8 @@ defmodule Crypto do
 
       iex> clear_text = "my-clear-text"
       iex> auth_data = "my-auth-data"
-      iex> {:ok, aes_256_key} = Crypto.generate_aes_key(:aes_256, :bytes)
-      iex> {:ok, {_ad, payload}} = Crypto.encrypt(aes_256_key, auth_data, clear_text)
+      iex> {:ok, aes_256_key} = Radixir.Crypto.generate_aes_key(:aes_256, :bytes)
+      iex> {:ok, {_ad, payload}} = Radixir.Crypto.encrypt(aes_256_key, auth_data, clear_text)
       iex> {_init_vec, cipher_text, cipher_tag} = payload
       iex> assert(is_bitstring(cipher_text))
       true
@@ -366,10 +366,10 @@ defmodule Crypto do
 
       iex> clear_text = "my-clear-text"
       iex> auth_data = "my-auth-data"
-      iex> {:ok, aes_256_key} = Crypto.generate_aes_key(:aes_256, :bytes)
-      iex> {:ok, {_ad, payload}} = Crypto.encrypt(aes_256_key, auth_data, clear_text)
+      iex> {:ok, aes_256_key} = Radixir.Crypto.generate_aes_key(:aes_256, :bytes)
+      iex> {:ok, {_ad, payload}} = Radixir.Crypto.encrypt(aes_256_key, auth_data, clear_text)
       iex> {init_vec, cipher_text, cipher_tag} = payload
-      iex> {:ok, val} = Crypto.decrypt(aes_256_key, auth_data, init_vec, cipher_text, cipher_tag)
+      iex> {:ok, val} = Radixir.Crypto.decrypt(aes_256_key, auth_data, init_vec, cipher_text, cipher_tag)
       iex> assert(val == clear_text)
       true
 
@@ -390,9 +390,9 @@ defmodule Crypto do
   ## Examples
 
       iex> clear_text = "my-clear-text"
-      iex> {:ok, aes_256_key} = Crypto.generate_aes_key(:aes_256, :bytes)
-      iex> {:ok, {init_vec, cipher_text}} = Crypto.encrypt(aes_256_key, clear_text)
-      iex> {:ok, val} = Crypto.decrypt(aes_256_key, init_vec, cipher_text)
+      iex> {:ok, aes_256_key} = Radixir.Crypto.generate_aes_key(:aes_256, :bytes)
+      iex> {:ok, {init_vec, cipher_text}} = Radixir.Crypto.encrypt(aes_256_key, clear_text)
+      iex> {:ok, val} = Radixir.Crypto.decrypt(aes_256_key, init_vec, cipher_text)
       iex> assert(val == clear_text)
       true
 
@@ -430,9 +430,9 @@ defmodule Crypto do
 
       iex> clear_text = "my-clear-text"
       iex> auth_data = "my-auth-data"
-      iex> {:ok, aes_256_key} = Crypto.generate_aes_key(:aes_256, :bytes)
-      iex> {:ok, {_ad, {init_vec, cipher_text, cipher_tag}}} = Crypto.encrypt(aes_256_key, auth_data, clear_text)
-      iex> {:ok, encoded_payload} = Crypto.encode_payload(init_vec, cipher_text, cipher_tag)
+      iex> {:ok, aes_256_key} = Radixir.Crypto.generate_aes_key(:aes_256, :bytes)
+      iex> {:ok, {_ad, {init_vec, cipher_text, cipher_tag}}} = Radixir.Crypto.encrypt(aes_256_key, auth_data, clear_text)
+      iex> {:ok, encoded_payload} = Radixir.Crypto.encode_payload(init_vec, cipher_text, cipher_tag)
       iex> assert(String.valid?(encoded_payload))
       true
 
@@ -449,12 +449,12 @@ defmodule Crypto do
 
       iex> clear_text = "my-clear-text"
       iex> auth_data = "my-auth-data"
-      iex> {:ok, aes_256_key} = Crypto.generate_aes_key(:aes_256, :bytes)
-      iex> {:ok, {_ad, {init_vec, cipher_text, cipher_tag}}} = Crypto.encrypt(aes_256_key, auth_data, clear_text)
-      iex> {:ok, encoded_payload} = Crypto.encode_payload(init_vec, cipher_text, cipher_tag)
+      iex> {:ok, aes_256_key} = Radixir.Crypto.generate_aes_key(:aes_256, :bytes)
+      iex> {:ok, {_ad, {init_vec, cipher_text, cipher_tag}}} = Radixir.Crypto.encrypt(aes_256_key, auth_data, clear_text)
+      iex> {:ok, encoded_payload} = Radixir.Crypto.encode_payload(init_vec, cipher_text, cipher_tag)
       iex> assert(String.valid?(encoded_payload))
       true
-      iex> {:ok, {d_init_vec, d_cipher_text, d_cipher_tag}} = Crypto.decode_payload(encoded_payload)
+      iex> {:ok, {d_init_vec, d_cipher_text, d_cipher_tag}} = Radixir.Crypto.decode_payload(encoded_payload)
       iex> assert(d_init_vec == init_vec)
       true
       iex> assert(d_cipher_text == cipher_text)
