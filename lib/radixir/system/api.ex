@@ -2,7 +2,6 @@ defmodule Radixir.System.API do
   @moduledoc """
   Submits requests to System API.
   """
-  alias Radixir.HTTP
   alias Radixir.Util
 
   @type options :: keyword()

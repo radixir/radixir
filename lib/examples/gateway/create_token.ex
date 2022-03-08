@@ -1,4 +1,5 @@
 defmodule Examples.Gateway.CreateToken do
+  @moduledoc false
   def go() do
     options = [api: [headers: ["X-Radixdlt-Target-Gw-Api": "1.0.2"]]]
 

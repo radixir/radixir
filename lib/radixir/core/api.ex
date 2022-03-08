@@ -2,7 +2,6 @@ defmodule Radixir.Core.API do
   @moduledoc """
   Submits requests to Core API.
   """
-  alias Radixir.HTTP
   alias Radixir.Util
 
   @type body :: map

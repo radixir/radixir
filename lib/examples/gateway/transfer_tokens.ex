@@ -1,4 +1,5 @@
 defmodule Examples.Gateway.TransferTokens do
+  @moduledoc false
   def go() do
     {:ok, %{testnet: %{account_address: account_address}, private_key: private_key}} =
       Radixir.Key.from_mnemonic()
