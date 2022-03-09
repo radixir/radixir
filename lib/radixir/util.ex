@@ -485,21 +485,17 @@ defmodule Radixir.Util do
 
     options = Keyword.delete(options, :url)
 
-    if url do
-      {:ok, url, options}
-    else
-      {:error, "no url available"}
-    end
+    {:ok, url, options}
   end
 
   @doc false
   def get_mnemonic_from_options(options) do
-    case Keyword.get(options, :mnemonic, Config.mnemonic()) do
+    case Keyword.get(options, :mnemonic) do
       nil ->
-        {:error, "no mnemonic available"}
+        Config.mnemonic()
 
-      mnemonic ->
-        {:ok, mnemonic}
+      result ->
+        {:ok, result}
     end
   end
 

@@ -12,42 +12,26 @@ defmodule Radixir.Config do
   @doc """
   Fetches gateway api url.
   """
-  @spec gateway_api_url() :: url | nil
-  def gateway_api_url do
-    :radixir
-    |> Application.get_env(__MODULE__)
-    |> Keyword.get(:gateway_api_url)
-  end
+  @spec gateway_api_url() :: {:ok, url} | {:error, error_message}
+  def gateway_api_url, do: get_env(:gateway_api_url)
 
   @doc """
   Fetches core api url.
   """
-  @spec core_api_url() :: url | nil
-  def core_api_url do
-    :radixir
-    |> Application.get_env(__MODULE__)
-    |> Keyword.get(:core_api_url)
-  end
+  @spec core_api_url() :: {:ok, url} | {:error, error_message}
+  def core_api_url, do: get_env(:core_api_url)
 
   @doc """
   Fetches system api url.
   """
-  @spec system_api_url() :: url | nil
-  def system_api_url do
-    :radixir
-    |> Application.get_env(__MODULE__)
-    |> Keyword.get(:system_api_url)
-  end
+  @spec system_api_url() :: {:ok, url} | {:error, error_message}
+  def system_api_url, do: get_env(:system_api_url)
 
   @doc """
   Fetches mnemonic.
   """
-  @spec mnemonic() :: url | nil
-  def mnemonic do
-    :radixir
-    |> Application.get_env(__MODULE__)
-    |> Keyword.get(:mnemonic)
-  end
+  @spec mnemonic() :: {:ok, mnemonic} | {:error, error_message}
+  def mnemonic, do: get_env(:mnemonic)
 
   @doc """
   Fetches usernames.
@@ -57,10 +41,9 @@ defmodule Radixir.Config do
   """
   @spec usernames() :: {:ok, list(username)} | {:error, error_message}
   def usernames() do
-    :radixir
-    |> Application.get_env(__MODULE__)
-    |> Keyword.get(:usernames)
-    |> process_usernames_passwords("no usernames")
+    with {:ok, usernames} <- get_env(:usernames) do
+      process_usernames_passwords(usernames, "no usernames")
+    end
   end
 
   @doc """
@@ -71,10 +54,9 @@ defmodule Radixir.Config do
   """
   @spec passwords() :: {:ok, list(password)} | {:error, error_message}
   def passwords() do
-    :radixir
-    |> Application.get_env(__MODULE__)
-    |> Keyword.get(:passwords)
-    |> process_usernames_passwords("no passwords")
+    with {:ok, passwords} <- get_env(:passwords) do
+      process_usernames_passwords(passwords, "no passwords")
+    end
   end
 
   @doc """
@@ -82,12 +64,12 @@ defmodule Radixir.Config do
   """
   @spec testnet?() :: boolean()
   def testnet? do
-    :radixir
-    |> Application.get_env(__MODULE__)
-    |> Keyword.get(:testnet)
-    |> case do
-      "true" -> true
-      _ -> false
+    with {:ok, testnet} <- get_env(:testnet) do
+      if testnet == "true" do
+        true
+      else
+        false
+      end
     end
   end
 
@@ -145,8 +127,6 @@ defmodule Radixir.Config do
     end
   end
 
-  defp process_usernames_passwords(nil, error_message), do: {:error, error_message}
-
   defp process_usernames_passwords(content, error_message) do
     String.split(content, ", ")
     |> case do
@@ -171,6 +151,29 @@ defmodule Radixir.Config do
       {:ok, index}
     else
       {:error, "invalid index for accessing usernames and passwords"}
+    end
+  end
+
+  defp get_app_env() do
+    :radixir
+    |> Application.get_env(__MODULE__)
+    |> handle_app_env()
+  end
+
+  defp handle_app_env(nil), do: {:error, "no configuration parameters found"}
+
+  defp handle_app_env(value), do: {:ok, value}
+
+  defp get_env_value(envs, key) do
+    case Keyword.get(envs, key) do
+      nil -> {:error, "#{key} not found in configuration"}
+      result -> {:ok, result}
+    end
+  end
+
+  defp get_env(key) do
+    with {:ok, envs} <- get_app_env() do
+      get_env_value(envs, key)
     end
   end
 end

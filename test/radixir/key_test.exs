@@ -112,8 +112,22 @@ defmodule Radixir.KeyTest do
     end
 
     test "fails to derive a keypair and addresses because no mnemonic was found" do
-      System.delete_env("MNEMONIC")
-      assert {:error, "no mnemonic available"} = Radixir.Key.from_mnemonic()
+      assert {:error, "mnemonic not found in configuration"} = Radixir.Key.from_mnemonic()
+    end
+
+    test "fails to derive a keypair and addresses because no configuration was set" do
+      Application.delete_env(:radixir, Radixir.Config)
+      assert {:error, "no configuration parameters found"} = Radixir.Key.from_mnemonic()
+    end
+
+    test "fails to derive a keypair and addresses because non BIP39 mnemonic was given" do
+      assert_raise ArgumentError, fn -> Radixir.Key.from_mnemonic(mnemonic: "carl tod") end
+    end
+
+    test "fails to derive a keypair and addresses because invalid mnemonic was given" do
+      assert_raise FunctionClauseError, fn ->
+        Radixir.Key.from_mnemonic(mnemonic: "nurse grid sister")
+      end
     end
   end
 
