@@ -55,13 +55,20 @@ defmodule Radixir.Core do
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-        - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
+        - `auth_index` (optional, integer): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
         - `username`: (optional, string): `username` to be used for endpoint authentication.
         - `password`: (optional, string): `password` to be used for endpoint authentication.
 
   ## Note
     - Either `username` and `password` or `auth_index` must be provided.
     - If all three are provided `auth_index` is used.
+
+  If the following usernames and passwords are exported as follows:
+  ```
+  export USERNAMES='admin, superadmin, metrics'
+  export PASSWORDS='funny cats very Jack 21!, harry Kack love h39! LW, monitor Kat darrel 23 Jack!'
+  ```
+  then an `auth_index` of 0 would result in `admin` being used as the username and `funny cats very Jack 21!` being used as the password.
   """
   @spec get_network_configuration(options) :: {:ok, map} | {:error, map | error_message}
   def get_network_configuration(options \\ []) do
@@ -76,7 +83,7 @@ defmodule Radixir.Core do
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-        - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
+        - `auth_index` (optional, integer): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
         - `username`: (optional, string): `username` to be used for endpoint authentication.
         - `password`: (optional, string): `password` to be used for endpoint authentication.
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
@@ -84,6 +91,13 @@ defmodule Radixir.Core do
   ## Note
     - Either `username` and `password` or `auth_index` must be provided.
     - If all three are provided `auth_index` is used.
+
+  If the following usernames and passwords are exported as follows:
+  ```
+  export USERNAMES='admin, superadmin, metrics'
+  export PASSWORDS='funny cats very Jack 21!, harry Kack love h39! LW, monitor Kat darrel 23 Jack!'
+  ```
+  then an `auth_index` of 0 would result in `admin` being used as the username and `funny cats very Jack 21!` being used as the password.
   """
   @spec get_network_status(options) :: {:ok, map} | {:error, map | error_message}
   def get_network_status(options \\ []) do
@@ -106,7 +120,7 @@ defmodule Radixir.Core do
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-        - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
+        - `auth_index` (optional, integer): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
         - `username`: (optional, string): `username` to be used for endpoint authentication.
         - `password`: (optional, string): `password` to be used for endpoint authentication.
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
@@ -117,6 +131,13 @@ defmodule Radixir.Core do
   ## Note
     - Either `username` and `password` or `auth_index` must be provided.
     - If all three are provided `auth_index` is used.
+
+  If the following usernames and passwords are exported as follows:
+  ```
+  export USERNAMES='admin, superadmin, metrics'
+  export PASSWORDS='funny cats very Jack 21!, harry Kack love h39! LW, monitor Kat darrel 23 Jack!'
+  ```
+  then an `auth_index` of 0 would result in `admin` being used as the username and `funny cats very Jack 21!` being used as the password.
   """
   @spec get_entity_information(address, options) :: {:ok, map} | {:error, map | error_message}
   def get_entity_information(address, options \\ []) do
@@ -141,7 +162,7 @@ defmodule Radixir.Core do
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-        - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
+        - `auth_index` (optional, integer): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
         - `username`: (optional, string): `username` to be used for endpoint authentication.
         - `password`: (optional, string): `password` to be used for endpoint authentication.
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
@@ -149,6 +170,13 @@ defmodule Radixir.Core do
   ## Note
     - Either `username` and `password` or `auth_index` must be provided.
     - If all three are provided `auth_index` is used.
+
+  If the following usernames and passwords are exported as follows:
+  ```
+  export USERNAMES='admin, superadmin, metrics'
+  export PASSWORDS='funny cats very Jack 21!, harry Kack love h39! LW, monitor Kat darrel 23 Jack!'
+  ```
+  then an `auth_index` of 0 would result in `admin` being used as the username and `funny cats very Jack 21!` being used as the password.
   """
   @spec get_mempool_transactions(options) :: {:ok, map} | {:error, map | error_message}
   def get_mempool_transactions(options \\ []) do
@@ -171,7 +199,7 @@ defmodule Radixir.Core do
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-        - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
+        - `auth_index` (optional, integer): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
         - `username`: (optional, string): `username` to be used for endpoint authentication.
         - `password`: (optional, string): `password` to be used for endpoint authentication.
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
@@ -179,6 +207,13 @@ defmodule Radixir.Core do
   ## Note
     - Either `username` and `password` or `auth_index` must be provided.
     - If all three are provided `auth_index` is used.
+
+  If the following usernames and passwords are exported as follows:
+  ```
+  export USERNAMES='admin, superadmin, metrics'
+  export PASSWORDS='funny cats very Jack 21!, harry Kack love h39! LW, monitor Kat darrel 23 Jack!'
+  ```
+  then an `auth_index` of 0 would result in `admin` being used as the username and `funny cats very Jack 21!` being used as the password.
   """
   @spec get_mempool_transaction(transaction_hash, options) ::
           {:ok, map} | {:error, map | error_message}
@@ -203,7 +238,7 @@ defmodule Radixir.Core do
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-        - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
+        - `auth_index` (optional, integer): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
         - `username`: (optional, string): `username` to be used for endpoint authentication.
         - `password`: (optional, string): `password` to be used for endpoint authentication.
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
@@ -213,6 +248,13 @@ defmodule Radixir.Core do
   ## Note
     - Either `username` and `password` or `auth_index` must be provided.
     - If all three are provided `auth_index` is used.
+
+  If the following usernames and passwords are exported as follows:
+  ```
+  export USERNAMES='admin, superadmin, metrics'
+  export PASSWORDS='funny cats very Jack 21!, harry Kack love h39! LW, monitor Kat darrel 23 Jack!'
+  ```
+  then an `auth_index` of 0 would result in `admin` being used as the username and `funny cats very Jack 21!` being used as the password.
   """
   @spec get_committed_transactions(state_version, options) ::
           {:ok, map} | {:error, map | error_message}
@@ -242,7 +284,7 @@ defmodule Radixir.Core do
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-        - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
+        - `auth_index` (optional, integer): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
         - `username`: (optional, string): `username` to be used for endpoint authentication.
         - `password`: (optional, string): `password` to be used for endpoint authentication.
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
@@ -250,6 +292,13 @@ defmodule Radixir.Core do
   ## Note
     - Either `username` and `password` or `auth_index` must be provided.
     - If all three are provided `auth_index` is used.
+
+  If the following usernames and passwords are exported as follows:
+  ```
+  export USERNAMES='admin, superadmin, metrics'
+  export PASSWORDS='funny cats very Jack 21!, harry Kack love h39! LW, monitor Kat darrel 23 Jack!'
+  ```
+  then an `auth_index` of 0 would result in `admin` being used as the username and `funny cats very Jack 21!` being used as the password.
   """
   @spec derive_account_entity_identifier(public_key, options) ::
           {:ok, map} | {:error, map | error_message}
@@ -275,7 +324,7 @@ defmodule Radixir.Core do
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-        - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
+        - `auth_index` (optional, integer): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
         - `username`: (optional, string): `username` to be used for endpoint authentication.
         - `password`: (optional, string): `password` to be used for endpoint authentication.
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
@@ -283,6 +332,13 @@ defmodule Radixir.Core do
   ## Note
     - Either `username` and `password` or `auth_index` must be provided.
     - If all three are provided `auth_index` is used.
+
+  If the following usernames and passwords are exported as follows:
+  ```
+  export USERNAMES='admin, superadmin, metrics'
+  export PASSWORDS='funny cats very Jack 21!, harry Kack love h39! LW, monitor Kat darrel 23 Jack!'
+  ```
+  then an `auth_index` of 0 would result in `admin` being used as the username and `funny cats very Jack 21!` being used as the password.
   """
   @spec derive_validator_entity_identifier(public_key, options) ::
           {:ok, map} | {:error, map | error_message}
@@ -308,7 +364,7 @@ defmodule Radixir.Core do
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-        - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
+        - `auth_index` (optional, integer): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
         - `username`: (optional, string): `username` to be used for endpoint authentication.
         - `password`: (optional, string): `password` to be used for endpoint authentication.
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
@@ -316,6 +372,13 @@ defmodule Radixir.Core do
   ## Note
     - Either `username` and `password` or `auth_index` must be provided.
     - If all three are provided `auth_index` is used.
+
+  If the following usernames and passwords are exported as follows:
+  ```
+  export USERNAMES='admin, superadmin, metrics'
+  export PASSWORDS='funny cats very Jack 21!, harry Kack love h39! LW, monitor Kat darrel 23 Jack!'
+  ```
+  then an `auth_index` of 0 would result in `admin` being used as the username and `funny cats very Jack 21!` being used as the password.
   """
   @spec derive_token_entity_identifier(public_key, symbol, options) ::
           {:ok, map} | {:error, map | error_message}
@@ -343,7 +406,7 @@ defmodule Radixir.Core do
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-        - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
+        - `auth_index` (optional, integer): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
         - `username`: (optional, string): `username` to be used for endpoint authentication.
         - `password`: (optional, string): `password` to be used for endpoint authentication.
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
@@ -354,6 +417,13 @@ defmodule Radixir.Core do
   ## Note
     - Either `username` and `password` or `auth_index` must be provided.
     - If all three are provided `auth_index` is used.
+
+  If the following usernames and passwords are exported as follows:
+  ```
+  export USERNAMES='admin, superadmin, metrics'
+  export PASSWORDS='funny cats very Jack 21!, harry Kack love h39! LW, monitor Kat darrel 23 Jack!'
+  ```
+  then an `auth_index` of 0 would result in `admin` being used as the username and `funny cats very Jack 21!` being used as the password.
   """
   @spec derive_prepared_stakes_entity_identifier(public_key, validator_address, options) ::
           {:ok, map} | {:error, map | error_message}
@@ -387,7 +457,7 @@ defmodule Radixir.Core do
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-        - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
+        - `auth_index` (optional, integer): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
         - `username`: (optional, string): `username` to be used for endpoint authentication.
         - `password`: (optional, string): `password` to be used for endpoint authentication.
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
@@ -395,6 +465,13 @@ defmodule Radixir.Core do
   ## Note
     - Either `username` and `password` or `auth_index` must be provided.
     - If all three are provided `auth_index` is used.
+
+  If the following usernames and passwords are exported as follows:
+  ```
+  export USERNAMES='admin, superadmin, metrics'
+  export PASSWORDS='funny cats very Jack 21!, harry Kack love h39! LW, monitor Kat darrel 23 Jack!'
+  ```
+  then an `auth_index` of 0 would result in `admin` being used as the username and `funny cats very Jack 21!` being used as the password.
   """
   @spec derive_prepared_unstakes_entity_identifier(public_key, options) ::
           {:ok, map} | {:error, map | error_message}
@@ -422,7 +499,7 @@ defmodule Radixir.Core do
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-        - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
+        - `auth_index` (optional, integer): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
         - `username`: (optional, string): `username` to be used for endpoint authentication.
         - `password`: (optional, string): `password` to be used for endpoint authentication.
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
@@ -433,6 +510,13 @@ defmodule Radixir.Core do
   ## Note
     - Either `username` and `password` or `auth_index` must be provided.
     - If all three are provided `auth_index` is used.
+
+  If the following usernames and passwords are exported as follows:
+  ```
+  export USERNAMES='admin, superadmin, metrics'
+  export PASSWORDS='funny cats very Jack 21!, harry Kack love h39! LW, monitor Kat darrel 23 Jack!'
+  ```
+  then an `auth_index` of 0 would result in `admin` being used as the username and `funny cats very Jack 21!` being used as the password.
   """
   @spec derive_exiting_unstakes_entity_identifier(
           public_key,
@@ -479,7 +563,7 @@ defmodule Radixir.Core do
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-        - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
+        - `auth_index` (optional, integer): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
         - `username`: (optional, string): `username` to be used for endpoint authentication.
         - `password`: (optional, string): `password` to be used for endpoint authentication.
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
@@ -487,6 +571,13 @@ defmodule Radixir.Core do
   ## Note
     - Either `username` and `password` or `auth_index` must be provided.
     - If all three are provided `auth_index` is used.
+
+  If the following usernames and passwords are exported as follows:
+  ```
+  export USERNAMES='admin, superadmin, metrics'
+  export PASSWORDS='funny cats very Jack 21!, harry Kack love h39! LW, monitor Kat darrel 23 Jack!'
+  ```
+  then an `auth_index` of 0 would result in `admin` being used as the username and `funny cats very Jack 21!` being used as the password.
   """
   @spec derive_validator_system_entity_identifier(public_key, options) ::
           {:ok, map} | {:error, map | error_message}
@@ -963,7 +1054,7 @@ defmodule Radixir.Core do
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-        - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
+        - `auth_index` (optional, integer): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
         - `username`: (optional, string): `username` to be used for endpoint authentication.
         - `password`: (optional, string): `password` to be used for endpoint authentication.
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
@@ -975,6 +1066,13 @@ defmodule Radixir.Core do
   ## Note
     - Either `username` and `password` or `auth_index` must be provided.
     - If all three are provided `auth_index` is used.
+
+  If the following usernames and passwords are exported as follows:
+  ```
+  export USERNAMES='admin, superadmin, metrics'
+  export PASSWORDS='funny cats very Jack 21!, harry Kack love h39! LW, monitor Kat darrel 23 Jack!'
+  ```
+  then an `auth_index` of 0 would result in `admin` being used as the username and `funny cats very Jack 21!` being used as the password.
   """
   @spec build_transaction(
           operation_groups,
@@ -1021,7 +1119,7 @@ defmodule Radixir.Core do
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-        - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
+        - `auth_index` (optional, integer): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
         - `username`: (optional, string): `username` to be used for endpoint authentication.
         - `password`: (optional, string): `password` to be used for endpoint authentication.
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
@@ -1029,6 +1127,13 @@ defmodule Radixir.Core do
   ## Note
     - Either `username` and `password` or `auth_index` must be provided.
     - If all three are provided `auth_index` is used.
+
+  If the following usernames and passwords are exported as follows:
+  ```
+  export USERNAMES='admin, superadmin, metrics'
+  export PASSWORDS='funny cats very Jack 21!, harry Kack love h39! LW, monitor Kat darrel 23 Jack!'
+  ```
+  then an `auth_index` of 0 would result in `admin` being used as the username and `funny cats very Jack 21!` being used as the password.
   """
   @spec parse_transaction(transaction, signed, options) ::
           {:ok, map} | {:error, map | error_message}
@@ -1056,7 +1161,7 @@ defmodule Radixir.Core do
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-        - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
+        - `auth_index` (optional, integer): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
         - `username`: (optional, string): `username` to be used for endpoint authentication.
         - `password`: (optional, string): `password` to be used for endpoint authentication.
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
@@ -1064,6 +1169,13 @@ defmodule Radixir.Core do
   ## Note
     - Either `username` and `password` or `auth_index` must be provided.
     - If all three are provided `auth_index` is used.
+
+  If the following usernames and passwords are exported as follows:
+  ```
+  export USERNAMES='admin, superadmin, metrics'
+  export PASSWORDS='funny cats very Jack 21!, harry Kack love h39! LW, monitor Kat darrel 23 Jack!'
+  ```
+  then an `auth_index` of 0 would result in `admin` being used as the username and `funny cats very Jack 21!` being used as the password.
   """
   @spec finalize_transaction(unsigned_transaction, signature_public_key, signature_bytes, options) ::
           {:ok, map} | {:error, map | error_message}
@@ -1096,7 +1208,7 @@ defmodule Radixir.Core do
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-        - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
+        - `auth_index` (optional, integer): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
         - `username`: (optional, string): `username` to be used for endpoint authentication.
         - `password`: (optional, string): `password` to be used for endpoint authentication.
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
@@ -1104,6 +1216,13 @@ defmodule Radixir.Core do
   ## Note
     - Either `username` and `password` or `auth_index` must be provided.
     - If all three are provided `auth_index` is used.
+
+  If the following usernames and passwords are exported as follows:
+  ```
+  export USERNAMES='admin, superadmin, metrics'
+  export PASSWORDS='funny cats very Jack 21!, harry Kack love h39! LW, monitor Kat darrel 23 Jack!'
+  ```
+  then an `auth_index` of 0 would result in `admin` being used as the username and `funny cats very Jack 21!` being used as the password.
   """
   @spec get_transaction_hash(signed_transaction, options) ::
           {:ok, map} | {:error, map | error_message}
@@ -1131,7 +1250,7 @@ defmodule Radixir.Core do
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-        - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
+        - `auth_index` (optional, integer): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
         - `username`: (optional, string): `username` to be used for endpoint authentication.
         - `password`: (optional, string): `password` to be used for endpoint authentication.
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
@@ -1139,6 +1258,13 @@ defmodule Radixir.Core do
   ## Note
     - Either `username` and `password` or `auth_index` must be provided.
     - If all three are provided `auth_index` is used.
+
+  If the following usernames and passwords are exported as follows:
+  ```
+  export USERNAMES='admin, superadmin, metrics'
+  export PASSWORDS='funny cats very Jack 21!, harry Kack love h39! LW, monitor Kat darrel 23 Jack!'
+  ```
+  then an `auth_index` of 0 would result in `admin` being used as the username and `funny cats very Jack 21!` being used as the password.
   """
   @spec submit_transaction(signed_transaction, options) ::
           {:ok, map} | {:error, map | error_message}
@@ -1165,7 +1291,7 @@ defmodule Radixir.Core do
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-        - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
+        - `auth_index` (optional, integer): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
         - `username`: (optional, string): `username` to be used for endpoint authentication.
         - `password`: (optional, string): `password` to be used for endpoint authentication.
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
@@ -1173,6 +1299,13 @@ defmodule Radixir.Core do
   ## Note
     - Either `username` and `password` or `auth_index` must be provided.
     - If all three are provided `auth_index` is used.
+
+  If the following usernames and passwords are exported as follows:
+  ```
+  export USERNAMES='admin, superadmin, metrics'
+  export PASSWORDS='funny cats very Jack 21!, harry Kack love h39! LW, monitor Kat darrel 23 Jack!'
+  ```
+  then an `auth_index` of 0 would result in `admin` being used as the username and `funny cats very Jack 21!` being used as the password.
   """
   @spec get_public_keys(options) ::
           {:ok, map} | {:error, map | error_message}
@@ -1197,7 +1330,7 @@ defmodule Radixir.Core do
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-        - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
+        - `auth_index` (optional, integer): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
         - `username`: (optional, string): `username` to be used for endpoint authentication.
         - `password`: (optional, string): `password` to be used for endpoint authentication.
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
@@ -1205,6 +1338,13 @@ defmodule Radixir.Core do
   ## Note
     - Either `username` and `password` or `auth_index` must be provided.
     - If all three are provided `auth_index` is used.
+
+  If the following usernames and passwords are exported as follows:
+  ```
+  export USERNAMES='admin, superadmin, metrics'
+  export PASSWORDS='funny cats very Jack 21!, harry Kack love h39! LW, monitor Kat darrel 23 Jack!'
+  ```
+  then an `auth_index` of 0 would result in `admin` being used as the username and `funny cats very Jack 21!` being used as the password.
   """
   @spec sign_transaction(unsigned_transaction, public_key, options) ::
           {:ok, map} | {:error, map | error_message}
@@ -1232,7 +1372,7 @@ defmodule Radixir.Core do
       - `api`: Keyword list that contains
         - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-        - `auth_index` (optional, string): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
+        - `auth_index` (optional, integer): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
         - `username`: (optional, string): `username` to be used for endpoint authentication.
         - `password`: (optional, string): `password` to be used for endpoint authentication.
       - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
@@ -1244,6 +1384,13 @@ defmodule Radixir.Core do
   ## Note
     - Either `username` and `password` or `auth_index` must be provided.
     - If all three are provided `auth_index` is used.
+
+  If the following usernames and passwords are exported as follows:
+  ```
+  export USERNAMES='admin, superadmin, metrics'
+  export PASSWORDS='funny cats very Jack 21!, harry Kack love h39! LW, monitor Kat darrel 23 Jack!'
+  ```
+  then an `auth_index` of 0 would result in `admin` being used as the username and `funny cats very Jack 21!` being used as the password.
   """
   @spec send_transaction(
           operation_groups,

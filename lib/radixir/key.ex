@@ -1,6 +1,6 @@
 defmodule Radixir.Key do
   @moduledoc """
-  Handles all things to do with public/private keys and radix addresses.
+  Handles all things to do with mnemonics, keys and addresses.
   """
 
   alias BlockKeys.Encoding
@@ -156,14 +156,15 @@ defmodule Radixir.Key do
 
   ## Examples
 
-      iex> Radixir.Key.get_account_extended_keys_from_mnemonic(mnemonic: "nurse grid sister metal flock choice system control about mountain sister rapid hundred render shed chicken print cover tape sister zero bronze tattoo stairs", account_index: 1)
+      iex> Radixir.Key.derive_account_extended_keys_from_mnemonic(mnemonic: "nurse grid sister metal flock choice system control about mountain sister rapid hundred render shed chicken print cover tape sister zero bronze tattoo stairs", account_index: 1)
       %{
         account_extended_private_key: "xprv9xvGWitXHhPc6cwCZRpSBxnNpGovAAtNwHQJ2rc5Gmxt4PSZR9gZvX3qA614mU9EyZaFxcHnFWmdZAKFu1WiritR9UMGXL5drySpT1pRSFz",
         account_extended_public_key: "xpub6BucvERR84wuK71ffTMSZ6j7NJeQZdcEJWKtqF1gq7VrwBmhxgzpUKNK1P6jR2iWRMUagy94y9XK3wG3hUtAoVLVyQ3nSwA9pzepBCb2rRK"
       }
   """
-  @spec get_account_extended_keys_from_mnemonic(options) :: {:ok, map} | {:error, error_message}
-  def get_account_extended_keys_from_mnemonic(options \\ []) do
+  @spec derive_account_extended_keys_from_mnemonic(options) ::
+          {:ok, map} | {:error, error_message}
+  def derive_account_extended_keys_from_mnemonic(options \\ []) do
     with {:ok, mnemonic} <- Util.get_mnemonic_from_options(options),
          account_index <- Keyword.get(options, :account_index, 0) do
       root_key = BlockKeys.from_mnemonic(mnemonic)
@@ -183,6 +184,23 @@ defmodule Radixir.Key do
   ## Parameters
     - `account_extended_public_key`: Master public key.
     - `address_index`: Address index.
+
+  ## Examples
+
+      iex> Radixir.Key.account_extended_public_key_to_addresses("xpub6BucvERR84wuK71ffTMSZ6j7NJeQZdcEJWKtqF1gq7VrwBmhxgzpUKNK1P6jR2iWRMUagy94y9XK3wG3hUtAoVLVyQ3nSwA9pzepBCb2rRK", 1)
+      {:ok,
+      %{
+        mainnet: %{
+          account_address: "rdx1qspr0yphjarred20cr9vyy6h8ky60wun5t8z7g3lm3z25klf4yulmwgmwg5c8",
+          node_address: "rn1qgmeqduhgc7t2n7qetppx4ea3xnmhyazechjy07ugj49h6df887mjqymm42",
+          validator_address: "rv1qgmeqduhgc7t2n7qetppx4ea3xnmhyazechjy07ugj49h6df887mjch3te5"
+        },
+        testnet: %{
+          account_address: "tdx1qspr0yphjarred20cr9vyy6h8ky60wun5t8z7g3lm3z25klf4yulmwg6zaxgy",
+          node_address: "tn1qgmeqduhgc7t2n7qetppx4ea3xnmhyazechjy07ugj49h6df887mjxaua6a",
+          validator_address: "tv1qgmeqduhgc7t2n7qetppx4ea3xnmhyazechjy07ugj49h6df887mj7wkdkr"
+        }
+      }}
   """
   @spec account_extended_public_key_to_addresses(account_extended_public_key, address_index) ::
           {:ok, map} | {:error, error_message}
@@ -292,21 +310,22 @@ defmodule Radixir.Key do
   end
 
   @doc """
-  Generates mainnet and testnet token rri from `public_key` and `symbol`.
+  Derives mainnet and testnet token rri from `public_key` and `symbol`.
 
   ## Parameters
     - `public_key`: Hex encoded public key.
     - `synbol`: Token symbol.
 
   ## Examples
-      iex> Radixir.Key.generate_token_rri("02690937690ffb9d7ae8b67af05efc03a5a9f7e53933de80f92ce763a5554a1fa3","gok")
+      iex> Radixir.Key.derive_token_rri("02690937690ffb9d7ae8b67af05efc03a5a9f7e53933de80f92ce763a5554a1fa3","gok")
+      {:ok,
       %{
         mainnet: "gok_rr1qdjusppk2dqe2r08xlnlauuaedn9rtuttz2c6g76jq3qee68dq",
         testnet: "gok_tr1qdjusppk2dqe2r08xlnlauuaedn9rtuttz2c6g76jq3qezz2ds"
-      }
+      }}
   """
-  @spec generate_token_rri(public_key, symbol) :: {:ok, map} | {:error, error_message}
-  def generate_token_rri(public_key, symbol) do
+  @spec derive_token_rri(public_key, symbol) :: {:ok, map} | {:error, error_message}
+  def derive_token_rri(public_key, symbol) do
     with public_key <- String.downcase(public_key),
          symbol <- String.downcase(symbol),
          {:ok, public_key} <- validate_public_key(public_key),
@@ -319,10 +338,11 @@ defmodule Radixir.Key do
 
       data = <<3>> <> result
 
-      %{
-        mainnet: Bech32.encode(symbol <> "_rr", data),
-        testnet: Bech32.encode(symbol <> "_tr", data)
-      }
+      {:ok,
+       %{
+         mainnet: Bech32.encode(symbol <> "_rr", data),
+         testnet: Bech32.encode(symbol <> "_tr", data)
+       }}
     end
   end
 
@@ -434,7 +454,7 @@ defmodule Radixir.Key do
   end
 
   defp valid_address_prefix(address) do
-    case String.match?(address, ~r/^rdx|tdx|rv|tv|rn|tn/) do
+    case String.match?(address, ~r/^(rdx|tdx|rv|tv|rn|tn)/) do
       true ->
         {:ok, address}
 
