@@ -1,7 +1,8 @@
 defmodule Radixir.Core.Request.BuildTransaction.Operation do
-  @moduledoc """
-  Methods to create each map in `ValidatorSystemMetadata` map.
-  """
+  @moduledoc false
+  # @moduledoc """
+  # Methods to create each map in `ValidatorSystemMetadata` map.
+  # """
   alias Radixir.StitchPlan
 
   @type stitch_plans :: list(keyword())

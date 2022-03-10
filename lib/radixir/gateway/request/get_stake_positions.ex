@@ -1,7 +1,8 @@
 defmodule Radixir.Gateway.Request.GetStakePositions do
-  @moduledoc """
-  Methods to create each map in `GetStakePositions` request body.
-  """
+  @moduledoc false
+  # @moduledoc """
+  # Methods to create each map in `GetStakePositions` request body.
+  # """
   alias Radixir.StitchPlan
 
   @type stitch_plans :: list(keyword())

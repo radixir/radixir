@@ -1,7 +1,8 @@
 defmodule Radixir.Core.Request.DeriveEntityIdentifier.Metadata.PreparedStakes do
-  @moduledoc """
-  Methods to create each map in `PreparedStakes` map.
-  """
+  @moduledoc false
+  # @moduledoc """
+  # Methods to create each map in `PreparedStakes` map.
+  # """
   alias Radixir.StitchPlan
 
   @type stitch_plans :: list(keyword())

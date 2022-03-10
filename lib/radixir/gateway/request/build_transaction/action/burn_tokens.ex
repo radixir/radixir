@@ -1,7 +1,8 @@
 defmodule Radixir.Gateway.Request.BuildTransaction.Action.BurnTokens do
-  @moduledoc """
-  Methods to create each map in `BurnTokens` action.
-  """
+  @moduledoc false
+  # @moduledoc """
+  # Methods to create each map in `BurnTokens` action.
+  # """
   alias Radixir.StitchPlan
 
   @type stitch_plans :: list(keyword())

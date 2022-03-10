@@ -4,6 +4,7 @@ defmodule Radixir.System do
   """
 
   alias Radixir.System.API
+
   @type options :: keyword()
   @type error_message :: String.t()
 
@@ -22,7 +23,7 @@ defmodule Radixir.System do
     - If all three are provided `auth_index` is used.
   """
   @spec get_version(options) :: {:ok, map} | {:error, map | error_message}
-  defdelegate get_version(options \\ []), to: API
+  def get_version(options \\ []), do: API.get_version(options)
 
   @doc """
   Gets system health.
@@ -39,7 +40,7 @@ defmodule Radixir.System do
     - If all three are provided `auth_index` is used.
   """
   @spec get_health(options) :: {:ok, map} | {:error, map | error_message}
-  defdelegate get_health(options \\ []), to: API
+  def get_health(options \\ []), do: API.get_health(options)
 
   @doc """
   Gets system configuration.
@@ -56,7 +57,7 @@ defmodule Radixir.System do
     - If all three are provided `auth_index` is used.
   """
   @spec get_configuration(options) :: {:ok, map} | {:error, map | error_message}
-  defdelegate get_configuration(options \\ []), to: API
+  def get_configuration(options \\ []), do: API.get_configuration(options)
 
   @doc """
   Gets system peers.
@@ -73,7 +74,7 @@ defmodule Radixir.System do
     - If all three are provided `auth_index` is used.
   """
   @spec get_peers(options) :: {:ok, map} | {:error, map | error_message}
-  defdelegate get_peers(options \\ []), to: API
+  def get_peers(options \\ []), do: API.get_peers(options)
 
   @doc """
   Gets system addressbook.
@@ -90,7 +91,7 @@ defmodule Radixir.System do
     - If all three are provided `auth_index` is used.
   """
   @spec get_address_book(options) :: {:ok, map} | {:error, map | error_message}
-  defdelegate get_address_book(options \\ []), to: API
+  def get_address_book(options \\ []), do: API.get_address_book(options)
 
   @doc """
   Gets system metrics.
@@ -107,7 +108,7 @@ defmodule Radixir.System do
     - If all three are provided `auth_index` is used.
   """
   @spec get_metrics(options) :: {:ok, map} | {:error, map | error_message}
-  defdelegate get_metrics(options \\ []), to: API
+  def get_metrics(options \\ []), do: API.get_metrics(options)
 
   @doc """
   Gets prometheus metrics.
@@ -124,5 +125,5 @@ defmodule Radixir.System do
     - If all three are provided `auth_index` is used.
   """
   @spec get_prometheus_metrics(options) :: {:ok, map} | {:error, map | error_message}
-  defdelegate get_prometheus_metrics(options \\ []), to: API
+  def get_prometheus_metrics(options \\ []), do: API.get_prometheus_metrics(options)
 end

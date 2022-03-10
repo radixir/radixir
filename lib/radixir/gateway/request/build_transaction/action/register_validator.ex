@@ -1,7 +1,8 @@
 defmodule Radixir.Gateway.Request.BuildTransaction.Action.RegisterValidator do
-  @moduledoc """
-  Methods to create each map in `RegisterValidator` action.
-  """
+  @moduledoc false
+  # @moduledoc """
+  # Methods to create each map in `RegisterValidator` action.
+  # """
   alias Radixir.StitchPlan
 
   @type stitch_plans :: list(keyword())

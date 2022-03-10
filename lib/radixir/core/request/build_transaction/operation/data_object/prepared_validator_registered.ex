@@ -1,7 +1,8 @@
 defmodule Radixir.Core.Request.BuildTransaction.Operation.DataObject.PreparedValidatorRegistered do
-  @moduledoc """
-  Methods to create each map in `PreparedValidatorRegistered` map.
-  """
+  @moduledoc false
+  # @moduledoc """
+  # Methods to create each map in `PreparedValidatorRegistered` map.
+  # """
   alias Radixir.StitchPlan
 
   @type stitch_plans :: list(keyword())

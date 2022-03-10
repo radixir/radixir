@@ -1,7 +1,8 @@
 defmodule Radixir.Core.Request.GetTransactionHash do
-  @moduledoc """
-  Methods to create each map in `GetTransactionHash` request body.
-  """
+  @moduledoc false
+  # @moduledoc """
+  # Methods to create each map in `GetTransactionHash` request body.
+  # """
   alias Radixir.StitchPlan
 
   @type stitch_plans :: list(keyword())

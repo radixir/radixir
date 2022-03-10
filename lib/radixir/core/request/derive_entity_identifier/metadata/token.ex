@@ -1,7 +1,8 @@
 defmodule Radixir.Core.Request.DeriveEntityIdentifier.Metadata.Token do
-  @moduledoc """
-  Methods to create each map in `Token` map.
-  """
+  @moduledoc false
+  # @moduledoc """
+  # Methods to create each map in `Token` map.
+  # """
   alias Radixir.StitchPlan
 
   @type stitch_plans :: list(keyword())

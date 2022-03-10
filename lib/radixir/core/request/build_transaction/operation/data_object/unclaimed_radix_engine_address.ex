@@ -1,7 +1,8 @@
 defmodule Radixir.Core.Request.BuildTransaction.Operation.DataObject.UnclaimedRadixEngineAddress do
-  @moduledoc """
-  Methods to create each map in `UnclaimedRadixEngineAddress` map.
-  """
+  @moduledoc false
+  # @moduledoc """
+  # Methods to create each map in `UnclaimedRadixEngineAddress` map.
+  # """
   alias Radixir.StitchPlan
 
   @type stitch_plans :: list(keyword())

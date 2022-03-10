@@ -1,7 +1,8 @@
 defmodule Radixir.Core.Request.GetCommittedTransactions do
-  @moduledoc """
-  Methods to create each map in `GetCommittedTransactions` request body.
-  """
+  @moduledoc false
+  # @moduledoc """
+  # Methods to create each map in `GetCommittedTransactions` request body.
+  # """
   alias Radixir.StitchPlan
 
   @type stitch_plans :: list(keyword())

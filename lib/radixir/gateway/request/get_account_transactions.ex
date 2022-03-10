@@ -1,7 +1,8 @@
 defmodule Radixir.Gateway.Request.GetAccountTransactions do
-  @moduledoc """
-  Methods to create each map in `GetAccountTransactions` request body.
-  """
+  @moduledoc false
+  # @moduledoc """
+  # Methods to create each map in `GetAccountTransactions` request body.
+  # """
   alias Radixir.StitchPlan
 
   @type stitch_plans :: list(keyword())

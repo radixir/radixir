@@ -1,7 +1,8 @@
 defmodule Radixir.Core.Request.DeriveEntityIdentifier.Metadata.Validator do
-  @moduledoc """
-  Methods to create each map in `Validator` map.
-  """
+  @moduledoc false
+  # @moduledoc """
+  # Methods to create each map in `Validator` map.
+  # """
   alias Radixir.StitchPlan
 
   @type stitch_plans :: list(keyword())

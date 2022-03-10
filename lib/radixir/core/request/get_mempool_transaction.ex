@@ -1,7 +1,8 @@
 defmodule Radixir.Core.Request.GetMempoolTransaction do
-  @moduledoc """
-  Methods to create each map in `GetMempoolTransaction` request body.
-  """
+  @moduledoc false
+  # @moduledoc """
+  # Methods to create each map in `GetMempoolTransaction` request body.
+  # """
   alias Radixir.StitchPlan
 
   @type stitch_plans :: list(keyword())

@@ -1,7 +1,8 @@
 defmodule Radixir.Gateway.Request.GetAccountBalances do
-  @moduledoc """
-  Methods to create each map in `GetAccountBalances` request body.
-  """
+  @moduledoc false
+  # @moduledoc """
+  # Methods to create each map in `GetAccountBalances` request body.
+  # """
   alias Radixir.StitchPlan
 
   @type stitch_plans :: list(keyword())

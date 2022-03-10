@@ -1,7 +1,8 @@
 defmodule Radixir.Gateway.Request.GetNativeTokenInfo do
-  @moduledoc """
-  Methods to create each map in `GetNativeTokenInfo` request body.
-  """
+  @moduledoc false
+  # @moduledoc """
+  # Methods to create each map in `GetNativeTokenInfo` request body.
+  # """
   alias Radixir.StitchPlan
 
   @type stitch_plans :: list(keyword())

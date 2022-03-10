@@ -1,7 +1,8 @@
 defmodule Radixir.Core.Request.BuildTransaction.OperationGroup do
-  @moduledoc """
-  Method to create an operation group map.
-  """
+  @moduledoc false
+  # @moduledoc """
+  # Method to create an operation group map.
+  # """
 
   @type operations :: list(map)
 

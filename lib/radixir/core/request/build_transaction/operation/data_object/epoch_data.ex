@@ -1,7 +1,8 @@
 defmodule Radixir.Core.Request.BuildTransaction.Operation.DataObject.EpochData do
-  @moduledoc """
-  Methods to create each map in `EpochData` map.
-  """
+  @moduledoc false
+  # @moduledoc """
+  # Methods to create each map in `EpochData` map.
+  # """
   alias Radixir.StitchPlan
 
   @type stitch_plans :: list(keyword())

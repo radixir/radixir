@@ -1,7 +1,8 @@
 defmodule Radixir.Core.Request.BuildTransaction.Operation.DataObject.ValidatorAllowDelegation do
-  @moduledoc """
-  Methods to create each map in `ValidatorAllowDelegation` map.
-  """
+  @moduledoc false
+  # @moduledoc """
+  # Methods to create each map in `ValidatorAllowDelegation` map.
+  # """
   alias Radixir.StitchPlan
 
   @type stitch_plans :: list(keyword())

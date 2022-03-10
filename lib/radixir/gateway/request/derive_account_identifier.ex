@@ -1,7 +1,8 @@
 defmodule Radixir.Gateway.Request.DeriveAccountIdentifier do
-  @moduledoc """
-  Methods to create each map in `DeriveAccountIdentifier` request body.
-  """
+  @moduledoc false
+  # @moduledoc """
+  # Methods to create each map in `DeriveAccountIdentifier` request body.
+  # """
   alias Radixir.StitchPlan
 
   @type stitch_plans :: list(keyword())

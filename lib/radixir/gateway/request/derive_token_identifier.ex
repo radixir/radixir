@@ -1,7 +1,8 @@
 defmodule Radixir.Gateway.Request.DeriveTokenIdentifier do
-  @moduledoc """
-  Methods to create each map in `DeriveTokenIdentifier` request body.
-  """
+  @moduledoc false
+  # @moduledoc """
+  # Methods to create each map in `DeriveTokenIdentifier` request body.
+  # """
   alias Radixir.StitchPlan
 
   @type stitch_plans :: list(keyword())

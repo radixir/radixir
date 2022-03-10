@@ -1,7 +1,8 @@
 defmodule Radixir.Gateway.Request.DeriveValidatorIdentifier do
-  @moduledoc """
-  Methods to create each map in `DeriveValidatorIdentifier` request body.
-  """
+  @moduledoc false
+  # @moduledoc """
+  # Methods to create each map in `DeriveValidatorIdentifier` request body.
+  # """
   alias Radixir.StitchPlan
 
   @type stitch_plans :: list(keyword())

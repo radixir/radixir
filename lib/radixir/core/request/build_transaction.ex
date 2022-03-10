@@ -1,7 +1,8 @@
 defmodule Radixir.Core.Request.BuildTransaction do
-  @moduledoc """
-  Methods to create each map in `BuildTransaction` request body.
-  """
+  @moduledoc false
+  # @moduledoc """
+  # Methods to create each map in `BuildTransaction` request body.
+  # """
   alias Radixir.StitchPlan
   alias Radixir.Util
 

@@ -1,7 +1,8 @@
 defmodule Radixir.Core.Request.GetNetworkStatus do
-  @moduledoc """
-  Methods to create each map in `GetNetworkStatus` request body.
-  """
+  @moduledoc false
+  # @moduledoc """
+  # Methods to create each map in `GetNetworkStatus` request body.
+  # """
   alias Radixir.StitchPlan
 
   @type stitch_plans :: list(keyword())

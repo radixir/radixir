@@ -1,7 +1,8 @@
 defmodule Radixir.Gateway.Request.BuildTransaction.Action.UnstakeTokens do
-  @moduledoc """
-  Methods to create each map in `UnstakeTokens` action.
-  """
+  @moduledoc false
+  # @moduledoc """
+  # Methods to create each map in `UnstakeTokens` action.
+  # """
   alias Radixir.StitchPlan
 
   @type stitch_plans :: list(keyword())

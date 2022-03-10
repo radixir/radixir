@@ -111,13 +111,13 @@ defmodule Radixir.KeyTest do
                Radixir.Key.from_mnemonic(mnemonic: mnemonic, account_index: 1, address_index: 1)
     end
 
-    test "fails to derive a keypair and addresses because no mnemonic was found" do
-      assert {:error, "mnemonic not found in configuration"} = Radixir.Key.from_mnemonic()
-    end
-
     test "fails to derive a keypair and addresses because no configuration was set" do
       Application.delete_env(:radixir, Radixir.Config)
       assert {:error, "no configuration parameters found"} = Radixir.Key.from_mnemonic()
+    end
+
+    test "fails to derive a keypair and addresses because no mnemonic was found" do
+      assert {:error, "mnemonic not found in configuration"} = Radixir.Key.from_mnemonic()
     end
 
     test "fails to derive a keypair and addresses because non BIP39 mnemonic was given" do
@@ -131,8 +131,56 @@ defmodule Radixir.KeyTest do
     end
   end
 
+  describe "from_account_extended_private_key/1" do
+    test "derives a keypair and addresses from account extended private key" do
+      assert {:ok,
+              %{
+                mainnet: %{
+                  account_address:
+                    "rdx1qspgw45trvgp9nd7ca9vznrmq0cqy44du60utqmj3f0xp404gx04mwq28puxy",
+                  node_address: "rn1q2r4dzcmzqfvm0k8ftq5c7cr7qp9dt0xnlzcxu52tesdta2pnawmsv4kwd6",
+                  validator_address:
+                    "rv1q2r4dzcmzqfvm0k8ftq5c7cr7qp9dt0xnlzcxu52tesdta2pnawms5xu7py"
+                },
+                private_key: "f7b9e64ce04a7c6ad62520e14d787b3109e9b3317483da0bc970d4d6e59e866a",
+                public_key: "0287568b1b1012cdbec74ac14c7b03f00256ade69fc583728a5e60d5f5419f5db8",
+                testnet: %{
+                  account_address:
+                    "tdx1qspgw45trvgp9nd7ca9vznrmq0cqy44du60utqmj3f0xp404gx04mwqtt5wk8",
+                  node_address: "tn1q2r4dzcmzqfvm0k8ftq5c7cr7qp9dt0xnlzcxu52tesdta2pnawms2v3gzd",
+                  validator_address:
+                    "tv1q2r4dzcmzqfvm0k8ftq5c7cr7qp9dt0xnlzcxu52tesdta2pnawmsjlmcwn"
+                }
+              }} =
+               Radixir.Key.from_account_extended_private_key(
+                 "xprv9xvGWitXHhPc4R9opoQJrA5xfvUsXzdS9gEsEE8AVk1rbdHxcjngXHJ971JC7ensJS6u5XT7wNo23smXy1KfSmmffZWMyCDsfQQaQ2QPr5z",
+                 1
+               )
+    end
+
+    test "fails to derive a keypair and addresses from account extended private key due to bad key with MatchError" do
+      assert_raise MatchError, fn ->
+        Radixir.Key.from_account_extended_private_key(
+          "xprv9xvGWitXHhPc4R9opoQJrA5xfvUsXzdS9gEsEE8AVk1rbdHxcjngXHJ971JC7ensJS6u5XT7wNo23smXy1KfSmmffZWMyCDsfQQaQ2QPr5"
+        )
+      end
+    end
+
+    test "fails to derive a keypair and addresses from account extended private key due to bad key with FunctionClauseError" do
+      assert_raise FunctionClauseError, fn ->
+        Radixir.Key.from_account_extended_private_key("asdfasdf")
+      end
+    end
+
+    test "fails to derive a keypair and addresses from account extended private key due to bad key with ArgumentError" do
+      assert_raise ArgumentError, fn ->
+        Radixir.Key.from_account_extended_private_key("xpubasdfasd")
+      end
+    end
+  end
+
   describe "from_private_key/1" do
-    test "converts a private key to a key + addresses" do
+    test "derives keypair and addresses from private key" do
       assert {:ok,
               %{
                 mainnet_address:

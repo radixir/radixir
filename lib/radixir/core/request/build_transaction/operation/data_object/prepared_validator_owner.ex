@@ -1,7 +1,8 @@
 defmodule Radixir.Core.Request.BuildTransaction.Operation.DataObject.PreparedValidatorOwner do
-  @moduledoc """
-  Methods to create each map in `PreparedValidatorOwner` map.
-  """
+  @moduledoc false
+  # @moduledoc """
+  # Methods to create each map in `PreparedValidatorOwner` map.
+  # """
   alias Radixir.StitchPlan
 
   @type stitch_plans :: list(keyword())

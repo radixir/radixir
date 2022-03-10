@@ -1,7 +1,8 @@
 defmodule Radixir.Gateway.Request.GetTokenInfo do
-  @moduledoc """
-  Methods to create each map in `GetTokenInfo` request body.
-  """
+  @moduledoc false
+  # @moduledoc """
+  # Methods to create each map in `GetTokenInfo` request body.
+  # """
   alias Radixir.StitchPlan
 
   @type stitch_plans :: list(keyword())

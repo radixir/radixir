@@ -1,7 +1,8 @@
 defmodule Radixir.Core.Request.FinalizeTransaction do
-  @moduledoc """
-  Methods to create each map in `FinalizeTransaction` request body.
-  """
+  @moduledoc false
+  # @moduledoc """
+  # Methods to create each map in `FinalizeTransaction` request body.
+  # """
   alias Radixir.StitchPlan
 
   @type stitch_plans :: list(keyword())

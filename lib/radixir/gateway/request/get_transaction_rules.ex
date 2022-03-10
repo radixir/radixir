@@ -1,7 +1,8 @@
 defmodule Radixir.Gateway.Request.GetTransactionRules do
-  @moduledoc """
-  Methods to create each map in `GetTransactionRules` request body.
-  """
+  @moduledoc false
+  # @moduledoc """
+  # Methods to create each map in `GetTransactionRules` request body.
+  # """
   alias Radixir.StitchPlan
 
   @type stitch_plans :: list(keyword())

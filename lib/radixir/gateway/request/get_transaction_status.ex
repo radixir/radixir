@@ -1,7 +1,8 @@
 defmodule Radixir.Gateway.Request.GetTransactionStatus do
-  @moduledoc """
-  Methods to create each map in `GetTransactionStatus` request body.
-  """
+  @moduledoc false
+  # @moduledoc """
+  # Methods to create each map in `GetTransactionStatus` request body.
+  # """
   alias Radixir.StitchPlan
 
   @type stitch_plans :: list(keyword())

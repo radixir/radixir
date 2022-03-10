@@ -1,7 +1,8 @@
 defmodule Radixir.Core.Request.BuildTransaction.Operation.ResourceIdentifier do
-  @moduledoc """
-  Methods to create each map in `ResourceIdentifier` map.
-  """
+  @moduledoc false
+  # @moduledoc """
+  # Methods to create each map in `ResourceIdentifier` map.
+  # """
 
   @type stitch_plans :: list(keyword())
   @type params :: keyword()

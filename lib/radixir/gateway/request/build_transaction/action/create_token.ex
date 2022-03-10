@@ -1,7 +1,8 @@
 defmodule Radixir.Gateway.Request.BuildTransaction.Action.CreateToken do
-  @moduledoc """
-  Methods to create each map in `CreateToken` action.
-  """
+  @moduledoc false
+  # @moduledoc """
+  # Methods to create each map in `CreateToken` action.
+  # """
   alias Radixir.StitchPlan
 
   @type stitch_plans :: list(keyword())

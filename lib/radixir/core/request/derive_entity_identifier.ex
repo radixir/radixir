@@ -1,7 +1,8 @@
 defmodule Radixir.Core.Request.DeriveEntityIdentifier do
-  @moduledoc """
-  Methods to create each map in `DeriveEntityIdentifier` request body.
-  """
+  @moduledoc false
+  # @moduledoc """
+  # Methods to create each map in `DeriveEntityIdentifier` request body.
+  # """
   alias Radixir.StitchPlan
 
   @type stitch_plans :: list(keyword())

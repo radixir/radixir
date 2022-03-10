@@ -1,7 +1,8 @@
 defmodule Radixir.Gateway.Request.BuildTransaction.Action.MintTokens do
-  @moduledoc """
-  Methods to create each map in `MintTokens` action.
-  """
+  @moduledoc false
+  # @moduledoc """
+  # Methods to create each map in `MintTokens` action.
+  # """
   alias Radixir.StitchPlan
 
   @type stitch_plans :: list(keyword())

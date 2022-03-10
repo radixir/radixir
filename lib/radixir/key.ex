@@ -17,7 +17,7 @@ defmodule Radixir.Key do
   @type error_message :: String.t()
   @type account_extended_private_key :: String.t()
   @type account_extended_public_key :: String.t()
-  @type index :: integer
+  @type address_index :: integer
   @type options :: keyword
 
   @doc """
@@ -40,6 +40,25 @@ defmodule Radixir.Key do
       - `mnemonic` (optional, string): If `mnemonic` is not in `options` then the mnemonic set in the configs will be used.
       - `account_index` (optional, integer): If `account_index` is not in `options` then an `account_index` of 0 will be used.
       - `address_index` (optional, integer): If `address_index` is not in `options` then an `address_index` of 0 will be used.
+
+  ## Example
+
+    iex> Radixir.Key.from_mnemonic(mnemonic: "nurse grid sister metal flock choice system control about mountain sister rapid hundred render shed chicken print cover tape sister zero bronze tattoo stairs", account_index: 0, address_index: 0)
+    {:ok,
+    %{
+      mainnet: %{
+        account_address: "rdx1qspdkgfmwl656m4nvejgskjrzhp27auwefswhvaztzfamgse2mk8t6gt2apaj",
+        node_address: "rn1qtdjzwmh74xkavmxvjy95sc4c2hh0rk2vr4m8gjcj0w6yx2ka367jtmsh45",
+        validator_address: "rv1qtdjzwmh74xkavmxvjy95sc4c2hh0rk2vr4m8gjcj0w6yx2ka367jng68e2"
+      },
+      private_key: "9dd06ce00e682e5b6e5e16ced5d90316ddc19a12d0cdeefc223cfd6920aee54b",
+      public_key: "02db213b77f54d6eb36664885a4315c2af778eca60ebb3a25893dda21956ec75e9",
+      testnet: %{
+        account_address: "tdx1qspdkgfmwl656m4nvejgskjrzhp27auwefswhvaztzfamgse2mk8t6g2xgnd3",
+        node_address: "tn1qtdjzwmh74xkavmxvjy95sc4c2hh0rk2vr4m8gjcj0w6yx2ka367jdzh36r",
+        validator_address: "tv1qtdjzwmh74xkavmxvjy95sc4c2hh0rk2vr4m8gjcj0w6yx2ka367j43apka"
+      }
+    }}
   """
   @spec from_mnemonic(options) :: {:ok, map} | {:error, error_message}
   def from_mnemonic(options \\ []) do
@@ -57,16 +76,35 @@ defmodule Radixir.Key do
   end
 
   @doc """
-  Generates a keypair and addresses from account extended private key.
+  Derives a keypair and addresses from account extended private key.
 
   ## Parameters
     - `account_extended_private_key`: Account extended private key.
-    - `index`: Path index.
+    - `address_index`: Address index.
+
+  ## Example
+
+      iex> Radixir.Key.from_account_extended_private_key("xprv9xvGWitXHhPc4R9opoQJrA5xfvUsXzdS9gEsEE8AVk1rbdHxcjngXHJ971JC7ensJS6u5XT7wNo23smXy1KfSmmffZWMyCDsfQQaQ2QPr5z", 1)
+      {:ok,
+      %{
+        mainnet: %{
+          account_address: "rdx1qspgw45trvgp9nd7ca9vznrmq0cqy44du60utqmj3f0xp404gx04mwq28puxy",
+          node_address: "rn1q2r4dzcmzqfvm0k8ftq5c7cr7qp9dt0xnlzcxu52tesdta2pnawmsv4kwd6",
+          validator_address: "rv1q2r4dzcmzqfvm0k8ftq5c7cr7qp9dt0xnlzcxu52tesdta2pnawms5xu7py"
+        },
+        private_key: "f7b9e64ce04a7c6ad62520e14d787b3109e9b3317483da0bc970d4d6e59e866a",
+        public_key: "0287568b1b1012cdbec74ac14c7b03f00256ade69fc583728a5e60d5f5419f5db8",
+        testnet: %{
+          account_address: "tdx1qspgw45trvgp9nd7ca9vznrmq0cqy44du60utqmj3f0xp404gx04mwqtt5wk8",
+          node_address: "tn1q2r4dzcmzqfvm0k8ftq5c7cr7qp9dt0xnlzcxu52tesdta2pnawms2v3gzd",
+          validator_address: "tv1q2r4dzcmzqfvm0k8ftq5c7cr7qp9dt0xnlzcxu52tesdta2pnawmsjlmcwn"
+        }
+      }}
   """
-  @spec from_account_extended_private_key(account_extended_private_key, index) ::
+  @spec from_account_extended_private_key(account_extended_private_key, address_index) ::
           {:ok, map} | {:error, error_message}
-  def from_account_extended_private_key(account_extended_private_key, index \\ 0) do
-    BlockKeys.CKD.derive(account_extended_private_key, "m/0/#{index}'")
+  def from_account_extended_private_key(account_extended_private_key, address_index \\ 0) do
+    BlockKeys.CKD.derive(account_extended_private_key, "m/0/#{address_index}'")
     |> Encoding.decode_extended_key()
     |> Map.fetch!(:key)
     |> Util.encode16()
@@ -75,12 +113,13 @@ defmodule Radixir.Key do
   end
 
   @doc """
-  Converts `private_key` to its keypair and addresses.
+  Derives keypair and addresses from private key.
 
   ## Parameters
-    - `private_key`: Hex encoded private key.
+    - `private_key`: Private key.
 
   ## Examples
+
       iex> Radixir.Key.from_private_key("ed50cfe0904bfbf7668502a3f7d562c3139997255c3268c779eeff04a40f9a17")
       {:ok,
       %{
@@ -89,13 +128,13 @@ defmodule Radixir.Key do
           node_address: "rn1qvhe4nxylxgxmlazzt2ua78383l67cqzgthygygafhhyljhe0pjx7mctqsv",
           validator_address: "rv1qvhe4nxylxgxmlazzt2ua78383l67cqzgthygygafhhyljhe0pjx7rtpsuj"
         },
+        private_key: "ed50cfe0904bfbf7668502a3f7d562c3139997255c3268c779eeff04a40f9a17",
+        public_key: "032f9accc4f9906dffa212d5cef8f13c7faf600242ee44111d4dee4fcaf978646f",
         testnet: %{
           account_address: "tdx1qspjlxkvcnueqm0l5gfdtnhc7y78ltmqqfpwu3q3r4x7un72l9uxgmccyzjy7",
           node_address: "tn1qvhe4nxylxgxmlazzt2ua78383l67cqzgthygygafhhyljhe0pjx7apvxlm",
           validator_address: "tv1qvhe4nxylxgxmlazzt2ua78383l67cqzgthygygafhhyljhe0pjx79jxkn9"
-        },
-        private_key: "ed50cfe0904bfbf7668502a3f7d562c3139997255c3268c779eeff04a40f9a17",
-        public_key: "032f9accc4f9906dffa212d5cef8f13c7faf600242ee44111d4dee4fcaf978646f"
+        }
       }}
   """
   @spec from_private_key(private_key) :: {:ok, map} | {:error, error_message}
@@ -108,12 +147,20 @@ defmodule Radixir.Key do
   end
 
   @doc """
-  Generates account extended private key and account extended public key from mnemonic.
+  Derives account extended private key and account extended public key from mnemonic.
 
   ## Parameters
     - `options`: Keyword list that contains
       - `mnemonic` (optional, string): If `mnemonic` is not in `options` then the mnemonic set in the configs will be used.
       - `account_index` (optional, integer): If `account_index` is not in `options` then an `account_index` of 0 will be used.
+
+  ## Examples
+
+      iex> Radixir.Key.get_account_extended_keys_from_mnemonic(mnemonic: "nurse grid sister metal flock choice system control about mountain sister rapid hundred render shed chicken print cover tape sister zero bronze tattoo stairs", account_index: 1)
+      %{
+        account_extended_private_key: "xprv9xvGWitXHhPc6cwCZRpSBxnNpGovAAtNwHQJ2rc5Gmxt4PSZR9gZvX3qA614mU9EyZaFxcHnFWmdZAKFu1WiritR9UMGXL5drySpT1pRSFz",
+        account_extended_public_key: "xpub6BucvERR84wuK71ffTMSZ6j7NJeQZdcEJWKtqF1gq7VrwBmhxgzpUKNK1P6jR2iWRMUagy94y9XK3wG3hUtAoVLVyQ3nSwA9pzepBCb2rRK"
+      }
   """
   @spec get_account_extended_keys_from_mnemonic(options) :: {:ok, map} | {:error, error_message}
   def get_account_extended_keys_from_mnemonic(options \\ []) do
@@ -135,12 +182,12 @@ defmodule Radixir.Key do
 
   ## Parameters
     - `account_extended_public_key`: Master public key.
-    - `index`: Path index.
+    - `address_index`: Address index.
   """
-  @spec account_extended_public_key_to_addresses(account_extended_public_key, index) ::
+  @spec account_extended_public_key_to_addresses(account_extended_public_key, address_index) ::
           {:ok, map} | {:error, error_message}
-  def account_extended_public_key_to_addresses(account_extended_public_key, index \\ 0) do
-    BlockKeys.CKD.derive(account_extended_public_key, "M/0/#{index}")
+  def account_extended_public_key_to_addresses(account_extended_public_key, address_index \\ 0) do
+    BlockKeys.CKD.derive(account_extended_public_key, "M/0/#{address_index}")
     |> Encoding.decode_extended_key()
     |> Map.fetch!(:key)
     |> Util.encode16()

@@ -1,7 +1,8 @@
 defmodule Radixir.System.API do
-  @moduledoc """
-  Submits requests to System API.
-  """
+  @moduledoc false
+  # @moduledoc """
+  # Submits requests to System API.
+  # """
   alias Radixir.Util
   alias Radixir.HTTP
 

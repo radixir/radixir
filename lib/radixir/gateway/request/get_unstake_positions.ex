@@ -1,7 +1,8 @@
 defmodule Radixir.Gateway.Request.GetUnstakePositions do
-  @moduledoc """
-  Methods to create each map in `GetUnstakePositions` request body.
-  """
+  @moduledoc false
+  # @moduledoc """
+  # Methods to create each map in `GetUnstakePositions` request body.
+  # """
   alias Radixir.StitchPlan
 
   @type stitch_plans :: list(keyword())

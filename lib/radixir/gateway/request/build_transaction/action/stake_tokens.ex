@@ -1,7 +1,8 @@
 defmodule Radixir.Gateway.Request.BuildTransaction.Action.StakeTokens do
-  @moduledoc """
-  Methods to create each map in `StakeTokens` action.
-  """
+  @moduledoc false
+  # @moduledoc """
+  # Methods to create each map in `StakeTokens` action.
+  # """
   alias Radixir.StitchPlan
 
   @type stitch_plans :: list(keyword())

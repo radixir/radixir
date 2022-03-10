@@ -143,24 +143,6 @@ defmodule Radixir.Util do
   end
 
   @doc """
-  Stitches together stitch plans which results in a map.
-
-  ## Parameters
-    - `keys_values`: List of keyword lists.
-
-  ## Examples
-      iex> Radixir.Util.stitch([[keys: [:a, :b, :c], value: 4],[keys: [:z, :y, :x], value: 90]])
-      %{a: %{b: %{c: 4}}, z: %{y: %{x: 90}}}
-  """
-  @spec stitch(keys_values) :: map
-  def stitch(keys_values) do
-    # [[keys: [:a, :b, :c], value: 4],[keys: [:z, :y, :x], value: 90]]
-    Enum.reduce(keys_values, %{}, fn x, data ->
-      map_put(data, x[:keys], x[:value])
-    end)
-  end
-
-  @doc """
   Converts xrd to atto, smallest unit of value.
 
   ## Parameters
@@ -445,13 +427,23 @@ defmodule Radixir.Util do
     Decimal.sub(num1, num2) |> Decimal.to_string(:normal)
   end
 
-  defp do_decode_message("0000" <> message), do: decode16(message, "message")
+  # @doc """
+  # Stitches together stitch plans which results in a map.
 
-  defp do_decode_message("30303030" <> message) do
-    with {:ok, result} <- decode16(message, "message"),
-         {:ok, result} <- decode16(result, "message") do
-      {:ok, result}
-    end
+  # ## Parameters
+  #   - `keys_values`: List of keyword lists.
+
+  # ## Examples
+  #     iex> Radixir.Util.stitch([[keys: [:a, :b, :c], value: 4],[keys: [:z, :y, :x], value: 90]])
+  #     %{a: %{b: %{c: 4}}, z: %{y: %{x: 90}}}
+  # """
+  @doc false
+  @spec stitch(keys_values) :: map
+  def stitch(keys_values) do
+    # [[keys: [:a, :b, :c], value: 4],[keys: [:z, :y, :x], value: 90]]
+    Enum.reduce(keys_values, %{}, fn x, data ->
+      map_put(data, x[:keys], x[:value])
+    end)
   end
 
   @doc false
@@ -519,6 +511,15 @@ defmodule Radixir.Util do
   @doc false
   def map_put(data, keys, value) do
     put_in(data, Enum.map(keys, &Access.key(&1, %{})), value)
+  end
+
+  defp do_decode_message("0000" <> message), do: decode16(message, "message")
+
+  defp do_decode_message("30303030" <> message) do
+    with {:ok, result} <- decode16(message, "message"),
+         {:ok, result} <- decode16(result, "message") do
+      {:ok, result}
+    end
   end
 
   defp parse_auth_results(nil = _username, nil = _password, nil = _auth_index, _options),

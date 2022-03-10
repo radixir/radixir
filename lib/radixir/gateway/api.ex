@@ -1,7 +1,8 @@
 defmodule Radixir.Gateway.API do
-  @moduledoc """
-  Submits requests to Gateway API.
-  """
+  @moduledoc false
+  # @moduledoc """
+  # Submits requests to Gateway API.
+  # """
   alias Radixir.Util
   alias Radixir.HTTP
 

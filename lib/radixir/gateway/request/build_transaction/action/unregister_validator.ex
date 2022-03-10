@@ -1,7 +1,8 @@
 defmodule Radixir.Gateway.Request.BuildTransaction.Action.UnregisterValidator do
-  @moduledoc """
-  Methods to create each map in `UnregisterValidator` action.
-  """
+  @moduledoc false
+  # @moduledoc """
+  # Methods to create each map in `UnregisterValidator` action.
+  # """
   alias Radixir.StitchPlan
 
   @type stitch_plans :: list(keyword())

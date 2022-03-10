@@ -1,7 +1,8 @@
 defmodule Radixir.Core.Request.DeriveEntityIdentifier.Metadata.Account do
-  @moduledoc """
-  Methods to create each map in `Account` map.
-  """
+  @moduledoc false
+  # @moduledoc """
+  # Methods to create each map in `Account` map.
+  # """
   alias Radixir.StitchPlan
 
   @type stitch_plans :: list(keyword())

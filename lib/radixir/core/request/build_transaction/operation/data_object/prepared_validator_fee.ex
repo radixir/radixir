@@ -1,7 +1,8 @@
 defmodule Radixir.Core.Request.BuildTransaction.Operation.DataObject.PreparedValidatorFee do
-  @moduledoc """
-  Methods to create each map in `PreparedValidatorFee` map.
-  """
+  @moduledoc false
+  # @moduledoc """
+  # Methods to create each map in `PreparedValidatorFee` map.
+  # """
   alias Radixir.StitchPlan
 
   @type stitch_plans :: list(keyword())

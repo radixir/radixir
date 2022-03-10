@@ -1,7 +1,8 @@
 defmodule Radixir.Gateway.Request.GetValidatorStakes do
-  @moduledoc """
-  Methods to create each map in `GetValidatorStakes` request body.
-  """
+  @moduledoc false
+  # @moduledoc """
+  # Methods to create each map in `GetValidatorStakes` request body.
+  # """
   alias Radixir.StitchPlan
 
   @type stitch_plans :: list(keyword())

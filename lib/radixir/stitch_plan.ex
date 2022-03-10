@@ -1,7 +1,8 @@
 defmodule Radixir.StitchPlan do
-  @moduledoc """
-  Generates stitch plans for maps that are used in requests.
-  """
+  @moduledoc false
+  # @moduledoc """
+  # Generates stitch plans for maps that are used in requests.
+  # """
   alias Radixir.Config
   alias Radixir.Util
 

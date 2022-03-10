@@ -1,7 +1,8 @@
 defmodule Radixir.Core.Request.BuildTransaction.Operation.DataObject.TokenMetaData do
-  @moduledoc """
-  Methods to create each map in `TokenMetaData` map.
-  """
+  @moduledoc false
+  # @moduledoc """
+  # Methods to create each map in `TokenMetaData` map.
+  # """
   alias Radixir.StitchPlan
 
   @type stitch_plans :: list(keyword())

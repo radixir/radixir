@@ -1,7 +1,8 @@
 defmodule Radixir.Core.Request.GetEntityInformation do
-  @moduledoc """
-  Methods to create each map in `GetEntityInformation` request body.
-  """
+  @moduledoc false
+  # @moduledoc """
+  # Methods to create each map in `GetEntityInformation` request body.
+  # """
   alias Radixir.StitchPlan
 
   @type stitch_plans :: list(keyword())

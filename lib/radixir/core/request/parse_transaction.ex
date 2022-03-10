@@ -1,7 +1,8 @@
 defmodule Radixir.Core.Request.ParseTransaction do
-  @moduledoc """
-  Methods to create each map in `ParseTransaction` request body.
-  """
+  @moduledoc false
+  # @moduledoc """
+  # Methods to create each map in `ParseTransaction` request body.
+  # """
   alias Radixir.StitchPlan
 
   @type stitch_plans :: list(keyword())

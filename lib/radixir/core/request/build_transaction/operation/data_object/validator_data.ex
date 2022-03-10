@@ -1,7 +1,8 @@
 defmodule Radixir.Core.Request.BuildTransaction.Operation.DataObject.ValidatorData do
-  @moduledoc """
-  Methods to create each map in `ValidatorData` map.
-  """
+  @moduledoc false
+  # @moduledoc """
+  # Methods to create each map in `ValidatorData` map.
+  # """
   alias Radixir.StitchPlan
 
   @type stitch_plans :: list(keyword())

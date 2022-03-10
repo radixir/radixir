@@ -1,7 +1,8 @@
 defmodule Radixir.Core.Request.GetPublicKeys do
-  @moduledoc """
-  Methods to create each map in `GetPublicKeys` request body.
-  """
+  @moduledoc false
+  # @moduledoc """
+  # Methods to create each map in `GetPublicKeys` request body.
+  # """
   alias Radixir.StitchPlan
 
   @type stitch_plans :: list(keyword())

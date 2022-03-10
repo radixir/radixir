@@ -1,7 +1,8 @@
 defmodule Radixir.Config do
-  @moduledoc """
-  Configuration helpers.
-  """
+  @moduledoc false
+  # @moduledoc """
+  # Configuration helpers.
+  # """
 
   @type url :: String.t()
   @type username :: String.t()
