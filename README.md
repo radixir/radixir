@@ -43,6 +43,12 @@ config :radixir, Radixir.Config,
 
 ```
 
+The following will need to be set in `config.exs` or `runtime.exs`;
+
+```
+config :block_keys, :ec_module, :libsecp256k1
+```
+
 ## Getting started locally
 
 - Install [asdf](https://asdf-vm.com/guide/getting-started.html#_3-install-asdf)
