@@ -5,8 +5,8 @@ defmodule Radixir.Core.Request.GetPublicKeys do
   # """
   alias Radixir.StitchPlan
 
-  @type stitch_plans :: list(keyword())
-  @type params :: keyword()
+  @type stitch_plans :: list(keyword)
+  @type params :: keyword
 
   @doc """
   Generates stitch plan for `network_identifier` map in `GetPublicKeys` request body.

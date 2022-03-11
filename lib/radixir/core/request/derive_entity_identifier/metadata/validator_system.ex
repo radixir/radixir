@@ -5,7 +5,7 @@ defmodule Radixir.Core.Request.DeriveEntityIdentifier.Metadata.ValidatorSystem d
   # """
   alias Radixir.StitchPlan
 
-  @type stitch_plans :: list(keyword())
+  @type stitch_plans :: list(keyword)
 
   @doc """
   Generates stitch plan for `type` map in `ValidatorSystem` map. Value is set to `ValidatorSystem`.

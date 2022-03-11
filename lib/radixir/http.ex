@@ -1,5 +1,12 @@
 defmodule Radixir.HTTP do
   @moduledoc false
+
+  @type url :: String.t()
+  @type path :: String.t()
+  @type body :: map
+  @type options :: keyword
+
+  @callback post(url, path, body, options) :: {:ok, map} | {:error, map}
   def post(url, path, body, options \\ []) do
     Req.post!(
       url <> path,
@@ -9,6 +16,7 @@ defmodule Radixir.HTTP do
     |> handle_response()
   end
 
+  @callback get(url, path, options) :: {:ok, map} | {:error, map}
   def get(url, path, options \\ []) do
     Req.get!(url <> path, options)
     |> handle_response()

@@ -30,6 +30,7 @@ defmodule Radixir.MixProject do
       {:curvy, "~> 0.3.0"},
       {:decimal, "~> 2.0"},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
+      {:mox, "~> 1.0", only: :test},
       {:nimble_options, "~> 0.3.0"},
       {:req, "~> 0.2.0"},
       {:scrypt, "~> 2.1"}

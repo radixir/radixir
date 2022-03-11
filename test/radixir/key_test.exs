@@ -108,6 +108,11 @@ defmodule Radixir.KeyTest do
               }} = Key.from_mnemonic(mnemonic: mnemonic, account_index: 1, address_index: 1)
     end
 
+    test "fails to derive a keypair and addresses because mnemonic is not in configuration" do
+      Application.put_env(:radixir, Radixir.Config, test: 9)
+      assert {:error, "mnemonic not found in configuration"} = Key.from_mnemonic()
+    end
+
     test "fails to derive a keypair and addresses because no configuration was set" do
       Application.delete_env(:radixir, Radixir.Config)
       assert {:error, "no configuration parameters found"} = Key.from_mnemonic()
@@ -240,6 +245,13 @@ defmodule Radixir.KeyTest do
       Application.delete_env(:radixir, Radixir.Config)
 
       assert {:error, "no configuration parameters found"} =
+               Key.derive_account_extended_keys_from_mnemonic()
+    end
+
+    test "fails derives account extended keys from mnemonic because mnemonic is not in configuration" do
+      Application.put_env(:radixir, Radixir.Config, test: 9)
+
+      assert {:error, "mnemonic not found in configuration"} =
                Key.derive_account_extended_keys_from_mnemonic()
     end
 

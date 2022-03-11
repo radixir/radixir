@@ -20,7 +20,7 @@ defmodule Radixir.Util do
   @type unsigned_transaction :: String.t()
   @type payload_to_sign :: String.t()
   @type error_message :: String.t()
-  @type keys_values :: list(keyword())
+  @type keys_values :: list(keyword)
   @type rounding ::
           :down | :half_up | :half_even | :ceiling | :floor | :half_down | :up
 
@@ -477,7 +477,16 @@ defmodule Radixir.Util do
 
     options = Keyword.delete(options, :url)
 
-    {:ok, url, options}
+    case url do
+      {:ok, url} ->
+        {:ok, url, options}
+
+      {:error, error} ->
+        {:error, error}
+
+      url ->
+        {:ok, url, options}
+    end
   end
 
   @doc false
@@ -496,7 +505,6 @@ defmodule Radixir.Util do
     {username, options} = get_username_from_options(options)
     {password, options} = get_password_from_options(options)
     {auth_index, options} = get_auth_index_from_options(options)
-
     parse_auth_results(username, password, auth_index, options)
   end
 

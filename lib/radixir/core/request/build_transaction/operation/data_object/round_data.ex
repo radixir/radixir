@@ -5,8 +5,8 @@ defmodule Radixir.Core.Request.BuildTransaction.Operation.DataObject.RoundData d
   # """
   alias Radixir.StitchPlan
 
-  @type stitch_plans :: list(keyword())
-  @type params :: keyword()
+  @type stitch_plans :: list(keyword)
+  @type params :: keyword
 
   @doc """
   Generates stitch plan for `type` map in `RoundData` map. Value is set to `RoundData`.

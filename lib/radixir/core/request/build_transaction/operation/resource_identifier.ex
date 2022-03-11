@@ -4,8 +4,8 @@ defmodule Radixir.Core.Request.BuildTransaction.Operation.ResourceIdentifier do
   # Methods to create each map in `ResourceIdentifier` map.
   # """
 
-  @type stitch_plans :: list(keyword())
-  @type params :: keyword()
+  @type stitch_plans :: list(keyword)
+  @type params :: keyword
 
   @doc """
   Generates stitch plan for `token` type in `ResourceIdentifier` map. Type value is set to `Token`.

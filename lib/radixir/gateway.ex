@@ -13,7 +13,7 @@ defmodule Radixir.Gateway do
   @type address :: String.t()
   @type rri :: String.t()
   @type symbol :: String.t()
-  @type options :: keyword()
+  @type options :: keyword
   @type error_message :: String.t()
   @type unsigned_transaction :: String.t()
   @type signed_transaction :: String.t()

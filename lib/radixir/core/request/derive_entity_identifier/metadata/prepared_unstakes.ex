@@ -5,7 +5,7 @@ defmodule Radixir.Core.Request.DeriveEntityIdentifier.Metadata.PreparedUnstakes 
   # """
   alias Radixir.StitchPlan
 
-  @type stitch_plans :: list(keyword())
+  @type stitch_plans :: list(keyword)
 
   @doc """
   Generates stitch plan for `type` map in `PreparedUnstakes` map. Value is set to `PreparedUnstakes`.

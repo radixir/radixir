@@ -6,8 +6,8 @@ defmodule Radixir.StitchPlan do
   alias Radixir.Config
   alias Radixir.Util
 
-  @type stitch_plans :: list(keyword())
-  @type params :: keyword()
+  @type stitch_plans :: list(keyword)
+  @type params :: keyword
   @type prefix_keys :: list(atom())
 
   @doc """

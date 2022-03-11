@@ -5,7 +5,7 @@ defmodule Radixir.System do
 
   alias Radixir.System.API
 
-  @type options :: keyword()
+  @type options :: keyword
   @type error_message :: String.t()
 
   @doc """

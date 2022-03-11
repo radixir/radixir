@@ -7,7 +7,7 @@ defmodule Radixir.Gateway.API do
   alias Radixir.HTTP
 
   @type body :: map
-  @type options :: keyword()
+  @type options :: keyword
   @type error_message :: String.t()
 
   @doc """

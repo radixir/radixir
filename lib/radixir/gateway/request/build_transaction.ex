@@ -6,8 +6,8 @@ defmodule Radixir.Gateway.Request.BuildTransaction do
   alias Radixir.StitchPlan
   alias Radixir.Util
 
-  @type stitch_plans :: list(keyword())
-  @type params :: keyword()
+  @type stitch_plans :: list(keyword)
+  @type params :: keyword
   @type request :: map
   @type actions :: list(map)
 

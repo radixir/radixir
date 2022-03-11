@@ -6,7 +6,7 @@ defmodule Radixir.System.API do
   alias Radixir.Util
   alias Radixir.HTTP
 
-  @type options :: keyword()
+  @type options :: keyword
   @type error_message :: String.t()
 
   @doc """
@@ -42,7 +42,7 @@ defmodule Radixir.System.API do
          {:ok, url, options} <- Util.get_url_from_options(options, :system) do
       auth = [auth: {username, password}]
       options = Keyword.merge(auth, options)
-      HTTP.get(url, "/system/version", options)
+      impl().get(url, "/system/version", options)
     end
   end
 
@@ -267,4 +267,6 @@ defmodule Radixir.System.API do
       HTTP.get(url, "/prometheus/metrics", options)
     end
   end
+
+  defp impl, do: Application.get_env(:radixir, :http, Radixir.HTTP)
 end
