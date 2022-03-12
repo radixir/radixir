@@ -4,7 +4,6 @@ defmodule Radixir.System.API do
   # Submits requests to System API.
   # """
   alias Radixir.Util
-  alias Radixir.HTTP
 
   @type options :: keyword
   @type error_message :: String.t()
@@ -79,7 +78,7 @@ defmodule Radixir.System.API do
          {:ok, url, options} <- Util.get_url_from_options(options, :system) do
       auth = [auth: {username, password}]
       options = Keyword.merge(auth, options)
-      HTTP.get(url, "/system/health", options)
+      impl().get(url, "/system/health", options)
     end
   end
 
@@ -116,7 +115,7 @@ defmodule Radixir.System.API do
          {:ok, url, options} <- Util.get_url_from_options(options, :system) do
       auth = [auth: {username, password}]
       options = Keyword.merge(auth, options)
-      HTTP.get(url, "/system/configuration", options)
+      impl().get(url, "/system/configuration", options)
     end
   end
 
@@ -153,7 +152,7 @@ defmodule Radixir.System.API do
          {:ok, url, options} <- Util.get_url_from_options(options, :system) do
       auth = [auth: {username, password}]
       options = Keyword.merge(auth, options)
-      HTTP.get(url, "/system/peers", options)
+      impl().get(url, "/system/peers", options)
     end
   end
 
@@ -190,7 +189,7 @@ defmodule Radixir.System.API do
          {:ok, url, options} <- Util.get_url_from_options(options, :system) do
       auth = [auth: {username, password}]
       options = Keyword.merge(auth, options)
-      HTTP.get(url, "/system/addressbook", options)
+      impl().get(url, "/system/addressbook", options)
     end
   end
 
@@ -227,7 +226,7 @@ defmodule Radixir.System.API do
          {:ok, url, options} <- Util.get_url_from_options(options, :system) do
       auth = [auth: {username, password}]
       options = Keyword.merge(auth, options)
-      HTTP.get(url, "/system/metrics", options)
+      impl().get(url, "/system/metrics", options)
     end
   end
 
@@ -264,7 +263,7 @@ defmodule Radixir.System.API do
          {:ok, url, options} <- Util.get_url_from_options(options, :system) do
       auth = [auth: {username, password}]
       options = Keyword.merge(auth, options)
-      HTTP.get(url, "/prometheus/metrics", options)
+      impl().get(url, "/prometheus/metrics", options)
     end
   end
 
