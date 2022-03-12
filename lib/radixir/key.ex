@@ -22,12 +22,35 @@ defmodule Radixir.Key do
 
   @doc """
   Generates a new keypair and addresses.
+
+  ## Examples
+
+      Radixir.Key.generate()
+      %{
+        mainnet: %{
+          account_address: "rdx1qsp6sg72yg8hpznc60hsy4jmjqyknst2sfswu5h9xv5knyntemgvnesrl9mr9",
+          node_address: "rn1qw5z8j3zpacg57xnaup9vkusp95uz65zvrh99efn995ey67w6ry7vqje79j",
+          validator_address: "rv1qw5z8j3zpacg57xnaup9vkusp95uz65zvrh99efn995ey67w6ry7vcpnwfv"
+        },
+        private_key: "519b6c5c1db1fab3e8513ad18b419082c81844ef66b24f850f9ab7366f7efc34",
+        public_key: "03a823ca220f708a78d3ef02565b900969c16a8260ee52e5332969926bced0c9e6",
+        testnet: %{
+          account_address: "tdx1qsp6sg72yg8hpznc60hsy4jmjqyknst2sfswu5h9xv5knyntemgvnesznsfnx",
+          node_address: "tn1qw5z8j3zpacg57xnaup9vkusp95uz65zvrh99efn995ey67w6ry7vxt7c29",
+          validator_address: "tv1qw5z8j3zpacg57xnaup9vkusp95uz65zvrh99efn995ey67w6ry7v7c5gxm"
+        }
+      }
   """
   @spec generate() :: map
   def generate(), do: Curvy.generate_key() |> format()
 
   @doc """
   Generates a new mnemonic.
+
+  ## Examples
+
+      Radixir.Key.generate_mnemonic()
+      "rival glimpse kick start glide fix school cook adult pulse property chef garden hobby attract market market broom position truly shell diagram throw invite"
   """
   @spec generate_mnemonic() :: String.t()
   def generate_mnemonic(), do: BlockKeys.Mnemonic.generate_phrase()
@@ -41,24 +64,24 @@ defmodule Radixir.Key do
       - `account_index` (optional, integer): If `account_index` is not in `options` then an `account_index` of 0 will be used.
       - `address_index` (optional, integer): If `address_index` is not in `options` then an `address_index` of 0 will be used.
 
-  ## Example
+  ## Examples
 
-    iex> Radixir.Key.from_mnemonic(mnemonic: "nurse grid sister metal flock choice system control about mountain sister rapid hundred render shed chicken print cover tape sister zero bronze tattoo stairs", account_index: 0, address_index: 0)
-    {:ok,
-    %{
-      mainnet: %{
-        account_address: "rdx1qspdkgfmwl656m4nvejgskjrzhp27auwefswhvaztzfamgse2mk8t6gt2apaj",
-        node_address: "rn1qtdjzwmh74xkavmxvjy95sc4c2hh0rk2vr4m8gjcj0w6yx2ka367jtmsh45",
-        validator_address: "rv1qtdjzwmh74xkavmxvjy95sc4c2hh0rk2vr4m8gjcj0w6yx2ka367jng68e2"
-      },
-      private_key: "9dd06ce00e682e5b6e5e16ced5d90316ddc19a12d0cdeefc223cfd6920aee54b",
-      public_key: "02db213b77f54d6eb36664885a4315c2af778eca60ebb3a25893dda21956ec75e9",
-      testnet: %{
-        account_address: "tdx1qspdkgfmwl656m4nvejgskjrzhp27auwefswhvaztzfamgse2mk8t6g2xgnd3",
-        node_address: "tn1qtdjzwmh74xkavmxvjy95sc4c2hh0rk2vr4m8gjcj0w6yx2ka367jdzh36r",
-        validator_address: "tv1qtdjzwmh74xkavmxvjy95sc4c2hh0rk2vr4m8gjcj0w6yx2ka367j43apka"
-      }
-    }}
+      iex> Radixir.Key.from_mnemonic(mnemonic: "nurse grid sister metal flock choice system control about mountain sister rapid hundred render shed chicken print cover tape sister zero bronze tattoo stairs", account_index: 0, address_index: 0)
+      {:ok,
+      %{
+        mainnet: %{
+          account_address: "rdx1qspdkgfmwl656m4nvejgskjrzhp27auwefswhvaztzfamgse2mk8t6gt2apaj",
+          node_address: "rn1qtdjzwmh74xkavmxvjy95sc4c2hh0rk2vr4m8gjcj0w6yx2ka367jtmsh45",
+          validator_address: "rv1qtdjzwmh74xkavmxvjy95sc4c2hh0rk2vr4m8gjcj0w6yx2ka367jng68e2"
+        },
+        private_key: "9dd06ce00e682e5b6e5e16ced5d90316ddc19a12d0cdeefc223cfd6920aee54b",
+        public_key: "02db213b77f54d6eb36664885a4315c2af778eca60ebb3a25893dda21956ec75e9",
+        testnet: %{
+          account_address: "tdx1qspdkgfmwl656m4nvejgskjrzhp27auwefswhvaztzfamgse2mk8t6g2xgnd3",
+          node_address: "tn1qtdjzwmh74xkavmxvjy95sc4c2hh0rk2vr4m8gjcj0w6yx2ka367jdzh36r",
+          validator_address: "tv1qtdjzwmh74xkavmxvjy95sc4c2hh0rk2vr4m8gjcj0w6yx2ka367j43apka"
+        }
+      }}
   """
   @spec from_mnemonic(options) :: {:ok, map} | {:error, error_message}
   def from_mnemonic(options \\ []) do
@@ -82,7 +105,7 @@ defmodule Radixir.Key do
     - `account_extended_private_key`: Account extended private key.
     - `address_index`: Address index.
 
-  ## Example
+  ## Examples
 
       iex> Radixir.Key.from_account_extended_private_key("xprv9xvGWitXHhPc4R9opoQJrA5xfvUsXzdS9gEsEE8AVk1rbdHxcjngXHJ971JC7ensJS6u5XT7wNo23smXy1KfSmmffZWMyCDsfQQaQ2QPr5z", 1)
       {:ok,
@@ -219,6 +242,7 @@ defmodule Radixir.Key do
     - `public_key`: Hex encoded public key.
 
   ## Examples
+
       iex> Radixir.Key.public_key_to_addresses("032f9accc4f9906dffa212d5cef8f13c7faf600242ee44111d4dee4fcaf978646f")
       {:ok,
       %{
@@ -250,6 +274,7 @@ defmodule Radixir.Key do
     - `address`: Radix address.
 
   ## Examples
+
       iex> Radixir.Key.address_to_public_key("tdx1qspjlxkvcnueqm0l5gfdtnhc7y78ltmqqfpwu3q3r4x7un72l9uxgmccyzjy7")
       {:ok,
         "032f9accc4f9906dffa212d5cef8f13c7faf600242ee44111d4dee4fcaf978646f"
@@ -271,6 +296,7 @@ defmodule Radixir.Key do
     - `private_key`: Hex encoded private key.
 
   ## Examples
+
       iex> Radixir.Key.private_key_to_secret_integer("ed50cfe0904bfbf7668502a3f7d562c3139997255c3268c779eeff04a40f9a17")
       {:ok,
         107340927595134471984420820489673630767605194678966104711498635548873815202327
@@ -294,6 +320,7 @@ defmodule Radixir.Key do
     - `private_key`: Hex encoded private key.
 
   ## Examples
+
       iex> Radixir.Key.sign_data("68656C6C6F207261646978","ed50cfe0904bfbf7668502a3f7d562c3139997255c3268c779eeff04a40f9a17")
       {:ok,
         "304402206f2c0f3a70c23879a44a2910f9b060e59d5b96e350605fdbee2a7a265ca503c302201043a8a957353744608c86824c286034e6166be475c7c096527a225cbdf90d0a"
@@ -317,6 +344,7 @@ defmodule Radixir.Key do
     - `synbol`: Token symbol.
 
   ## Examples
+
       iex> Radixir.Key.derive_token_rri("02690937690ffb9d7ae8b67af05efc03a5a9f7e53933de80f92ce763a5554a1fa3","gok")
       {:ok,
       %{

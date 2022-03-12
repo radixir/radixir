@@ -31,6 +31,12 @@ defmodule Radixir.Util do
     - `message`: Plain text message to be encrypted.
     - `private_key`: Hex encoded private key.
     - `address`: Radix address.
+
+  ## Examples
+
+      Radixir.Util.encrypt_message("hello there","83c060ae328c1e8bd238939aa78098c8eee5e18fc857ca3cc10336ad204e8f69", "rdx1qsp29qfgpy79ne7g92s8r5mvrzngyugf750ut7u76qtr9v0kzlt3pzgqr7vv6")
+      {:ok,
+      "01ff02479eac3d0e685437e3ec1c6401db8895c4ead94f2906c3380c6d442f9496c71d3b28e578a98284b112d1c3c7d45bb407e9c778d7ac3ec9349f9d517abee7bad13c521e517bc86f"}
   """
   @spec encrypt_message(message, private_key, address) ::
           {:ok, encrypted_message} | {:error, error_message}
@@ -60,6 +66,11 @@ defmodule Radixir.Util do
     - `encrypted_message`: Encrypted message to be decrypted.
     - `private_key`: Hex encoded private key.
     - `address`: Radix address.
+
+  ## Examples
+
+      Radixir.Util.decrypt_message("01ff02479eac3d0e685437e3ec1c6401db8895c4ead94f2906c3380c6d442f9496c71d3b28e578a98284b112d1c3c7d45bb407e9c778d7ac3ec9349f9d517abee7bad13c521e517bc86f","b6b71fb3936ee2c7b6398bc5a25138292e0b470642bf70e1cea7f52707bce0e5", "rdx1qspzfaq8ccfzmrrx9xxqrm6uespgtt7mah0ry3qa2vsxajk462s5ttsmphsk4")
+      {:ok, "hello there"}
   """
   @spec decrypt_message(encrypted_message, private_key, address) ::
           {:ok, message} | {:error, error_message}
