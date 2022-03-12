@@ -72,9 +72,7 @@ defmodule Radixir.Gateway do
         - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
   """
-  def get_info(options \\ []) do
-    API.get_info(Keyword.get(options, :api, []))
-  end
+  def get_info(options \\ []), do: API.get_info(Keyword.get(options, :api, []))
 
   @doc """
   Gets the account address associated with the given public key.

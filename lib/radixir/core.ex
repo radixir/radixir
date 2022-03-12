@@ -71,9 +71,8 @@ defmodule Radixir.Core do
   then an `auth_index` of 0 would result in `admin` being used as the username and `funny cats very Jack 21!` being used as the password.
   """
   @spec get_network_configuration(options) :: {:ok, map} | {:error, map | error_message}
-  def get_network_configuration(options \\ []) do
-    API.get_network_configuration(Keyword.get(options, :api, []))
-  end
+  def get_network_configuration(options \\ []),
+    do: API.get_network_configuration(Keyword.get(options, :api, []))
 
   @doc """
   Gets network status.
