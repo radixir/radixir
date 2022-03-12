@@ -15,7 +15,7 @@ defmodule Radixir.Gateway.API do
 
   ## Parameters
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - `url` (optional, string): If url is not in options then the url set in the configs will be used.
       - any other options one may want to pass along to the http layer - for example `headers`
 
   ## Gateway API Documentation
@@ -34,7 +34,7 @@ defmodule Radixir.Gateway.API do
   ## Parameters
     - `body`: Request body.
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - `url` (optional, string): If url is not in options then the url set in the configs will be used.
       - any other options one may want to pass along to the http layer - for example `headers`
 
   ## Gateway API Documentation
@@ -53,7 +53,7 @@ defmodule Radixir.Gateway.API do
   ## Parameters
     - `body`: Request body.
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - `url` (optional, string): If url is not in options then the url set in the configs will be used.
       - any other options one may want to pass along to the http layer - for example `headers`
 
   ## Gateway API Documentation
@@ -72,7 +72,7 @@ defmodule Radixir.Gateway.API do
   ## Parameters
     - `body`: Request body.
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - `url` (optional, string): If url is not in options then the url set in the configs will be used.
       - any other options one may want to pass along to the http layer - for example `headers`
 
   ## Gateway API Documentation
@@ -91,7 +91,7 @@ defmodule Radixir.Gateway.API do
   ## Parameters
     - `body`: Request body.
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - `url` (optional, string): If url is not in options then the url set in the configs will be used.
       - any other options one may want to pass along to the http layer - for example `headers`
 
   ## Gateway API Documentation
@@ -110,7 +110,7 @@ defmodule Radixir.Gateway.API do
   ## Parameters
     - `body`: Request body.
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - `url` (optional, string): If url is not in options then the url set in the configs will be used.
       - any other options one may want to pass along to the http layer - for example `headers`
 
   ## Gateway API Documentation
@@ -129,7 +129,7 @@ defmodule Radixir.Gateway.API do
   ## Parameters
     - `body`: Request body.
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - `url` (optional, string): If url is not in options then the url set in the configs will be used.
       - any other options one may want to pass along to the http layer - for example `headers`
 
   ## Gateway API Documentation
@@ -148,7 +148,7 @@ defmodule Radixir.Gateway.API do
   ## Parameters
     - `body`: Request body.
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - `url` (optional, string): If url is not in options then the url set in the configs will be used.
       - any other options one may want to pass along to the http layer - for example `headers`
 
   ## Gateway API Documentation
@@ -167,7 +167,7 @@ defmodule Radixir.Gateway.API do
   ## Parameters
     - `body`: Request body.
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - `url` (optional, string): If url is not in options then the url set in the configs will be used.
       - any other options one may want to pass along to the http layer - for example `headers`
 
   ## Gateway API Documentation
@@ -186,7 +186,7 @@ defmodule Radixir.Gateway.API do
   ## Parameters
     - `body`: Request body.
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - `url` (optional, string): If url is not in options then the url set in the configs will be used.
       - any other options one may want to pass along to the http layer - for example `headers`
 
   ## Gateway API Documentation
@@ -205,7 +205,7 @@ defmodule Radixir.Gateway.API do
   ## Parameters
     - `body`: Request body.
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - `url` (optional, string): If url is not in options then the url set in the configs will be used.
       - any other options one may want to pass along to the http layer - for example `headers`
 
   ## Gateway API Documentation
@@ -224,7 +224,7 @@ defmodule Radixir.Gateway.API do
   ## Parameters
     - `body`: Request body.
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - `url` (optional, string): If url is not in options then the url set in the configs will be used.
       - any other options one may want to pass along to the http layer - for example `headers`
 
   ## Gateway API Documentation
@@ -243,7 +243,7 @@ defmodule Radixir.Gateway.API do
   ## Parameters
     - `body`: Request body.
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - `url` (optional, string): If url is not in options then the url set in the configs will be used.
       - any other options one may want to pass along to the http layer - for example `headers`
 
   ## Gateway API Documentation
@@ -262,7 +262,7 @@ defmodule Radixir.Gateway.API do
   ## Parameters
     - `body`: Request body.
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - `url` (optional, string): If url is not in options then the url set in the configs will be used.
       - any other options one may want to pass along to the http layer - for example `headers`
 
   ## Gateway API Documentation
@@ -281,7 +281,7 @@ defmodule Radixir.Gateway.API do
   ## Parameters
     - `body`: Request body.
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - `url` (optional, string): If url is not in options then the url set in the configs will be used.
       - any other options one may want to pass along to the http layer - for example `headers`
 
   ## Gateway API Documentation
@@ -300,7 +300,7 @@ defmodule Radixir.Gateway.API do
   ## Parameters
     - `body`: Request body.
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - `url` (optional, string): If url is not in options then the url set in the configs will be used.
       - any other options one may want to pass along to the http layer - for example `headers`
 
   ## Gateway API Documentation
@@ -319,7 +319,7 @@ defmodule Radixir.Gateway.API do
   ## Parameters
     - `body`: Request body.
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - `url` (optional, string): If url is not in options then the url set in the configs will be used.
       - any other options one may want to pass along to the http layer - for example `headers`
 
   ## Gateway API Documentation
@@ -338,7 +338,7 @@ defmodule Radixir.Gateway.API do
   ## Parameters
     - `body`: Request body.
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+      - `url` (optional, string): If url is not in options then the url set in the configs will be used.
       - any other options one may want to pass along to the http layer - for example `headers`
 
   ## Gateway API Documentation

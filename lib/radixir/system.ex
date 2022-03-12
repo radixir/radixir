@@ -13,10 +13,12 @@ defmodule Radixir.System do
 
   ## Parameters
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
-      - `auth_index` (optional, integer): Index of the username + password combo to be used for endpoint authentication.
-      - `username`: (optional, string): Username to be used for endpoint authentication.
-      - `password`: (optional, string): Password to be used for endpoint authentication.
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
+        - any other options one may want to pass along to the http layer - for example `headers`
+        - `auth_index` (optional, integer): Index of the username + password combo to be used for endpoint authentication.
+        - `username`: (optional, string): Username to be used for endpoint authentication.
+        - `password`: (optional, string): Password to be used for endpoint authentication.
 
   ## Note
     - Either `username` and `password` or `auth_index` must be provided.
@@ -30,17 +32,19 @@ defmodule Radixir.System do
   then an `auth_index` of 0 would result in `admin` being used as the username and `funny cats very Jack 21!` being used as the password.
   """
   @spec get_version(options) :: {:ok, map} | {:error, map | error_message}
-  def get_version(options \\ []), do: API.get_version(options)
+  def get_version(options \\ []), do: API.get_version(Keyword.get(options, :api, []))
 
   @doc """
   Gets system health.
 
   ## Parameters
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
-      - `auth_index` (optional, integer): Index of the username + password combo to be used for endpoint authentication.
-      - `username`: (optional, string): Username to be used for endpoint authentication.
-      - `password`: (optional, string): Password to be used for endpoint authentication.
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
+        - any other options one may want to pass along to the http layer - for example `headers`
+        - `auth_index` (optional, integer): Index of the username + password combo to be used for endpoint authentication.
+        - `username`: (optional, string): Username to be used for endpoint authentication.
+        - `password`: (optional, string): Password to be used for endpoint authentication.
 
   ## Note
     - Either `username` and `password` or `auth_index` must be provided.
@@ -54,17 +58,19 @@ defmodule Radixir.System do
   then an `auth_index` of 0 would result in `admin` being used as the username and `funny cats very Jack 21!` being used as the password.
   """
   @spec get_health(options) :: {:ok, map} | {:error, map | error_message}
-  def get_health(options \\ []), do: API.get_health(options)
+  def get_health(options \\ []), do: API.get_health(Keyword.get(options, :api, []))
 
   @doc """
   Gets system configuration.
 
   ## Parameters
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
-      - `auth_index` (optional, integer): Index of the username + password combo to be used for endpoint authentication.
-      - `username`: (optional, string): Username to be used for endpoint authentication.
-      - `password`: (optional, string): Password to be used for endpoint authentication.
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
+        - any other options one may want to pass along to the http layer - for example `headers`
+        - `auth_index` (optional, integer): Index of the username + password combo to be used for endpoint authentication.
+        - `username`: (optional, string): Username to be used for endpoint authentication.
+        - `password`: (optional, string): Password to be used for endpoint authentication.
 
   ## Note
     - Either `username` and `password` or `auth_index` must be provided.
@@ -78,17 +84,19 @@ defmodule Radixir.System do
   then an `auth_index` of 0 would result in `admin` being used as the username and `funny cats very Jack 21!` being used as the password.
   """
   @spec get_configuration(options) :: {:ok, map} | {:error, map | error_message}
-  def get_configuration(options \\ []), do: API.get_configuration(options)
+  def get_configuration(options \\ []), do: API.get_configuration(Keyword.get(options, :api, []))
 
   @doc """
   Gets system peers.
 
   ## Parameters
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
-      - `auth_index` (optional, integer): Index of the username + password combo to be used for endpoint authentication.
-      - `username`: (optional, string): Username to be used for endpoint authentication.
-      - `password`: (optional, string): Password to be used for endpoint authentication.
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
+        - any other options one may want to pass along to the http layer - for example `headers`
+        - `auth_index` (optional, integer): Index of the username + password combo to be used for endpoint authentication.
+        - `username`: (optional, string): Username to be used for endpoint authentication.
+        - `password`: (optional, string): Password to be used for endpoint authentication.
 
   ## Note
     - Either `username` and `password` or `auth_index` must be provided.
@@ -102,17 +110,19 @@ defmodule Radixir.System do
   then an `auth_index` of 0 would result in `admin` being used as the username and `funny cats very Jack 21!` being used as the password.
   """
   @spec get_peers(options) :: {:ok, map} | {:error, map | error_message}
-  def get_peers(options \\ []), do: API.get_peers(options)
+  def get_peers(options \\ []), do: API.get_peers(Keyword.get(options, :api, []))
 
   @doc """
   Gets system addressbook.
 
   ## Parameters
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
-      - `auth_index` (optional, integer): Index of the username + password combo to be used for endpoint authentication.
-      - `username`: (optional, string): Username to be used for endpoint authentication.
-      - `password`: (optional, string): Password to be used for endpoint authentication.
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
+        - any other options one may want to pass along to the http layer - for example `headers`
+        - `auth_index` (optional, integer): Index of the username + password combo to be used for endpoint authentication.
+        - `username`: (optional, string): Username to be used for endpoint authentication.
+        - `password`: (optional, string): Password to be used for endpoint authentication.
 
   ## Note
     - Either `username` and `password` or `auth_index` must be provided.
@@ -126,17 +136,19 @@ defmodule Radixir.System do
   then an `auth_index` of 0 would result in `admin` being used as the username and `funny cats very Jack 21!` being used as the password.
   """
   @spec get_address_book(options) :: {:ok, map} | {:error, map | error_message}
-  def get_address_book(options \\ []), do: API.get_address_book(options)
+  def get_address_book(options \\ []), do: API.get_address_book(Keyword.get(options, :api, []))
 
   @doc """
   Gets system metrics.
 
   ## Parameters
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
-      - `auth_index` (optional, integer): Index of the username + password combo to be used for endpoint authentication.
-      - `username`: (optional, string): Username to be used for endpoint authentication.
-      - `password`: (optional, string): Password to be used for endpoint authentication.
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
+        - any other options one may want to pass along to the http layer - for example `headers`
+        - `auth_index` (optional, integer): Index of the username + password combo to be used for endpoint authentication.
+        - `username`: (optional, string): Username to be used for endpoint authentication.
+        - `password`: (optional, string): Password to be used for endpoint authentication.
 
   ## Note
     - Either `username` and `password` or `auth_index` must be provided.
@@ -150,17 +162,19 @@ defmodule Radixir.System do
   then an `auth_index` of 0 would result in `admin` being used as the username and `funny cats very Jack 21!` being used as the password.
   """
   @spec get_metrics(options) :: {:ok, map} | {:error, map | error_message}
-  def get_metrics(options \\ []), do: API.get_metrics(options)
+  def get_metrics(options \\ []), do: API.get_metrics(Keyword.get(options, :api, []))
 
   @doc """
   Gets prometheus metrics.
 
   ## Parameters
     - `options`: Keyword list that contains
-      - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
-      - `auth_index` (optional, integer): Index of the username + password combo to be used for endpoint authentication.
-      - `username`: (optional, string): Username to be used for endpoint authentication.
-      - `password`: (optional, string): Password to be used for endpoint authentication.
+      - `api`: Keyword list that contains
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
+        - any other options one may want to pass along to the http layer - for example `headers`
+        - `auth_index` (optional, integer): Index of the username + password combo to be used for endpoint authentication.
+        - `username`: (optional, string): Username to be used for endpoint authentication.
+        - `password`: (optional, string): Password to be used for endpoint authentication.
 
   ## Note
     - Either `username` and `password` or `auth_index` must be provided.
@@ -174,5 +188,6 @@ defmodule Radixir.System do
   then an `auth_index` of 0 would result in `admin` being used as the username and `funny cats very Jack 21!` being used as the password.
   """
   @spec get_prometheus_metrics(options) :: {:ok, map} | {:error, map | error_message}
-  def get_prometheus_metrics(options \\ []), do: API.get_prometheus_metrics(options)
+  def get_prometheus_metrics(options \\ []),
+    do: API.get_prometheus_metrics(Keyword.get(options, :api, []))
 end

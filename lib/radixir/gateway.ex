@@ -69,7 +69,7 @@ defmodule Radixir.Gateway do
   ## Parameters
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
   """
   def get_info(options \\ []) do
@@ -83,9 +83,9 @@ defmodule Radixir.Gateway do
     - `public_key`: Public key
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
   """
   @spec derive_account_identifier(public_key, options) ::
           {:ok, map} | {:error, map | error_message}
@@ -108,9 +108,9 @@ defmodule Radixir.Gateway do
     - `address`: Radix address
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
       - `epoch` (optional, integer): Epoch key in `at_state_identifier` map.
@@ -140,9 +140,9 @@ defmodule Radixir.Gateway do
     - `address`: Radix address
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
       - `epoch` (optional, integer): Epoch key in `at_state_identifier` map.
@@ -172,9 +172,9 @@ defmodule Radixir.Gateway do
     - `address`: Radix address
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
       - `epoch` (optional, integer): Epoch key in `at_state_identifier` map.
@@ -204,9 +204,9 @@ defmodule Radixir.Gateway do
     - `address`: Radix address
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
       - `epoch` (optional, integer): Epoch key in `at_state_identifier` map.
@@ -241,9 +241,9 @@ defmodule Radixir.Gateway do
   ## Parameters
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
       - `epoch` (optional, integer): Epoch key in `at_state_identifier` map.
@@ -272,9 +272,9 @@ defmodule Radixir.Gateway do
     - `rri`: Radix Resource Identifier
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
       - `epoch` (optional, integer): Epoch key in `at_state_identifier` map.
@@ -305,9 +305,9 @@ defmodule Radixir.Gateway do
     - `symbol`: Token symbol
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
   """
   @spec derive_token_identifier(public_key, symbol, options) ::
           {:ok, map} | {:error, map | error_message}
@@ -331,9 +331,9 @@ defmodule Radixir.Gateway do
     - `address`: Radix address
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
       - `epoch` (optional, integer): Epoch key in `at_state_identifier` map.
@@ -363,9 +363,9 @@ defmodule Radixir.Gateway do
     - `public_key`: Public key
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
   """
   @spec derive_validator_identifier(public_key, options) ::
           {:ok, map} | {:error, map | error_message}
@@ -387,9 +387,9 @@ defmodule Radixir.Gateway do
   ## Parameters
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
       - `epoch` (optional, integer): Epoch key in `at_state_identifier` map.
@@ -418,9 +418,9 @@ defmodule Radixir.Gateway do
     - `address`: Radix address
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
       - `epoch` (optional, integer): Epoch key in `at_state_identifier` map.
@@ -455,9 +455,9 @@ defmodule Radixir.Gateway do
   ## Parameters
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
       - `epoch` (optional, integer): Epoch key in `at_state_identifier` map.
@@ -487,9 +487,9 @@ defmodule Radixir.Gateway do
     - `fee_payer_address`: Fee payer address
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
       - `epoch` (optional, integer): Epoch key in `at_state_identifier` map.
@@ -553,9 +553,9 @@ defmodule Radixir.Gateway do
     - `fee_payer_address`: Fee payer address
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
       - `epoch` (optional, integer): Epoch key in `at_state_identifier` map.
@@ -618,9 +618,9 @@ defmodule Radixir.Gateway do
     - `fee_payer_address`: Fee payer address
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
       - `epoch` (optional, integer): Epoch key in `at_state_identifier` map.
@@ -685,9 +685,9 @@ defmodule Radixir.Gateway do
     - `fee_payer_address`: Fee payer address
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
       - `epoch` (optional, integer): Epoch key in `at_state_identifier` map.
@@ -764,9 +764,9 @@ defmodule Radixir.Gateway do
     - `fee_payer_address`: Fee payer address
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
       - `epoch` (optional, integer): Epoch key in `at_state_identifier` map.
@@ -828,9 +828,9 @@ defmodule Radixir.Gateway do
     - `fee_payer_address`: Fee payer address
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
       - `epoch` (optional, integer): Epoch key in `at_state_identifier` map.
@@ -892,9 +892,9 @@ defmodule Radixir.Gateway do
     - `fee_payer_address`: Fee payer address
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
       - `epoch` (optional, integer): Epoch key in `at_state_identifier` map.
@@ -956,9 +956,9 @@ defmodule Radixir.Gateway do
     - `fee_payer_address`: Fee payer address
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
       - `epoch` (optional, integer): Epoch key in `at_state_identifier` map.
@@ -1021,9 +1021,9 @@ defmodule Radixir.Gateway do
     - `signature_bytes`: Bytes of signature
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
       - `submit` (optional, boolean): If true, the transaction is immediately submitted after finalization.
   """
   @spec finalize_transaction(unsigned_transaction, signature_public_key, signature_bytes, options) ::
@@ -1061,9 +1061,9 @@ defmodule Radixir.Gateway do
     - `signed_transaction`: Signed transaction
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
   """
   @spec submit_transaction(signed_transaction, options) ::
           {:ok, map} | {:error, map | error_message}
@@ -1086,9 +1086,9 @@ defmodule Radixir.Gateway do
     - `transaction_hash`: Transaction hash
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
       - `epoch` (optional, integer): Epoch key in `at_state_identifier` map.
@@ -1119,9 +1119,9 @@ defmodule Radixir.Gateway do
     - `fee_payer_address`: Fee payer address
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
       - `epoch` (optional, integer): Epoch key in `at_state_identifier` map.
@@ -1159,9 +1159,9 @@ defmodule Radixir.Gateway do
     - `fee_payer_address`: Fee payer address
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
       - `epoch` (optional, integer): Epoch key in `at_state_identifier` map.
@@ -1199,9 +1199,9 @@ defmodule Radixir.Gateway do
     - `fee_payer_address`: Fee payer address
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
       - `epoch` (optional, integer): Epoch key in `at_state_identifier` map.
@@ -1239,9 +1239,9 @@ defmodule Radixir.Gateway do
     - `fee_payer_address`: Fee payer address
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
       - `epoch` (optional, integer): Epoch key in `at_state_identifier` map.
@@ -1281,9 +1281,9 @@ defmodule Radixir.Gateway do
     - `fee_payer_address`: Fee payer address
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
       - `epoch` (optional, integer): Epoch key in `at_state_identifier` map.
@@ -1321,9 +1321,9 @@ defmodule Radixir.Gateway do
     - `fee_payer_address`: Fee payer address
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
       - `epoch` (optional, integer): Epoch key in `at_state_identifier` map.
@@ -1361,9 +1361,9 @@ defmodule Radixir.Gateway do
     - `fee_payer_address`: Fee payer address
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
       - `epoch` (optional, integer): Epoch key in `at_state_identifier` map.
@@ -1401,9 +1401,9 @@ defmodule Radixir.Gateway do
     - `fee_payer_address`: Fee payer address
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
       - `version` (optional, integer): Version key in `at_state_identifier` map.
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
       - `epoch` (optional, integer): Epoch key in `at_state_identifier` map.

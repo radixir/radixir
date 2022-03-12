@@ -3,6 +3,8 @@ defmodule Radixir.SystemTest do
 
   import Mox
 
+  alias Radixir.System
+
   setup :verify_on_exit!
 
   describe "get_version/1" do
@@ -16,7 +18,7 @@ defmodule Radixir.SystemTest do
       end)
 
       assert {:ok, _} =
-               Radixir.System.get_version(url: "url", username: "username", password: "password")
+               System.get_version(api: [url: "url", username: "username", password: "password"])
     end
 
     test "successful call to get_version and getting url from configs" do
@@ -30,19 +32,19 @@ defmodule Radixir.SystemTest do
         {:ok, %{}}
       end)
 
-      assert {:ok, _} = Radixir.System.get_version(username: "username", password: "password")
+      assert {:ok, _} = System.get_version(api: [username: "username", password: "password"])
     end
 
     test "catches not providing auth" do
-      assert {:error, "no auth provided"} = Radixir.System.get_version()
+      assert {:error, "no auth provided"} = System.get_version()
     end
 
     test "catches missing password" do
-      assert {:error, "no password provided"} = Radixir.System.get_version(username: "goku")
+      assert {:error, "no password provided"} = System.get_version(api: [username: "goku"])
     end
 
     test "catches missing username" do
-      assert {:error, "no username provided"} = Radixir.System.get_version(password: "hello goku")
+      assert {:error, "no username provided"} = System.get_version(api: [password: "hello goku"])
     end
 
     test "catches invalid auth_index" do
@@ -52,7 +54,7 @@ defmodule Radixir.SystemTest do
       )
 
       assert {:error, "invalid index for accessing usernames and passwords"} =
-               Radixir.System.get_version(auth_index: 9)
+               System.get_version(api: [auth_index: 9])
     end
 
     test "catches usernames and passwords length mismatch" do
@@ -62,7 +64,7 @@ defmodule Radixir.SystemTest do
       )
 
       assert {:error, "usernames and passwords length mismatch"} =
-               Radixir.System.get_version(auth_index: 1)
+               System.get_version(api: [auth_index: 1])
     end
 
     test "catches no usernames" do
@@ -71,7 +73,7 @@ defmodule Radixir.SystemTest do
         passwords: ""
       )
 
-      assert {:error, "no usernames"} = Radixir.System.get_version(auth_index: 1)
+      assert {:error, "no usernames"} = System.get_version(api: [auth_index: 1])
     end
 
     test "catches no passwords" do
@@ -80,35 +82,42 @@ defmodule Radixir.SystemTest do
         passwords: ""
       )
 
-      assert {:error, "no passwords"} = Radixir.System.get_version(auth_index: 1)
+      assert {:error, "no passwords"} = System.get_version(api: [auth_index: 1])
     end
 
-    test "catches no configuration parameters found" do
+    test "catches no configuration parameters found when looking for usernames and passwords" do
       Application.delete_env(:radixir, Radixir.Config)
 
       assert {:error, "no configuration parameters found"} =
-               Radixir.System.get_version(auth_index: 1)
+               System.get_version(api: [auth_index: 1])
+    end
+
+    test "catches no configuration parameters found when looking for url" do
+      Application.delete_env(:radixir, Radixir.Config)
+
+      assert {:error, "no configuration parameters found"} =
+               System.get_version(api: [username: "doug", password: "cat"])
     end
 
     test "catches usernames not being found in configuration" do
       Application.put_env(:radixir, Radixir.Config, passwords: "admin sdfsdf, metrics")
 
       assert {:error, "usernames not found in configuration"} =
-               Radixir.System.get_version(auth_index: 1)
+               System.get_version(api: [auth_index: 1])
     end
 
     test "catches passwords not being found in configuration" do
       Application.put_env(:radixir, Radixir.Config, usernames: "admin sdfsdf, metrics")
 
       assert {:error, "passwords not found in configuration"} =
-               Radixir.System.get_version(auth_index: 1)
+               System.get_version(api: [auth_index: 1])
     end
 
     test "catches system_api_url not being found in configuration" do
       Application.put_env(:radixir, Radixir.Config, passwords: "admin sdfsdf, metrics")
 
       assert {:error, "system_api_url not found in configuration"} =
-               Radixir.System.get_version(username: "one", password: "two")
+               System.get_version(api: [username: "one", password: "two"])
     end
   end
 
@@ -123,7 +132,7 @@ defmodule Radixir.SystemTest do
       end)
 
       assert {:ok, _} =
-               Radixir.System.get_health(url: "url", username: "username", password: "password")
+               System.get_health(api: [url: "url", username: "username", password: "password"])
     end
 
     test "successful call to get_health and getting url from configs" do
@@ -137,19 +146,19 @@ defmodule Radixir.SystemTest do
         {:ok, %{}}
       end)
 
-      assert {:ok, _} = Radixir.System.get_health(username: "username", password: "password")
+      assert {:ok, _} = System.get_health(api: [username: "username", password: "password"])
     end
 
     test "catches not providing auth" do
-      assert {:error, "no auth provided"} = Radixir.System.get_health()
+      assert {:error, "no auth provided"} = System.get_health()
     end
 
     test "catches missing password" do
-      assert {:error, "no password provided"} = Radixir.System.get_health(username: "goku")
+      assert {:error, "no password provided"} = System.get_health(api: [username: "goku"])
     end
 
     test "catches missing username" do
-      assert {:error, "no username provided"} = Radixir.System.get_health(password: "hello goku")
+      assert {:error, "no username provided"} = System.get_health(api: [password: "hello goku"])
     end
 
     test "catches invalid auth_index" do
@@ -159,7 +168,7 @@ defmodule Radixir.SystemTest do
       )
 
       assert {:error, "invalid index for accessing usernames and passwords"} =
-               Radixir.System.get_health(auth_index: 9)
+               System.get_health(api: [auth_index: 9])
     end
 
     test "catches usernames and passwords length mismatch" do
@@ -169,7 +178,7 @@ defmodule Radixir.SystemTest do
       )
 
       assert {:error, "usernames and passwords length mismatch"} =
-               Radixir.System.get_health(auth_index: 1)
+               System.get_health(api: [auth_index: 1])
     end
 
     test "catches no usernames" do
@@ -178,7 +187,7 @@ defmodule Radixir.SystemTest do
         passwords: ""
       )
 
-      assert {:error, "no usernames"} = Radixir.System.get_health(auth_index: 1)
+      assert {:error, "no usernames"} = System.get_health(api: [auth_index: 1])
     end
 
     test "catches no passwords" do
@@ -187,35 +196,42 @@ defmodule Radixir.SystemTest do
         passwords: ""
       )
 
-      assert {:error, "no passwords"} = Radixir.System.get_health(auth_index: 1)
+      assert {:error, "no passwords"} = System.get_health(api: [auth_index: 1])
     end
 
-    test "catches no configuration parameters found" do
+    test "catches no configuration parameters found when looking for usernames and passwords" do
       Application.delete_env(:radixir, Radixir.Config)
 
       assert {:error, "no configuration parameters found"} =
-               Radixir.System.get_health(auth_index: 1)
+               System.get_health(api: [auth_index: 1])
+    end
+
+    test "catches no configuration parameters found when looking for url" do
+      Application.delete_env(:radixir, Radixir.Config)
+
+      assert {:error, "no configuration parameters found"} =
+               System.get_health(api: [username: "doug", password: "cat"])
     end
 
     test "catches usernames not being found in configuration" do
       Application.put_env(:radixir, Radixir.Config, passwords: "admin sdfsdf, metrics")
 
       assert {:error, "usernames not found in configuration"} =
-               Radixir.System.get_health(auth_index: 1)
+               System.get_health(api: [auth_index: 1])
     end
 
     test "catches passwords not being found in configuration" do
       Application.put_env(:radixir, Radixir.Config, usernames: "admin sdfsdf, metrics")
 
       assert {:error, "passwords not found in configuration"} =
-               Radixir.System.get_health(auth_index: 1)
+               System.get_health(api: [auth_index: 1])
     end
 
     test "catches system_api_url not being found in configuration" do
       Application.put_env(:radixir, Radixir.Config, passwords: "admin sdfsdf, metrics")
 
       assert {:error, "system_api_url not found in configuration"} =
-               Radixir.System.get_health(username: "one", password: "two")
+               System.get_health(api: [username: "one", password: "two"])
     end
   end
 
@@ -230,10 +246,8 @@ defmodule Radixir.SystemTest do
       end)
 
       assert {:ok, _} =
-               Radixir.System.get_configuration(
-                 url: "url",
-                 username: "username",
-                 password: "password"
+               System.get_configuration(
+                 api: [url: "url", username: "username", password: "password"]
                )
     end
 
@@ -249,20 +263,20 @@ defmodule Radixir.SystemTest do
       end)
 
       assert {:ok, _} =
-               Radixir.System.get_configuration(username: "username", password: "password")
+               System.get_configuration(api: [username: "username", password: "password"])
     end
 
     test "catches not providing auth" do
-      assert {:error, "no auth provided"} = Radixir.System.get_configuration()
+      assert {:error, "no auth provided"} = System.get_configuration()
     end
 
     test "catches missing password" do
-      assert {:error, "no password provided"} = Radixir.System.get_configuration(username: "goku")
+      assert {:error, "no password provided"} = System.get_configuration(api: [username: "goku"])
     end
 
     test "catches missing username" do
       assert {:error, "no username provided"} =
-               Radixir.System.get_configuration(password: "hello goku")
+               System.get_configuration(api: [password: "hello goku"])
     end
 
     test "catches invalid auth_index" do
@@ -272,7 +286,7 @@ defmodule Radixir.SystemTest do
       )
 
       assert {:error, "invalid index for accessing usernames and passwords"} =
-               Radixir.System.get_configuration(auth_index: 9)
+               System.get_configuration(api: [auth_index: 9])
     end
 
     test "catches usernames and passwords length mismatch" do
@@ -282,7 +296,7 @@ defmodule Radixir.SystemTest do
       )
 
       assert {:error, "usernames and passwords length mismatch"} =
-               Radixir.System.get_configuration(auth_index: 1)
+               System.get_configuration(api: [auth_index: 1])
     end
 
     test "catches no usernames" do
@@ -291,7 +305,7 @@ defmodule Radixir.SystemTest do
         passwords: ""
       )
 
-      assert {:error, "no usernames"} = Radixir.System.get_configuration(auth_index: 1)
+      assert {:error, "no usernames"} = System.get_configuration(api: [auth_index: 1])
     end
 
     test "catches no passwords" do
@@ -300,35 +314,42 @@ defmodule Radixir.SystemTest do
         passwords: ""
       )
 
-      assert {:error, "no passwords"} = Radixir.System.get_configuration(auth_index: 1)
+      assert {:error, "no passwords"} = System.get_configuration(api: [auth_index: 1])
     end
 
-    test "catches no configuration parameters found" do
+    test "catches no configuration parameters found when looking for usernames and passwords" do
       Application.delete_env(:radixir, Radixir.Config)
 
       assert {:error, "no configuration parameters found"} =
-               Radixir.System.get_configuration(auth_index: 1)
+               System.get_configuration(api: [auth_index: 1])
+    end
+
+    test "catches no configuration parameters found when looking for url" do
+      Application.delete_env(:radixir, Radixir.Config)
+
+      assert {:error, "no configuration parameters found"} =
+               System.get_configuration(api: [username: "doug", password: "cat"])
     end
 
     test "catches usernames not being found in configuration" do
       Application.put_env(:radixir, Radixir.Config, passwords: "admin sdfsdf, metrics")
 
       assert {:error, "usernames not found in configuration"} =
-               Radixir.System.get_configuration(auth_index: 1)
+               System.get_configuration(api: [auth_index: 1])
     end
 
     test "catches passwords not being found in configuration" do
       Application.put_env(:radixir, Radixir.Config, usernames: "admin sdfsdf, metrics")
 
       assert {:error, "passwords not found in configuration"} =
-               Radixir.System.get_configuration(auth_index: 1)
+               System.get_configuration(api: [auth_index: 1])
     end
 
     test "catches system_api_url not being found in configuration" do
       Application.put_env(:radixir, Radixir.Config, passwords: "admin sdfsdf, metrics")
 
       assert {:error, "system_api_url not found in configuration"} =
-               Radixir.System.get_configuration(username: "one", password: "two")
+               System.get_configuration(api: [username: "one", password: "two"])
     end
   end
 
@@ -343,7 +364,7 @@ defmodule Radixir.SystemTest do
       end)
 
       assert {:ok, _} =
-               Radixir.System.get_peers(url: "url", username: "username", password: "password")
+               System.get_peers(api: [url: "url", username: "username", password: "password"])
     end
 
     test "successful call to get_peers and getting url from configs" do
@@ -357,19 +378,19 @@ defmodule Radixir.SystemTest do
         {:ok, %{}}
       end)
 
-      assert {:ok, _} = Radixir.System.get_peers(username: "username", password: "password")
+      assert {:ok, _} = System.get_peers(api: [username: "username", password: "password"])
     end
 
     test "catches not providing auth" do
-      assert {:error, "no auth provided"} = Radixir.System.get_peers()
+      assert {:error, "no auth provided"} = System.get_peers()
     end
 
     test "catches missing password" do
-      assert {:error, "no password provided"} = Radixir.System.get_peers(username: "goku")
+      assert {:error, "no password provided"} = System.get_peers(api: [username: "goku"])
     end
 
     test "catches missing username" do
-      assert {:error, "no username provided"} = Radixir.System.get_peers(password: "hello goku")
+      assert {:error, "no username provided"} = System.get_peers(api: [password: "hello goku"])
     end
 
     test "catches invalid auth_index" do
@@ -379,7 +400,7 @@ defmodule Radixir.SystemTest do
       )
 
       assert {:error, "invalid index for accessing usernames and passwords"} =
-               Radixir.System.get_peers(auth_index: 9)
+               System.get_peers(api: [auth_index: 9])
     end
 
     test "catches usernames and passwords length mismatch" do
@@ -389,7 +410,7 @@ defmodule Radixir.SystemTest do
       )
 
       assert {:error, "usernames and passwords length mismatch"} =
-               Radixir.System.get_peers(auth_index: 1)
+               System.get_peers(api: [auth_index: 1])
     end
 
     test "catches no usernames" do
@@ -398,7 +419,7 @@ defmodule Radixir.SystemTest do
         passwords: ""
       )
 
-      assert {:error, "no usernames"} = Radixir.System.get_peers(auth_index: 1)
+      assert {:error, "no usernames"} = System.get_peers(api: [auth_index: 1])
     end
 
     test "catches no passwords" do
@@ -407,35 +428,42 @@ defmodule Radixir.SystemTest do
         passwords: ""
       )
 
-      assert {:error, "no passwords"} = Radixir.System.get_peers(auth_index: 1)
+      assert {:error, "no passwords"} = System.get_peers(api: [auth_index: 1])
     end
 
-    test "catches no configuration parameters found" do
+    test "catches no configuration parameters found when looking for usernames and passwords" do
       Application.delete_env(:radixir, Radixir.Config)
 
       assert {:error, "no configuration parameters found"} =
-               Radixir.System.get_peers(auth_index: 1)
+               System.get_peers(api: [auth_index: 1])
+    end
+
+    test "catches no configuration parameters found when looking for url" do
+      Application.delete_env(:radixir, Radixir.Config)
+
+      assert {:error, "no configuration parameters found"} =
+               System.get_peers(api: [username: "doug", password: "cat"])
     end
 
     test "catches usernames not being found in configuration" do
       Application.put_env(:radixir, Radixir.Config, passwords: "admin sdfsdf, metrics")
 
       assert {:error, "usernames not found in configuration"} =
-               Radixir.System.get_peers(auth_index: 1)
+               System.get_peers(api: [auth_index: 1])
     end
 
     test "catches passwords not being found in configuration" do
       Application.put_env(:radixir, Radixir.Config, usernames: "admin sdfsdf, metrics")
 
       assert {:error, "passwords not found in configuration"} =
-               Radixir.System.get_peers(auth_index: 1)
+               System.get_peers(api: [auth_index: 1])
     end
 
     test "catches system_api_url not being found in configuration" do
       Application.put_env(:radixir, Radixir.Config, passwords: "admin sdfsdf, metrics")
 
       assert {:error, "system_api_url not found in configuration"} =
-               Radixir.System.get_peers(username: "one", password: "two")
+               System.get_peers(api: [username: "one", password: "two"])
     end
   end
 
@@ -450,10 +478,8 @@ defmodule Radixir.SystemTest do
       end)
 
       assert {:ok, _} =
-               Radixir.System.get_address_book(
-                 url: "url",
-                 username: "username",
-                 password: "password"
+               System.get_address_book(
+                 api: [url: "url", username: "username", password: "password"]
                )
     end
 
@@ -468,21 +494,20 @@ defmodule Radixir.SystemTest do
         {:ok, %{}}
       end)
 
-      assert {:ok, _} =
-               Radixir.System.get_address_book(username: "username", password: "password")
+      assert {:ok, _} = System.get_address_book(api: [username: "username", password: "password"])
     end
 
     test "catches not providing auth" do
-      assert {:error, "no auth provided"} = Radixir.System.get_address_book()
+      assert {:error, "no auth provided"} = System.get_address_book()
     end
 
     test "catches missing password" do
-      assert {:error, "no password provided"} = Radixir.System.get_address_book(username: "goku")
+      assert {:error, "no password provided"} = System.get_address_book(api: [username: "goku"])
     end
 
     test "catches missing username" do
       assert {:error, "no username provided"} =
-               Radixir.System.get_address_book(password: "hello goku")
+               System.get_address_book(api: [password: "hello goku"])
     end
 
     test "catches invalid auth_index" do
@@ -492,7 +517,7 @@ defmodule Radixir.SystemTest do
       )
 
       assert {:error, "invalid index for accessing usernames and passwords"} =
-               Radixir.System.get_address_book(auth_index: 9)
+               System.get_address_book(api: [auth_index: 9])
     end
 
     test "catches usernames and passwords length mismatch" do
@@ -502,7 +527,7 @@ defmodule Radixir.SystemTest do
       )
 
       assert {:error, "usernames and passwords length mismatch"} =
-               Radixir.System.get_address_book(auth_index: 1)
+               System.get_address_book(api: [auth_index: 1])
     end
 
     test "catches no usernames" do
@@ -511,7 +536,7 @@ defmodule Radixir.SystemTest do
         passwords: ""
       )
 
-      assert {:error, "no usernames"} = Radixir.System.get_address_book(auth_index: 1)
+      assert {:error, "no usernames"} = System.get_address_book(api: [auth_index: 1])
     end
 
     test "catches no passwords" do
@@ -520,35 +545,42 @@ defmodule Radixir.SystemTest do
         passwords: ""
       )
 
-      assert {:error, "no passwords"} = Radixir.System.get_address_book(auth_index: 1)
+      assert {:error, "no passwords"} = System.get_address_book(api: [auth_index: 1])
     end
 
-    test "catches no configuration parameters found" do
+    test "catches no configuration parameters found when looking for usernames and passwords" do
       Application.delete_env(:radixir, Radixir.Config)
 
       assert {:error, "no configuration parameters found"} =
-               Radixir.System.get_address_book(auth_index: 1)
+               System.get_address_book(api: [auth_index: 1])
+    end
+
+    test "catches no configuration parameters found when looking for url" do
+      Application.delete_env(:radixir, Radixir.Config)
+
+      assert {:error, "no configuration parameters found"} =
+               System.get_address_book(api: [username: "doug", password: "cat"])
     end
 
     test "catches usernames not being found in configuration" do
       Application.put_env(:radixir, Radixir.Config, passwords: "admin sdfsdf, metrics")
 
       assert {:error, "usernames not found in configuration"} =
-               Radixir.System.get_address_book(auth_index: 1)
+               System.get_address_book(api: [auth_index: 1])
     end
 
     test "catches passwords not being found in configuration" do
       Application.put_env(:radixir, Radixir.Config, usernames: "admin sdfsdf, metrics")
 
       assert {:error, "passwords not found in configuration"} =
-               Radixir.System.get_address_book(auth_index: 1)
+               System.get_address_book(api: [auth_index: 1])
     end
 
     test "catches system_api_url not being found in configuration" do
       Application.put_env(:radixir, Radixir.Config, passwords: "admin sdfsdf, metrics")
 
       assert {:error, "system_api_url not found in configuration"} =
-               Radixir.System.get_address_book(username: "one", password: "two")
+               System.get_address_book(api: [username: "one", password: "two"])
     end
   end
 
@@ -563,7 +595,7 @@ defmodule Radixir.SystemTest do
       end)
 
       assert {:ok, _} =
-               Radixir.System.get_metrics(url: "url", username: "username", password: "password")
+               System.get_metrics(api: [url: "url", username: "username", password: "password"])
     end
 
     test "successful call to get_metrics and getting url from configs" do
@@ -577,19 +609,19 @@ defmodule Radixir.SystemTest do
         {:ok, %{}}
       end)
 
-      assert {:ok, _} = Radixir.System.get_metrics(username: "username", password: "password")
+      assert {:ok, _} = System.get_metrics(api: [username: "username", password: "password"])
     end
 
     test "catches not providing auth" do
-      assert {:error, "no auth provided"} = Radixir.System.get_metrics()
+      assert {:error, "no auth provided"} = System.get_metrics()
     end
 
     test "catches missing password" do
-      assert {:error, "no password provided"} = Radixir.System.get_metrics(username: "goku")
+      assert {:error, "no password provided"} = System.get_metrics(api: [username: "goku"])
     end
 
     test "catches missing username" do
-      assert {:error, "no username provided"} = Radixir.System.get_metrics(password: "hello goku")
+      assert {:error, "no username provided"} = System.get_metrics(api: [password: "hello goku"])
     end
 
     test "catches invalid auth_index" do
@@ -599,7 +631,7 @@ defmodule Radixir.SystemTest do
       )
 
       assert {:error, "invalid index for accessing usernames and passwords"} =
-               Radixir.System.get_metrics(auth_index: 9)
+               System.get_metrics(api: [auth_index: 9])
     end
 
     test "catches usernames and passwords length mismatch" do
@@ -609,7 +641,7 @@ defmodule Radixir.SystemTest do
       )
 
       assert {:error, "usernames and passwords length mismatch"} =
-               Radixir.System.get_metrics(auth_index: 1)
+               System.get_metrics(api: [auth_index: 1])
     end
 
     test "catches no usernames" do
@@ -618,7 +650,7 @@ defmodule Radixir.SystemTest do
         passwords: ""
       )
 
-      assert {:error, "no usernames"} = Radixir.System.get_metrics(auth_index: 1)
+      assert {:error, "no usernames"} = System.get_metrics(api: [auth_index: 1])
     end
 
     test "catches no passwords" do
@@ -627,35 +659,42 @@ defmodule Radixir.SystemTest do
         passwords: ""
       )
 
-      assert {:error, "no passwords"} = Radixir.System.get_metrics(auth_index: 1)
+      assert {:error, "no passwords"} = System.get_metrics(api: [auth_index: 1])
     end
 
-    test "catches no configuration parameters found" do
+    test "catches no configuration parameters found when looking for usernames and passwords" do
       Application.delete_env(:radixir, Radixir.Config)
 
       assert {:error, "no configuration parameters found"} =
-               Radixir.System.get_metrics(auth_index: 1)
+               System.get_metrics(api: [auth_index: 1])
+    end
+
+    test "catches no configuration parameters found when looking for url" do
+      Application.delete_env(:radixir, Radixir.Config)
+
+      assert {:error, "no configuration parameters found"} =
+               System.get_metrics(api: [username: "doug", password: "cat"])
     end
 
     test "catches usernames not being found in configuration" do
       Application.put_env(:radixir, Radixir.Config, passwords: "admin sdfsdf, metrics")
 
       assert {:error, "usernames not found in configuration"} =
-               Radixir.System.get_metrics(auth_index: 1)
+               System.get_metrics(api: [auth_index: 1])
     end
 
     test "catches passwords not being found in configuration" do
       Application.put_env(:radixir, Radixir.Config, usernames: "admin sdfsdf, metrics")
 
       assert {:error, "passwords not found in configuration"} =
-               Radixir.System.get_metrics(auth_index: 1)
+               System.get_metrics(api: [auth_index: 1])
     end
 
     test "catches system_api_url not being found in configuration" do
       Application.put_env(:radixir, Radixir.Config, passwords: "admin sdfsdf, metrics")
 
       assert {:error, "system_api_url not found in configuration"} =
-               Radixir.System.get_metrics(username: "one", password: "two")
+               System.get_metrics(api: [username: "one", password: "two"])
     end
   end
 
@@ -670,10 +709,8 @@ defmodule Radixir.SystemTest do
       end)
 
       assert {:ok, _} =
-               Radixir.System.get_prometheus_metrics(
-                 url: "url",
-                 username: "username",
-                 password: "password"
+               System.get_prometheus_metrics(
+                 api: [url: "url", username: "username", password: "password"]
                )
     end
 
@@ -689,21 +726,21 @@ defmodule Radixir.SystemTest do
       end)
 
       assert {:ok, _} =
-               Radixir.System.get_prometheus_metrics(username: "username", password: "password")
+               System.get_prometheus_metrics(api: [username: "username", password: "password"])
     end
 
     test "catches not providing auth" do
-      assert {:error, "no auth provided"} = Radixir.System.get_prometheus_metrics()
+      assert {:error, "no auth provided"} = System.get_prometheus_metrics()
     end
 
     test "catches missing password" do
       assert {:error, "no password provided"} =
-               Radixir.System.get_prometheus_metrics(username: "goku")
+               System.get_prometheus_metrics(api: [username: "goku"])
     end
 
     test "catches missing username" do
       assert {:error, "no username provided"} =
-               Radixir.System.get_prometheus_metrics(password: "hello goku")
+               System.get_prometheus_metrics(api: [password: "hello goku"])
     end
 
     test "catches invalid auth_index" do
@@ -713,7 +750,7 @@ defmodule Radixir.SystemTest do
       )
 
       assert {:error, "invalid index for accessing usernames and passwords"} =
-               Radixir.System.get_prometheus_metrics(auth_index: 9)
+               System.get_prometheus_metrics(api: [auth_index: 9])
     end
 
     test "catches usernames and passwords length mismatch" do
@@ -723,7 +760,7 @@ defmodule Radixir.SystemTest do
       )
 
       assert {:error, "usernames and passwords length mismatch"} =
-               Radixir.System.get_prometheus_metrics(auth_index: 1)
+               System.get_prometheus_metrics(api: [auth_index: 1])
     end
 
     test "catches no usernames" do
@@ -732,7 +769,7 @@ defmodule Radixir.SystemTest do
         passwords: ""
       )
 
-      assert {:error, "no usernames"} = Radixir.System.get_prometheus_metrics(auth_index: 1)
+      assert {:error, "no usernames"} = System.get_prometheus_metrics(api: [auth_index: 1])
     end
 
     test "catches no passwords" do
@@ -741,35 +778,42 @@ defmodule Radixir.SystemTest do
         passwords: ""
       )
 
-      assert {:error, "no passwords"} = Radixir.System.get_prometheus_metrics(auth_index: 1)
+      assert {:error, "no passwords"} = System.get_prometheus_metrics(api: [auth_index: 1])
     end
 
-    test "catches no configuration parameters found" do
+    test "catches no configuration parameters found when looking for usernames and passwords" do
       Application.delete_env(:radixir, Radixir.Config)
 
       assert {:error, "no configuration parameters found"} =
-               Radixir.System.get_prometheus_metrics(auth_index: 1)
+               System.get_prometheus_metrics(api: [auth_index: 1])
+    end
+
+    test "catches no configuration parameters found when looking for url" do
+      Application.delete_env(:radixir, Radixir.Config)
+
+      assert {:error, "no configuration parameters found"} =
+               System.get_prometheus_metrics(api: [username: "doug", password: "cat"])
     end
 
     test "catches usernames not being found in configuration" do
       Application.put_env(:radixir, Radixir.Config, passwords: "admin sdfsdf, metrics")
 
       assert {:error, "usernames not found in configuration"} =
-               Radixir.System.get_prometheus_metrics(auth_index: 1)
+               System.get_prometheus_metrics(api: [auth_index: 1])
     end
 
     test "catches passwords not being found in configuration" do
       Application.put_env(:radixir, Radixir.Config, usernames: "admin sdfsdf, metrics")
 
       assert {:error, "passwords not found in configuration"} =
-               Radixir.System.get_prometheus_metrics(auth_index: 1)
+               System.get_prometheus_metrics(api: [auth_index: 1])
     end
 
     test "catches system_api_url not being found in configuration" do
       Application.put_env(:radixir, Radixir.Config, passwords: "admin sdfsdf, metrics")
 
       assert {:error, "system_api_url not found in configuration"} =
-               Radixir.System.get_prometheus_metrics(username: "one", password: "two")
+               System.get_prometheus_metrics(api: [username: "one", password: "two"])
     end
   end
 end

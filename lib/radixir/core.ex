@@ -53,11 +53,11 @@ defmodule Radixir.Core do
   ## Parameters
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-        - `auth_index` (optional, integer): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
-        - `username`: (optional, string): `username` to be used for endpoint authentication.
-        - `password`: (optional, string): `password` to be used for endpoint authentication.
+        - `auth_index` (optional, integer): Index of the username + password combo to be used for endpoint authentication.
+        - `username`: (optional, string): Username to be used for endpoint authentication.
+        - `password`: (optional, string): Password to be used for endpoint authentication.
 
   ## Note
     - Either `username` and `password` or `auth_index` must be provided.
@@ -81,12 +81,12 @@ defmodule Radixir.Core do
   ## Parameters
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-        - `auth_index` (optional, integer): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
-        - `username`: (optional, string): `username` to be used for endpoint authentication.
-        - `password`: (optional, string): `password` to be used for endpoint authentication.
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+        - `auth_index` (optional, integer): Index of the username + password combo to be used for endpoint authentication.
+        - `username`: (optional, string): Username to be used for endpoint authentication.
+        - `password`: (optional, string): Password to be used for endpoint authentication.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
 
   ## Note
     - Either `username` and `password` or `auth_index` must be provided.
@@ -118,12 +118,12 @@ defmodule Radixir.Core do
     - `address`: Radix address.
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-        - `auth_index` (optional, integer): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
-        - `username`: (optional, string): `username` to be used for endpoint authentication.
-        - `password`: (optional, string): `password` to be used for endpoint authentication.
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+        - `auth_index` (optional, integer): Index of the username + password combo to be used for endpoint authentication.
+        - `username`: (optional, string): Username to be used for endpoint authentication.
+        - `password`: (optional, string): Password to be used for endpoint authentication.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
       - `sub_entity_address` (optional, string): Sub entity address.
       - `validator_address` (optional, string): Validator address.
       - `epoch_unlock` (optional, integer): Epoch unlock.
@@ -160,12 +160,12 @@ defmodule Radixir.Core do
   ## Parameters
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-        - `auth_index` (optional, integer): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
-        - `username`: (optional, string): `username` to be used for endpoint authentication.
-        - `password`: (optional, string): `password` to be used for endpoint authentication.
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+        - `auth_index` (optional, integer): Index of the username + password combo to be used for endpoint authentication.
+        - `username`: (optional, string): Username to be used for endpoint authentication.
+        - `password`: (optional, string): Password to be used for endpoint authentication.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
 
   ## Note
     - Either `username` and `password` or `auth_index` must be provided.
@@ -197,12 +197,12 @@ defmodule Radixir.Core do
     - `transaction_hash`: Transaction hash.
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-        - `auth_index` (optional, integer): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
-        - `username`: (optional, string): `username` to be used for endpoint authentication.
-        - `password`: (optional, string): `password` to be used for endpoint authentication.
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+        - `auth_index` (optional, integer): Index of the username + password combo to be used for endpoint authentication.
+        - `username`: (optional, string): Username to be used for endpoint authentication.
+        - `password`: (optional, string): Password to be used for endpoint authentication.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
 
   ## Note
     - Either `username` and `password` or `auth_index` must be provided.
@@ -236,12 +236,12 @@ defmodule Radixir.Core do
     - `state_version`: State version.
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-        - `auth_index` (optional, integer): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
-        - `username`: (optional, string): `username` to be used for endpoint authentication.
-        - `password`: (optional, string): `password` to be used for endpoint authentication.
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+        - `auth_index` (optional, integer): Index of the username + password combo to be used for endpoint authentication.
+        - `username`: (optional, string): Username to be used for endpoint authentication.
+        - `password`: (optional, string): Password to be used for endpoint authentication.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
       - `transaction_accumulator` (optional, string): Transaction accumulator in state identifier map.
       - `limit` (optional, integer): Maximum number of transactions that will be returned.
 
@@ -282,12 +282,12 @@ defmodule Radixir.Core do
     - `public_key`: Public key.
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-        - `auth_index` (optional, integer): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
-        - `username`: (optional, string): `username` to be used for endpoint authentication.
-        - `password`: (optional, string): `password` to be used for endpoint authentication.
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+        - `auth_index` (optional, integer): Index of the username + password combo to be used for endpoint authentication.
+        - `username`: (optional, string): Username to be used for endpoint authentication.
+        - `password`: (optional, string): Password to be used for endpoint authentication.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
 
   ## Note
     - Either `username` and `password` or `auth_index` must be provided.
@@ -322,12 +322,12 @@ defmodule Radixir.Core do
     - `public_key`: Public key.
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-        - `auth_index` (optional, integer): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
-        - `username`: (optional, string): `username` to be used for endpoint authentication.
-        - `password`: (optional, string): `password` to be used for endpoint authentication.
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+        - `auth_index` (optional, integer): Index of the username + password combo to be used for endpoint authentication.
+        - `username`: (optional, string): Username to be used for endpoint authentication.
+        - `password`: (optional, string): Password to be used for endpoint authentication.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
 
   ## Note
     - Either `username` and `password` or `auth_index` must be provided.
@@ -362,12 +362,12 @@ defmodule Radixir.Core do
     - `public_key`: Public key.
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-        - `auth_index` (optional, integer): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
-        - `username`: (optional, string): `username` to be used for endpoint authentication.
-        - `password`: (optional, string): `password` to be used for endpoint authentication.
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+        - `auth_index` (optional, integer): Index of the username + password combo to be used for endpoint authentication.
+        - `username`: (optional, string): Username to be used for endpoint authentication.
+        - `password`: (optional, string): Password to be used for endpoint authentication.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
 
   ## Note
     - Either `username` and `password` or `auth_index` must be provided.
@@ -404,12 +404,12 @@ defmodule Radixir.Core do
     - `validator_address`: Radix address.
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-        - `auth_index` (optional, integer): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
-        - `username`: (optional, string): `username` to be used for endpoint authentication.
-        - `password`: (optional, string): `password` to be used for endpoint authentication.
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+        - `auth_index` (optional, integer): Index of the username + password combo to be used for endpoint authentication.
+        - `username`: (optional, string): Username to be used for endpoint authentication.
+        - `password`: (optional, string): Password to be used for endpoint authentication.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
       - `sub_entity_address` (optional, string): Sub entity address.
       - `validator_address` (optional, string): Validator address.
       - `epoch_unlock` (optional, integer): Epoch unlock.
@@ -455,12 +455,12 @@ defmodule Radixir.Core do
     - `public_key`: Public key.
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-        - `auth_index` (optional, integer): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
-        - `username`: (optional, string): `username` to be used for endpoint authentication.
-        - `password`: (optional, string): `password` to be used for endpoint authentication.
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+        - `auth_index` (optional, integer): Index of the username + password combo to be used for endpoint authentication.
+        - `username`: (optional, string): Username to be used for endpoint authentication.
+        - `password`: (optional, string): Password to be used for endpoint authentication.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
 
   ## Note
     - Either `username` and `password` or `auth_index` must be provided.
@@ -497,12 +497,12 @@ defmodule Radixir.Core do
     - `epoch_unlock`: Epoch unlock.
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-        - `auth_index` (optional, integer): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
-        - `username`: (optional, string): `username` to be used for endpoint authentication.
-        - `password`: (optional, string): `password` to be used for endpoint authentication.
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+        - `auth_index` (optional, integer): Index of the username + password combo to be used for endpoint authentication.
+        - `username`: (optional, string): Username to be used for endpoint authentication.
+        - `password`: (optional, string): Password to be used for endpoint authentication.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
       - `sub_entity_address` (optional, string): Sub entity address.
       - `validator_address` (optional, string): Validator address.
       - `epoch_unlock` (optional, integer): Epoch unlock.
@@ -561,12 +561,12 @@ defmodule Radixir.Core do
     - `public_key`: Public key.
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-        - `auth_index` (optional, integer): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
-        - `username`: (optional, string): `username` to be used for endpoint authentication.
-        - `password`: (optional, string): `password` to be used for endpoint authentication.
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+        - `auth_index` (optional, integer): Index of the username + password combo to be used for endpoint authentication.
+        - `username`: (optional, string): Username to be used for endpoint authentication.
+        - `password`: (optional, string): Password to be used for endpoint authentication.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
 
   ## Note
     - Either `username` and `password` or `auth_index` must be provided.
@@ -1052,12 +1052,12 @@ defmodule Radixir.Core do
     - `fee_payer_address`: Fee payer address.
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-        - `auth_index` (optional, integer): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
-        - `username`: (optional, string): `username` to be used for endpoint authentication.
-        - `password`: (optional, string): `password` to be used for endpoint authentication.
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+        - `auth_index` (optional, integer): Index of the username + password combo to be used for endpoint authentication.
+        - `username`: (optional, string): Username to be used for endpoint authentication.
+        - `password`: (optional, string): Password to be used for endpoint authentication.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
       - `sub_entity_address` (optional, string): Sub entity address.
       - `validator_address` (optional, string): Validator address.
       - `epoch_unlock` (optional, integer): Epoch unlock.
@@ -1117,12 +1117,12 @@ defmodule Radixir.Core do
     - `signed`: Whether the transaction is signed or not.
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-        - `auth_index` (optional, integer): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
-        - `username`: (optional, string): `username` to be used for endpoint authentication.
-        - `password`: (optional, string): `password` to be used for endpoint authentication.
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+        - `auth_index` (optional, integer): Index of the username + password combo to be used for endpoint authentication.
+        - `username`: (optional, string): Username to be used for endpoint authentication.
+        - `password`: (optional, string): Password to be used for endpoint authentication.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
 
   ## Note
     - Either `username` and `password` or `auth_index` must be provided.
@@ -1159,12 +1159,12 @@ defmodule Radixir.Core do
     - `signature_bytes`: Signature bytes.
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-        - `auth_index` (optional, integer): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
-        - `username`: (optional, string): `username` to be used for endpoint authentication.
-        - `password`: (optional, string): `password` to be used for endpoint authentication.
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+        - `auth_index` (optional, integer): Index of the username + password combo to be used for endpoint authentication.
+        - `username`: (optional, string): Username to be used for endpoint authentication.
+        - `password`: (optional, string): Password to be used for endpoint authentication.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
 
   ## Note
     - Either `username` and `password` or `auth_index` must be provided.
@@ -1206,12 +1206,12 @@ defmodule Radixir.Core do
     - `signed_transaction`: Signed ransaction.
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-        - `auth_index` (optional, integer): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
-        - `username`: (optional, string): `username` to be used for endpoint authentication.
-        - `password`: (optional, string): `password` to be used for endpoint authentication.
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+        - `auth_index` (optional, integer): Index of the username + password combo to be used for endpoint authentication.
+        - `username`: (optional, string): Username to be used for endpoint authentication.
+        - `password`: (optional, string): Password to be used for endpoint authentication.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
 
   ## Note
     - Either `username` and `password` or `auth_index` must be provided.
@@ -1248,12 +1248,12 @@ defmodule Radixir.Core do
     - `signed_transaction`: Signed ransaction.
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-        - `auth_index` (optional, integer): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
-        - `username`: (optional, string): `username` to be used for endpoint authentication.
-        - `password`: (optional, string): `password` to be used for endpoint authentication.
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+        - `auth_index` (optional, integer): Index of the username + password combo to be used for endpoint authentication.
+        - `username`: (optional, string): Username to be used for endpoint authentication.
+        - `password`: (optional, string): Password to be used for endpoint authentication.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
 
   ## Note
     - Either `username` and `password` or `auth_index` must be provided.
@@ -1289,12 +1289,12 @@ defmodule Radixir.Core do
   ## Parameters
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-        - `auth_index` (optional, integer): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
-        - `username`: (optional, string): `username` to be used for endpoint authentication.
-        - `password`: (optional, string): `password` to be used for endpoint authentication.
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+        - `auth_index` (optional, integer): Index of the username + password combo to be used for endpoint authentication.
+        - `username`: (optional, string): Username to be used for endpoint authentication.
+        - `password`: (optional, string): Password to be used for endpoint authentication.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
 
   ## Note
     - Either `username` and `password` or `auth_index` must be provided.
@@ -1328,12 +1328,12 @@ defmodule Radixir.Core do
     - `public_key`: Public key.
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-        - `auth_index` (optional, integer): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
-        - `username`: (optional, string): `username` to be used for endpoint authentication.
-        - `password`: (optional, string): `password` to be used for endpoint authentication.
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+        - `auth_index` (optional, integer): Index of the username + password combo to be used for endpoint authentication.
+        - `username`: (optional, string): Username to be used for endpoint authentication.
+        - `password`: (optional, string): Password to be used for endpoint authentication.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
 
   ## Note
     - Either `username` and `password` or `auth_index` must be provided.
@@ -1370,12 +1370,12 @@ defmodule Radixir.Core do
     - `private_key`: Private key to sign transaction.
     - `options`: Keyword list that contains
       - `api`: Keyword list that contains
-        - `url` (optional, string): If `url` is not in `options` then the url set in the configs will be used.
+        - `url` (optional, string): If url is not in options then the url set in the configs will be used.
         - any other options one may want to pass along to the http layer - for example `headers`
-        - `auth_index` (optional, integer): `auth_index` is the index of the username + password combo to be used for endpoint authentication.
-        - `username`: (optional, string): `username` to be used for endpoint authentication.
-        - `password`: (optional, string): `password` to be used for endpoint authentication.
-      - `network` (optional, string): If `network` is not in `options` it will default to what is returned from `Radixir.Config.network()`.
+        - `auth_index` (optional, integer): Index of the username + password combo to be used for endpoint authentication.
+        - `username`: (optional, string): Username to be used for endpoint authentication.
+        - `password`: (optional, string): Password to be used for endpoint authentication.
+      - `network` (optional, string): If network is not in options it will default to what is returned from `Radixir.Config.network()`.
       - `sub_entity_address` (optional, string): Sub entity address.
       - `validator_address` (optional, string): Validator address.
       - `epoch_unlock` (optional, integer): Epoch unlock.
