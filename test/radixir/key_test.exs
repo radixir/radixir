@@ -476,7 +476,7 @@ defmodule Radixir.KeyTest do
     end
 
     test "fails to decode data" do
-      assert {:error, "could not decode data"} =
+      assert {:error, "could not base16 decode data"} =
                Key.sign_data(
                  "hello",
                  "ed50cfe0904bfbf7668502a3f7d562c3139997255c3268c779eeff04a40f9a17"

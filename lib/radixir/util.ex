@@ -42,9 +42,9 @@ defmodule Radixir.Util do
           {:ok, encrypted_message} | {:error, error_message}
   def encrypt_message(message, private_key, address) do
     with private_key <- String.downcase(private_key),
-         {:ok, private_key} <- Key.validate_private_key(private_key),
+         {:ok, _} <- Key.from_private_key(private_key),
          address <- String.downcase(address),
-         {:ok, address} <- Key.validate_address(address),
+         {:ok, _} <- Key.address_to_public_key(address),
          {:ok, dh} <- get_dh(private_key, address),
          {key_bytes, ephemeral_public_key_bytes, nonce_bytes} <- get_encryption_params(dh),
          {:ok, {_ad, payload}} <-
@@ -76,9 +76,9 @@ defmodule Radixir.Util do
           {:ok, message} | {:error, error_message}
   def decrypt_message(encrypted_message, private_key, address) do
     with private_key <- String.downcase(private_key),
-         {:ok, private_key} <- Key.validate_private_key(private_key),
+         {:ok, _} <- Key.from_private_key(private_key),
          address <- String.downcase(address),
-         {:ok, address} <- Key.validate_address(address),
+         {:ok, _} <- Key.address_to_public_key(address),
          {:ok, dh} <- get_dh(private_key, address),
          {key_bytes, ephemeral_public_key_bytes, nonce_bytes, cipher_text_bytes, cipher_tag_bytes} <-
            get_decryption_params(encrypted_message, dh) do
@@ -120,13 +120,13 @@ defmodule Radixir.Util do
   def verify_hash(unsigned_transaction, payload_to_sign) do
     with {:ok, unsigned_transaction_binary} <-
            decode16(unsigned_transaction, "unsigned_transaction") do
-      double_hash_hex =
+      double_hash =
         unsigned_transaction_binary
         |> hash()
         |> hash()
         |> encode16()
 
-      if double_hash_hex == payload_to_sign do
+      if double_hash == payload_to_sign do
         :ok
       else
         {:error, "double hash of unsigned_transaction does not match payload_to_sign"}
@@ -149,7 +149,7 @@ defmodule Radixir.Util do
       {:ok, result}
     else
       _ ->
-        {:error, "could not decode #{error_note}"}
+        {:error, "could not base16 decode #{error_note}"}
     end
   end
 
@@ -580,10 +580,10 @@ defmodule Radixir.Util do
     {auth_index, options}
   end
 
-  defp get_dh(private_key_hex, address) do
-    with {:ok, private_key_secret} <- Key.private_key_to_secret_integer(private_key_hex),
-         {:ok, public_key_hex} <- Key.address_to_public_key(address),
-         {:ok, public_key_binary} <- decode16(public_key_hex, "public_key_hex"),
+  defp get_dh(private_key, address) do
+    with {:ok, private_key_secret} <- Key.private_key_to_secret_integer(private_key),
+         {:ok, public_key} <- Key.address_to_public_key(address),
+         {:ok, public_key_binary} <- decode16(public_key, "public_key"),
          public_keypair <- Curvy.Key.from_pubkey(public_key_binary) do
       {:ok, Curvy.Point.mul(public_keypair.point, private_key_secret)}
     end

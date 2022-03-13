@@ -356,7 +356,7 @@ defmodule Radixir.Key do
   def derive_token_rri(public_key, symbol) do
     with public_key <- String.downcase(public_key),
          symbol <- String.downcase(symbol),
-         {:ok, public_key} <- validate_public_key(public_key),
+         {:ok, _} <- public_key_to_addresses(public_key),
          {:ok, public_key} <- Util.decode16(public_key, "public_key") do
       result =
         (public_key <> symbol)
