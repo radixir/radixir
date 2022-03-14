@@ -1463,17 +1463,19 @@ defmodule Radixir.Gateway do
         {:ok, submitted_transaction} ->
           {:ok,
            %{
-             built_transaction: built_transaction,
-             finalized_transaction: finalized_transaction,
-             submitted_transaction: submitted_transaction
+             build_transaction: built_transaction,
+             finalize_transaction: finalized_transaction,
+             submit_transaction: submitted_transaction
            }}
 
         {:error, error} ->
           {:error,
            %{
-             built_transaction: built_transaction,
-             finalized_transaction: finalized_transaction,
-             submitted_transaction_error: error
+             succeeded: %{
+               build_transaction: built_transaction,
+               finalize_transaction: finalized_transaction
+             },
+             failed: %{submit_transaction: error}
            }}
       end
     end

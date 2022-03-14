@@ -1404,142 +1404,46 @@ defmodule Radixir.Core do
         private_key,
         options \\ []
       ) do
-    with {:ok, %{public_key: public_key}} <- Key.from_private_key(private_key) do
-      pipeline_build_transaction(
-        operation_groups,
-        fee_payer_address,
-        options
-      )
-      |> pipeline_verify_hash()
-      |> pipeline_sign_data(private_key)
-      |> pipeline_finalize_transaction(public_key, options)
-      |> pipeline_submit_transaction(options)
-    end
+    with {:ok, %{public_key: public_key}} <- Key.from_private_key(private_key),
+         {:ok, built_transaction} <-
+           build_transaction(
+             operation_groups,
+             fee_payer_address,
+             options
+           ),
+         :ok <-
+           Util.verify_hash(
+             built_transaction["unsigned_transaction"],
+             built_transaction["payload_to_sign"]
+           ),
+         {:ok, signature_bytes} <-
+           Key.sign_data(built_transaction["payload_to_sign"], private_key),
+         {:ok, finalized_transaction} <-
+           finalize_transaction(
+             built_transaction["unsigned_transaction"],
+             public_key,
+             signature_bytes,
+             options
+           ) do
+      case submit_transaction(finalized_transaction["signed_transaction"], options) do
+        {:ok, submitted_transaction} ->
+          {:ok,
+           %{
+             build_transaction: built_transaction,
+             finalize_transaction: finalized_transaction,
+             submit_transaction: submitted_transaction
+           }}
 
-    # with {:ok, %{public_key: public_key}} <- Key.from_private_key(private_key),
-    #      {:ok, built_transaction} <-
-    #        build_transaction(
-    #          operation_groups,
-    #          fee_payer_address,
-    #          options
-    #        ),
-    #      :ok <-
-    #        Util.verify_hash(
-    #          built_transaction["unsigned_transaction"],
-    #          built_transaction["payload_to_sign"]
-    #        ),
-    #      {:ok, signature_bytes} <-
-    #        Key.sign_data(built_transaction["payload_to_sign"], private_key),
-    #      {:ok, finalized_transaction} <-
-    #        finalize_transaction(
-    #          built_transaction["unsigned_transaction"],
-    #          public_key,
-    #          signature_bytes,
-    #          options
-    #        ) do
-    #   case submit_transaction(finalized_transaction["signed_transaction"], options) do
-    #     {:ok, submitted_transaction} ->
-    #       {:ok,
-    #        %{
-    #          built_transaction: built_transaction,
-    #          finalized_transaction: finalized_transaction,
-    #          submitted_transaction: submitted_transaction
-    #        }}
-
-    #     {:error, error} ->
-    #       {:error,
-    #        %{
-    #          built_transaction: built_transaction,
-    #          finalized_transaction: finalized_transaction,
-    #          submitted_transaction_error: error
-    #        }}
-    #   end
-    # end
-  end
-
-  defp pipeline_build_transaction(
-         operation_groups,
-         fee_payer_address,
-         options
-       ) do
-    case build_transaction(
-           operation_groups,
-           fee_payer_address,
-           options
-         ) do
-      {:ok, built_transaction} ->
-        {:ok, Util.map_put(%{}, [:succeeded, :build_transaction], built_transaction)}
-
-      {:error, error} ->
-        {:error, Util.map_put(%{}, [:failed, :build_transaction], error)}
+        {:error, error} ->
+          {:error,
+           %{
+             succeeded: %{
+               build_transaction: built_transaction,
+               finalize_transaction: finalized_transaction
+             },
+             failed: %{submit_transaction: error}
+           }}
+      end
     end
   end
-
-  defp pipeline_verify_hash({:ok, %{succeeded: %{build_transaction: built_transaction}} = result}) do
-    case Util.verify_hash(
-           built_transaction["unsigned_transaction"],
-           built_transaction["payload_to_sign"]
-         ) do
-      :ok ->
-        {:ok, Util.map_put(result, [:succeeded, :verify_hash], :ok)}
-
-      {:error, error} ->
-        {:error, Util.map_put(result, [:failed, :verify_hash], error)}
-    end
-  end
-
-  defp pipeline_verify_hash({:error, error}), do: {:error, error}
-
-  defp pipeline_sign_data(
-         {:ok, %{succeeded: %{build_transaction: built_transaction}} = result},
-         private_key
-       ) do
-    case Key.sign_data(built_transaction["payload_to_sign"], private_key) do
-      {:ok, signature_bytes} ->
-        {:ok, Util.map_put(result, [:succeeded, :sign_data], signature_bytes)}
-
-      {:error, error} ->
-        {:error, Util.map_put(result, [:failed, :sign_data], error)}
-    end
-  end
-
-  defp pipeline_sign_data({:error, error}, _private_key), do: {:error, error}
-
-  defp pipeline_finalize_transaction(
-         {:ok,
-          %{succeeded: %{build_transaction: built_transaction, signed_data: signature_bytes}} =
-            result},
-         public_key,
-         options
-       ) do
-    case finalize_transaction(
-           built_transaction["unsigned_transaction"],
-           public_key,
-           signature_bytes,
-           options
-         ) do
-      {:ok, finalized_transaction} ->
-        {:ok, Util.map_put(result, [:succeeded, :finalize_transaction], finalized_transaction)}
-
-      {:error, error} ->
-        {:error, Util.map_put(result, [:failed, :finalize_transaction], error)}
-    end
-  end
-
-  defp pipeline_finalize_transaction({:error, error}, _public_key, _options), do: {:error, error}
-
-  defp pipeline_submit_transaction(
-         {:ok, %{succeeded: %{finalize_transaction: finalized_transaction}} = result},
-         options
-       ) do
-    case submit_transaction(finalized_transaction["signed_transaction"], options) do
-      {:ok, submitted_transaction} ->
-        {:ok, Util.map_put(result, [:succeeded, :submit_transaction], submitted_transaction)}
-
-      {:error, error} ->
-        {:error, Util.map_put(result, [:failed, :submit_transaction], error)}
-    end
-  end
-
-  defp pipeline_submit_transaction({:error, error}, _options), do: {:error, error}
 end
