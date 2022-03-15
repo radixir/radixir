@@ -8,18 +8,28 @@ defmodule Radixir.HTTP do
 
   @callback post(url, path, body, options) :: {:ok, map} | {:error, map}
   def post(url, path, body, options \\ []) do
-    Req.post!(
-      url <> path,
-      {:json, body},
-      options
-    )
-    |> handle_response()
+    try do
+      Req.post!(
+        url <> path,
+        {:json, body},
+        options
+      )
+      |> handle_response()
+    rescue
+      e in Mint.TransportError ->
+        {:error, "transport error: #{e.reason}"}
+    end
   end
 
   @callback get(url, path, options) :: {:ok, map} | {:error, map}
   def get(url, path, options \\ []) do
-    Req.get!(url <> path, options)
-    |> handle_response()
+    try do
+      Req.get!(url <> path, options)
+      |> handle_response()
+    rescue
+      e in Mint.TransportError ->
+        {:error, "transport error: #{e.reason}"}
+    end
   end
 
   defp handle_response(response) do

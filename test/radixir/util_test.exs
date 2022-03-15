@@ -211,4 +211,127 @@ defmodule Radixir.UtilTest do
                Util.decrypt_message(message, private_key, account_address)
     end
   end
+
+  describe "encode_message/1" do
+    test "encode a message" do
+      assert "000068656c6c6f207468657265" == Util.encode_message("hello there")
+      assert String.starts_with?("000068656c6c6f207468657265", "0000") == true
+    end
+  end
+
+  describe "decode_message/1" do
+    test "decode a message with 0000 prefix" do
+      assert {:ok, "hello there"} == Util.decode_message("000068656c6c6f207468657265")
+    end
+
+    test "decode a message with 30303030 prefix" do
+      assert {:ok, "hello there"} ==
+               Util.decode_message("3030303036383635366336633666323037343638363537323635")
+    end
+
+    test "catches failure to decode message" do
+      assert {:error, "could not base16 decode message"} = Util.decode_message("0000zzz")
+    end
+
+    test "catches failure to decode message due to invalid prefix" do
+      assert {:error, "invalid message format"} = Util.decode_message("zzz")
+    end
+  end
+
+  describe "verify_hash/2" do
+    test "verify hash" do
+      unsigned_transaction = Radixir.Util.encode16("hello there")
+
+      assert :ok ==
+               Util.verify_hash(
+                 unsigned_transaction,
+                 "56571a1be3fbeab18d215f549095915a004b5788ca0d535be668559129a76f25"
+               )
+    end
+
+    test "catches failure to verify hash due to not being able to decode unsigned_transaction" do
+      assert {:error, "could not base16 decode unsigned_transaction"} =
+               Util.verify_hash(
+                 "zzzz",
+                 "56571a1be3fbeab18d215f549095915a004b5788ca0d535be668559129a76f25"
+               )
+    end
+  end
+
+  describe "xrd_to_atto/1" do
+    test "convert xrd to atto with decimal" do
+      assert "1500000000000000000" == Util.xrd_to_atto("1.5")
+    end
+
+    test "convert xrd to atto with no decimal" do
+      assert "15000000000000000000" == Util.xrd_to_atto("15")
+    end
+
+    test "convert smallest xrd to atto with no decimal" do
+      assert "1" == Util.xrd_to_atto("0.000000000000000001")
+    end
+
+    test "convert xrd to atto and drops 19th decimal place" do
+      assert "1500000000000000009" == Util.xrd_to_atto("1.5000000000000000098")
+    end
+  end
+
+  describe "atto_to_xrd/1" do
+    test "convert atto to xrd" do
+      assert "1.5" == Util.atto_to_xrd("1500000000000000000")
+    end
+
+    test "convert atto to xrd and ignores decimals" do
+      assert "1.5" == Util.atto_to_xrd("1500000000000000000.98")
+    end
+
+    test "convert single atto to xrd" do
+      assert "0.000000000000000001" == Util.atto_to_xrd("1")
+    end
+  end
+
+  describe "xrd_abs/1" do
+    test "get absolute value of negative xrd amount" do
+      assert "1.5" == Util.xrd_abs("-1.5")
+    end
+
+    test "get absolute value of positive xrd amount" do
+      assert "1.5" == Util.xrd_abs("1.5")
+    end
+
+    test "get absolute value of negative xrd amount to 18th decimal" do
+      assert "1.500000000000000009" == Util.xrd_abs("-1.5000000000000000098")
+    end
+  end
+
+  describe "xrd_add/2" do
+    test "adds two xrd amounts and drops 19th decimal place" do
+      assert "24.000000000000000002" ==
+               Util.xrd_add("12.0000000000000000014", "12.0000000000000000014")
+    end
+
+    test "adds two xrd amounts and drops 19th decimal place - use negative number" do
+      assert "0.000000000000000000" ==
+               Util.xrd_add("-12.0000000000000000014", "12.0000000000000000014")
+    end
+
+    test "adds two xrd amounts and drops 19th decimal place - use various decimal places" do
+      assert "0.000999" ==
+               Util.xrd_add("-12.000001", "12.001")
+    end
+  end
+
+  describe "xrd_compare/2" do
+    test "compares two xrd amounts and drops 19th decimal place - gt" do
+      assert :gt == Util.xrd_compare("12.0000000000000000026", "12.0000000000000000014")
+    end
+
+    test "compares two xrd amounts and drops 19th decimal place - lt" do
+      assert :lt == Util.xrd_compare("12.0000000000000000016", "12.0000000000000000024")
+    end
+
+    test "compares two xrd amounts and drops 19th decimal place - eq" do
+      assert :eq == Util.xrd_compare("12.0000000000000000026", "12.0000000000000000024")
+    end
+  end
 end
