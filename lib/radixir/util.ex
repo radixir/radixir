@@ -102,8 +102,8 @@ defmodule Radixir.Util do
 
   ## Examples
 
-        iex> Radixir.Util.encode_message("hello there")
-        "000068656c6c6f207468657265"
+      iex> Radixir.Util.encode_message("hello there")
+      "000068656c6c6f207468657265"
   """
   @spec encode_message(message) :: encoded_message
   def encode_message(message) do
@@ -120,8 +120,8 @@ defmodule Radixir.Util do
 
   ## Examples
 
-        iex> Radixir.Util.decode_message("000068656c6c6f207468657265")
-        {:ok, "hello there"}
+      iex> Radixir.Util.decode_message("000068656c6c6f207468657265")
+      {:ok, "hello there"}
   """
   @spec decode_message(encoded_message) :: {:ok, message} | {:error, error_message}
   def decode_message(encoded_message), do: do_decode_message(encoded_message)
@@ -155,8 +155,8 @@ defmodule Radixir.Util do
 
   ## Examples
 
-        iex> Radixir.Util.encode16("hello there")
-        "68656c6c6f207468657265"
+      iex> Radixir.Util.encode16("hello there")
+      "68656c6c6f207468657265"
   """
   @spec encode16(data) :: encoded_data
   def encode16(data), do: Base.encode16(data, case: :lower)
@@ -170,11 +170,11 @@ defmodule Radixir.Util do
 
   ## Examples
 
-        iex> Radixir.Util.decode16("68656c6c6f207468657265", "obi wan's message")
-        {:ok, "hello there"}
+      iex> Radixir.Util.decode16("68656c6c6f207468657265", "obi wan's message")
+      {:ok, "hello there"}
 
-        iex> Radixir.Util.decode16("zzzz", "obi wan's message")
-        {:error, "could not base16 decode obi wan's message"}
+      iex> Radixir.Util.decode16("zzzz", "obi wan's message")
+      {:error, "could not base16 decode obi wan's message"}
   """
   @spec decode16(encoded_data, error_note) :: {:ok, data} | {:error, error_message}
   def decode16(encoded_data, error_note) do
@@ -193,6 +193,7 @@ defmodule Radixir.Util do
     - `xrd`: Amount of XRD.
 
   ## Examples
+
       iex> Radixir.Util.xrd_to_atto("1.5")
       "1500000000000000000"
   """
@@ -214,6 +215,7 @@ defmodule Radixir.Util do
     - `atto`: Amount of XRD, in atto units.
 
   ## Examples
+
       iex> Radixir.Util.atto_to_xrd("1500000000000000000")
       "1.5"
   """
@@ -237,8 +239,8 @@ defmodule Radixir.Util do
 
   ## Examples
 
-        iex> Radixir.Util.xrd_abs("-1.5")
-        "1.5"
+      iex> Radixir.Util.xrd_abs("-1.5")
+      "1.5"
   """
   @spec xrd_abs(String.t()) :: String.t()
   def xrd_abs(num) do
@@ -256,8 +258,8 @@ defmodule Radixir.Util do
 
   ## Examples
 
-        iex> Radixir.Util.xrd_add("12.0000000000000000014", "12.0000000000000000014")
-        "24.000000000000000002"
+      iex> Radixir.Util.xrd_add("12.0000000000000000014", "12.0000000000000000014")
+      "24.000000000000000002"
   """
   @spec xrd_add(String.t(), String.t()) :: String.t()
   def xrd_add(num1, num2) do
@@ -276,8 +278,8 @@ defmodule Radixir.Util do
 
   ## Examples
 
-        iex> Radixir.Util.xrd_compare("12.0000000000000000089", "12.0000000000000000079")
-        :gt
+      iex> Radixir.Util.xrd_compare("12.0000000000000000089", "12.0000000000000000079")
+      :gt
   """
   @spec xrd_compare(String.t(), String.t()) :: :lt | :gt | :eq
   def xrd_compare(num1, num2) do
@@ -293,13 +295,18 @@ defmodule Radixir.Util do
   ## Parameters
     - `num1`: Amount of XRD.
     - `num2`: Amount of XRD.
+
+  ## Examples
+
+      iex> Radixir.Util.xrd_div("10.4", "5.2")
+      "2"
   """
   @spec xrd_div(String.t(), String.t()) :: String.t()
   def xrd_div(num1, num2) do
     Decimal.Context.set(%Decimal.Context{Decimal.Context.get() | precision: 100})
     num1 = num1 |> xrd_to_atto() |> atto_to_xrd()
     num2 = num2 |> xrd_to_atto() |> atto_to_xrd()
-    Decimal.div(num1, num2) |> Decimal.to_string(:normal)
+    Decimal.div(num1, num2) |> Decimal.to_string(:normal) |> xrd_to_atto() |> atto_to_xrd()
   end
 
   @doc """
@@ -308,13 +315,18 @@ defmodule Radixir.Util do
   ## Parameters
     - `num1`: Amount of XRD.
     - `num2`: Amount of XRD.
+
+  ## Examples
+
+      iex> Radixir.Util.xrd_div_int("6.9","4.3")
+      "1"
   """
   @spec xrd_div_int(String.t(), String.t()) :: String.t()
   def xrd_div_int(num1, num2) do
     Decimal.Context.set(%Decimal.Context{Decimal.Context.get() | precision: 100})
     num1 = num1 |> xrd_to_atto() |> atto_to_xrd()
     num2 = num2 |> xrd_to_atto() |> atto_to_xrd()
-    Decimal.div_int(num1, num2) |> Decimal.to_string(:normal)
+    Decimal.div_int(num1, num2) |> Decimal.to_string(:normal) |> xrd_to_atto() |> atto_to_xrd()
   end
 
   @doc """
@@ -323,6 +335,11 @@ defmodule Radixir.Util do
   ## Parameters
     - `num1`: Amount of XRD.
     - `num2`: Amount of XRD.
+
+  ## Examples
+
+      iex> Radixir.Util.xrd_div_rem("6","4.3")
+      {"1", "1.7"}
   """
   @spec xrd_div_rem(String.t(), String.t()) :: {String.t(), String.t()}
   def xrd_div_rem(num1, num2) do
@@ -330,7 +347,9 @@ defmodule Radixir.Util do
     num1 = num1 |> xrd_to_atto() |> atto_to_xrd()
     num2 = num2 |> xrd_to_atto() |> atto_to_xrd()
     {integer_value, remainder_value} = Decimal.div_rem(num1, num2)
-    {Decimal.to_string(integer_value, :normal), Decimal.to_string(remainder_value, :normal)}
+
+    {Decimal.to_string(integer_value, :normal) |> xrd_to_atto() |> atto_to_xrd(),
+     Decimal.to_string(remainder_value, :normal) |> xrd_to_atto() |> atto_to_xrd()}
   end
 
   @doc """
@@ -339,6 +358,11 @@ defmodule Radixir.Util do
   ## Parameters
     - `num1`: Amount of XRD.
     - `num2`: Amount of XRD.
+
+  ## Examples
+
+      iex> Radixir.Util.xrd_equal?("1.0", "2.0")
+      false
   """
   @spec xrd_equal?(String.t(), String.t()) :: boolean
   def xrd_equal?(num1, num2) do
@@ -354,6 +378,11 @@ defmodule Radixir.Util do
   ## Parameters
     - `num1`: Amount of XRD.
     - `num2`: Amount of XRD.
+
+  ## Examples
+
+      iex> Radixir.Util.xrd_gt?("2.0", "3.0")
+      false
   """
   @spec xrd_gt?(String.t(), String.t()) :: boolean
   def xrd_gt?(num1, num2) do
@@ -369,6 +398,11 @@ defmodule Radixir.Util do
   ## Parameters
     - `num1`: Amount of XRD.
     - `num2`: Amount of XRD.
+
+  ## Examples
+
+      iex> Radixir.Util.xrd_lt?("2.0", "3.0")
+      true
   """
   @spec xrd_lt?(String.t(), String.t()) :: boolean
   def xrd_lt?(num1, num2) do
@@ -384,6 +418,11 @@ defmodule Radixir.Util do
   ## Parameters
     - `num1`: Amount of XRD.
     - `num2`: Amount of XRD.
+
+  ## Examples
+
+      iex> Radixir.Util.xrd_max("1.3", "1")
+      "1.3"
   """
   @spec xrd_max(String.t(), String.t()) :: String.t()
   def xrd_max(num1, num2) do
@@ -399,6 +438,11 @@ defmodule Radixir.Util do
   ## Parameters
     - `num1`: Amount of XRD.
     - `num2`: Amount of XRD.
+
+  ## Examples
+
+      iex> Radixir.Util.xrd_min("1.3", "1")
+      "1"
   """
   @spec xrd_min(String.t(), String.t()) :: String.t()
   def xrd_min(num1, num2) do
@@ -414,13 +458,18 @@ defmodule Radixir.Util do
   ## Parameters
     - `num1`: Amount of XRD.
     - `num2`: Amount of XRD.
+
+  ## Examples
+
+      iex> Radixir.Util.xrd_mult("5", "0.5")
+      "2.5"
   """
   @spec xrd_mult(String.t(), String.t()) :: String.t()
   def xrd_mult(num1, num2) do
     Decimal.Context.set(%Decimal.Context{Decimal.Context.get() | precision: 100})
     num1 = num1 |> xrd_to_atto() |> atto_to_xrd()
     num2 = num2 |> xrd_to_atto() |> atto_to_xrd()
-    Decimal.mult(num1, num2) |> Decimal.to_string(:normal)
+    Decimal.mult(num1, num2) |> Decimal.to_string(:normal) |> xrd_to_atto() |> atto_to_xrd()
   end
 
   @doc """
@@ -428,6 +477,11 @@ defmodule Radixir.Util do
 
   ## Parameters
     - `num`: Amount of XRD.
+
+  ## Example
+
+      iex> Radixir.Util.xrd_negate("2.5")
+      "-2.5"
   """
   @spec xrd_negate(String.t()) :: String.t()
   def xrd_negate(num) do
@@ -441,6 +495,11 @@ defmodule Radixir.Util do
 
   ## Parameters
     - `num`: Amount of XRD.
+
+  ## Example
+
+      iex> Radixir.Util.xrd_negative?("-1.34")
+      true
   """
   @spec xrd_negative?(String.t()) :: boolean
   def xrd_negative?(num) do
@@ -454,6 +513,11 @@ defmodule Radixir.Util do
 
   ## Parameters
     - `num`: Amount of XRD.
+
+  ## Example
+
+      iex> Radixir.Util.xrd_positive?("-1.34")
+      false
   """
   @spec xrd_positive?(String.t()) :: boolean
   def xrd_positive?(num) do
@@ -468,13 +532,18 @@ defmodule Radixir.Util do
   ## Parameters
     - `num1`: Amount of XRD.
     - `num2`: Amount of XRD.
+
+  ## Examples
+
+      iex> Radixir.Util.xrd_rem("5.0", "2")
+      "1"
   """
   @spec xrd_rem(String.t(), String.t()) :: String.t()
   def xrd_rem(num1, num2) do
     Decimal.Context.set(%Decimal.Context{Decimal.Context.get() | precision: 100})
     num1 = num1 |> xrd_to_atto() |> atto_to_xrd()
     num2 = num2 |> xrd_to_atto() |> atto_to_xrd()
-    Decimal.rem(num1, num2) |> Decimal.to_string(:normal)
+    Decimal.rem(num1, num2) |> Decimal.to_string(:normal) |> xrd_to_atto() |> atto_to_xrd()
   end
 
   @doc """
@@ -482,12 +551,21 @@ defmodule Radixir.Util do
 
   ## Parameters
     - `num`: Amount of XRD.
+
+  ## Examples
+
+      iex> Radixir.Util.xrd_round("1.6")
+      "2"
   """
   @spec xrd_round(String.t(), integer, rounding) :: String.t()
   def xrd_round(num, places \\ 0, mode \\ :half_up) do
     Decimal.Context.set(%Decimal.Context{Decimal.Context.get() | precision: 100})
     num = num |> xrd_to_atto() |> atto_to_xrd()
-    Decimal.round(num, places, mode) |> Decimal.to_string(:normal)
+
+    Decimal.round(num, places, mode)
+    |> Decimal.to_string(:normal)
+    |> xrd_to_atto()
+    |> atto_to_xrd()
   end
 
   @doc """
@@ -495,12 +573,17 @@ defmodule Radixir.Util do
 
   ## Parameters
     - `num`: Amount of XRD.
+
+  ## Examples
+
+      iex> Radixir.Util.xrd_sqrt("36")
+      "6"
   """
   @spec xrd_sqrt(String.t()) :: String.t()
   def xrd_sqrt(num) do
     Decimal.Context.set(%Decimal.Context{Decimal.Context.get() | precision: 100})
     num = num |> xrd_to_atto() |> atto_to_xrd()
-    Decimal.sqrt(num) |> Decimal.to_string(:normal)
+    Decimal.sqrt(num) |> Decimal.to_string(:normal) |> xrd_to_atto() |> atto_to_xrd()
   end
 
   @doc """
@@ -509,13 +592,18 @@ defmodule Radixir.Util do
   ## Parameters
     - `num1`: Amount of XRD.
     - `num2`: Amount of XRD.
+
+  ## Examples
+
+      iex> Radixir.Util.xrd_sub("5", "2")
+      "3"
   """
   @spec xrd_sub(String.t(), String.t()) :: String.t()
   def xrd_sub(num1, num2) do
     Decimal.Context.set(%Decimal.Context{Decimal.Context.get() | precision: 100})
     num1 = num1 |> xrd_to_atto() |> atto_to_xrd()
     num2 = num2 |> xrd_to_atto() |> atto_to_xrd()
-    Decimal.sub(num1, num2) |> Decimal.to_string(:normal)
+    Decimal.sub(num1, num2) |> Decimal.to_string(:normal) |> xrd_to_atto() |> atto_to_xrd()
   end
 
   # @doc """

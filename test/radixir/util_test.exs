@@ -334,4 +334,241 @@ defmodule Radixir.UtilTest do
       assert :eq == Util.xrd_compare("12.0000000000000000026", "12.0000000000000000024")
     end
   end
+
+  describe "xrd_div/2" do
+    test "divides two xrd amounts and drops 19th decimal place - equals 1" do
+      assert "1" == Util.xrd_div("12.0000000000000000026", "12.0000000000000000024")
+    end
+
+    test "divides two xrd amounts and drops 19th decimal place" do
+      assert "1.999999999999999999" ==
+               Util.xrd_div("24.0000000000000000036", "12.0000000000000000024")
+    end
+
+    test "divides two xrd amounts and drops 19th decimal place and results in smallest amount" do
+      assert "0.000000000000000001" ==
+               Util.xrd_div("1.0000000000000000026", "1000000000000000000.0000000000000000024")
+    end
+  end
+
+  describe "xrd_div_int/2" do
+    test "divides two xrd amounts and drops 19th decimal place and returns the integer part - equals 1" do
+      assert "1" == Util.xrd_div_int("12.0000000000000000026", "12.0000000000000000024")
+    end
+
+    test "divides two xrd amounts and drops 19th decimal place and returns the integer part" do
+      assert "1" ==
+               Util.xrd_div_int("24.0000000000000000036", "12.0000000000000000024")
+    end
+
+    test "divides two xrd amounts and drops 19th decimal place and returns the integer part and results in zero" do
+      assert "0" ==
+               Util.xrd_div_int(
+                 "1.0000000000000000026",
+                 "1000000000000000000.0000000000000000024"
+               )
+    end
+  end
+
+  describe "xrd_div_rem/2" do
+    test "divides two xrd amounts and drops 19th decimal place and returns the integer part and remainder part - equals 1" do
+      assert {"1", "1"} == Util.xrd_div_rem("13.0000000000000000026", "12.0000000000000000024")
+    end
+
+    test "divides two xrd amounts and drops 19th decimal place and returns the integer part and remainder part" do
+      assert {"1", "12.000000000000000001"} ==
+               Util.xrd_div_rem("24.0000000000000000036", "12.0000000000000000024")
+    end
+
+    test "divides two xrd amounts and drops 19th decimal place and returns the integer part and remainder part and results in smallest amount" do
+      assert {"0", "1.000000000000000002"} ==
+               Util.xrd_div_rem(
+                 "1.0000000000000000026",
+                 "1000000000000000000.0000000000000000024"
+               )
+    end
+  end
+
+  describe "xrd_equal?/2" do
+    test "check if an xrd amounts is equal to another - down to 18th decimal place" do
+      assert true == Util.xrd_equal?("12.0000000000000000026", "12.0000000000000000024")
+    end
+
+    test "check if an xrd amounts is equal to another - down to 18th decimal place - should be false" do
+      assert false == Util.xrd_equal?("12.0000000000000000036", "12.0000000000000000024")
+    end
+  end
+
+  describe "xrd_gt?/2" do
+    test "check if an xrd amounts is greater than another - down to 18th decimal place" do
+      assert false == Util.xrd_gt?("12.0000000000000000026", "12.0000000000000000024")
+    end
+
+    test "check if an xrd amounts is greater than another - down to 18th decimal place - should be false" do
+      assert true == Util.xrd_gt?("12.0000000000000000036", "12.0000000000000000024")
+    end
+
+    test "check if an xrd amounts is greater than another - down to 18th decimal place - should be true" do
+      assert false == Util.xrd_gt?("12.0000000000000000016", "12.0000000000000000024")
+    end
+  end
+
+  describe "xrd_lt?/2" do
+    test "check if an xrd amounts is less than another - down to 18th decimal place" do
+      assert false == Util.xrd_lt?("12.0000000000000000026", "12.0000000000000000024")
+    end
+
+    test "check if an xrd amounts is less than another - down to 18th decimal place - should be false" do
+      assert false == Util.xrd_lt?("12.0000000000000000036", "12.0000000000000000024")
+    end
+
+    test "check if an xrd amounts is less than another - down to 18th decimal place - should be true" do
+      assert true == Util.xrd_lt?("12.0000000000000000016", "12.0000000000000000024")
+    end
+  end
+
+  describe "xrd_max/2" do
+    test "gets the max between two xrd amounts - down to 18th decimal place - 1" do
+      assert "12.000000000000000002" ==
+               Util.xrd_max("12.0000000000000000026", "12.0000000000000000024")
+    end
+
+    test "gets the max between two xrd amounts - down to 18th decimal place - 2" do
+      assert "12.000000000000000003" ==
+               Util.xrd_max("12.0000000000000000036", "12.0000000000000000024")
+    end
+
+    test "gets the max between two xrd amounts - down to 18th decimal place - 3" do
+      assert "12.000000000000000002" ==
+               Util.xrd_max("12.0000000000000000016", "12.0000000000000000024")
+    end
+  end
+
+  describe "xrd_min/2" do
+    test "gets the min between two xrd amounts - down to 18th decimal place - 1" do
+      assert "12.000000000000000002" ==
+               Util.xrd_min("12.0000000000000000026", "12.0000000000000000024")
+    end
+
+    test "gets the min between two xrd amounts - down to 18th decimal place - 2" do
+      assert "12.000000000000000002" ==
+               Util.xrd_min("12.0000000000000000036", "12.0000000000000000024")
+    end
+
+    test "gets the min between two xrd amounts - down to 18th decimal place - 3" do
+      assert "12.000000000000000001" ==
+               Util.xrd_min("12.0000000000000000016", "12.0000000000000000024")
+    end
+  end
+
+  describe "xrd_mult/2" do
+    test "multiplies two xrd amounts - down to 18th decimal place - 1" do
+      assert "6" ==
+               Util.xrd_mult("12.0000000000000000016", "0.5")
+    end
+
+    test "multiplies two xrd amounts - down to 18th decimal place - 2" do
+      assert "24.000000000000000002" ==
+               Util.xrd_mult("12.0000000000000000016", "2")
+    end
+  end
+
+  describe "xrd_negate/2" do
+    test "negates an xrd amount - down to 18th decimal place - 1" do
+      assert "-0.000000000000000001" ==
+               Util.xrd_negate("0.000000000000000001")
+    end
+
+    test "negates an xrd amount - down to 18th decimal place - 2" do
+      assert "-12.000000000000000001" ==
+               Util.xrd_negate("12.0000000000000000016")
+    end
+
+    test "negates an xrd amount - down to 18th decimal place - 3" do
+      assert "12.000000000000000001" ==
+               Util.xrd_negate("-12.0000000000000000016")
+    end
+  end
+
+  describe "xrd_negative?/2" do
+    test "check if an xrd amount is negative - down to 18th decimal place - 1" do
+      assert false ==
+               Util.xrd_negative?("0.000000000000000001")
+    end
+
+    test "check if an xrd amount is negative - down to 18th decimal place - 2" do
+      assert true ==
+               Util.xrd_negative?("-0.000000000000000001")
+    end
+
+    test "check if an xrd amount is negative - down to 18th decimal place - 3" do
+      assert true ==
+               Util.xrd_negative?("-12.0000000000000000016")
+    end
+  end
+
+  describe "xrd_positive?/2" do
+    test "check if an xrd amount is positive - down to 18th decimal place - 1" do
+      assert true ==
+               Util.xrd_positive?("0.000000000000000001")
+    end
+
+    test "check if an xrd amount is positive - down to 18th decimal place - 2" do
+      assert false ==
+               Util.xrd_positive?("-0.000000000000000001")
+    end
+
+    test "check if an xrd amount is positive - down to 18th decimal place - 3" do
+      assert false ==
+               Util.xrd_positive?("-12.0000000000000000016")
+    end
+  end
+
+  describe "xrd_rem/2" do
+    test "gets the remainder of integer division of two XRD amounts - 1" do
+      assert "1" ==
+               Util.xrd_rem("5", "2")
+    end
+
+    test "gets the remainder of integer division of two XRD amounts - 2" do
+      assert "0.000000000000000001" ==
+               Util.xrd_rem("1.000000000000000002", "1.000000000000000001")
+    end
+  end
+
+  describe "xrd_round/2" do
+    test "rounds an XRD amount" do
+      assert "6" ==
+               Util.xrd_round("5.6")
+    end
+  end
+
+  describe "xrd_sqrt/2" do
+    test "gets the sqrt of an XRD amount" do
+      assert "2.366431913239846417" ==
+               Util.xrd_sqrt("5.6")
+    end
+  end
+
+  describe "xrd_sub/2" do
+    test "gets the difference of two XRD amounts - 1" do
+      assert "3" ==
+               Util.xrd_sub("5", "2")
+    end
+
+    test "gets the difference of two XRD amounts - 2" do
+      assert "0.000000000000000001" ==
+               Util.xrd_sub("1.000000000000000002", "1.000000000000000001")
+    end
+
+    test "gets the difference of two XRD amounts - 3" do
+      assert "0" ==
+               Util.xrd_sub("0.000000000000000001", "0.000000000000000001")
+    end
+
+    test "gets the difference of two XRD amounts - 4" do
+      assert "-0.000000000000000001" ==
+               Util.xrd_sub("0.000000000000000001", "0.000000000000000002")
+    end
+  end
 end
