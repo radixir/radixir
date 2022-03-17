@@ -71,6 +71,9 @@ defmodule Radixir.Config do
       else
         false
       end
+    else
+      _ ->
+        true
     end
   end
 

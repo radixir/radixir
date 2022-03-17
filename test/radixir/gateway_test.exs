@@ -341,7 +341,7 @@ defmodule Radixir.GatewayTest do
 
       assert {:error, "no configuration parameters found"} =
                Gateway.build_register_validator_transaction(
-                 [%{validator_address: ""}],
+                 [""],
                  ""
                )
     end
@@ -351,7 +351,7 @@ defmodule Radixir.GatewayTest do
 
       assert {:error, "gateway_api_url not found in configuration"} =
                Gateway.build_register_validator_transaction(
-                 [%{validator_address: ""}],
+                 [""],
                  ""
                )
     end
@@ -361,7 +361,7 @@ defmodule Radixir.GatewayTest do
 
       assert {:error, "no configuration parameters found"} =
                Gateway.build_unregister_validator_transaction(
-                 [%{validator_address: ""}],
+                 [""],
                  ""
                )
     end
@@ -371,7 +371,7 @@ defmodule Radixir.GatewayTest do
 
       assert {:error, "gateway_api_url not found in configuration"} =
                Gateway.build_unregister_validator_transaction(
-                 [%{validator_address: ""}],
+                 [""],
                  ""
                )
     end
@@ -463,6 +463,368 @@ defmodule Radixir.GatewayTest do
                  ],
                  "",
                  "519b6c5c1db1fab3e8513ad18b419082c81844ef66b24f850f9ab7366f7efc34"
+               )
+    end
+
+    test "transfer_tokens - catches no configuration parameters found when looking for url" do
+      Application.delete_env(:radixir, Radixir.Config)
+
+      assert {:error, "no configuration parameters found"} =
+               Gateway.transfer_tokens(
+                 [
+                   %{
+                     from_address: "",
+                     to_address: "",
+                     token_rri: "",
+                     amount: ""
+                   }
+                 ],
+                 "",
+                 "519b6c5c1db1fab3e8513ad18b419082c81844ef66b24f850f9ab7366f7efc34"
+               )
+    end
+
+    test "transfer_tokens - catches gateway_api_url not being found in configuration" do
+      Application.put_env(:radixir, Radixir.Config, test: "hello")
+
+      assert {:error, "gateway_api_url not found in configuration"} =
+               Gateway.transfer_tokens(
+                 [
+                   %{
+                     from_address: "",
+                     to_address: "",
+                     token_rri: "",
+                     amount: ""
+                   }
+                 ],
+                 "",
+                 "519b6c5c1db1fab3e8513ad18b419082c81844ef66b24f850f9ab7366f7efc34"
+               )
+    end
+
+    test "stake_tokens - catches no configuration parameters found when looking for url" do
+      Application.delete_env(:radixir, Radixir.Config)
+
+      assert {:error, "no configuration parameters found"} =
+               Gateway.stake_tokens(
+                 [
+                   %{
+                     from_address: "",
+                     to_validator_address: "",
+                     token_rri: "",
+                     amount: ""
+                   }
+                 ],
+                 "",
+                 "519b6c5c1db1fab3e8513ad18b419082c81844ef66b24f850f9ab7366f7efc34"
+               )
+    end
+
+    test "stake_tokens - catches gateway_api_url not being found in configuration" do
+      Application.put_env(:radixir, Radixir.Config, test: "hello")
+
+      assert {:error, "gateway_api_url not found in configuration"} =
+               Gateway.stake_tokens(
+                 [
+                   %{
+                     from_address: "",
+                     to_validator_address: "",
+                     token_rri: "",
+                     amount: ""
+                   }
+                 ],
+                 "",
+                 "519b6c5c1db1fab3e8513ad18b419082c81844ef66b24f850f9ab7366f7efc34"
+               )
+    end
+
+    test "unstake_tokens - catches no configuration parameters found when looking for url" do
+      Application.delete_env(:radixir, Radixir.Config)
+
+      assert {:error, "no configuration parameters found"} =
+               Gateway.unstake_tokens(
+                 [
+                   %{
+                     from_validator_address: "",
+                     to_address: "",
+                     token_rri: "",
+                     amount: ""
+                   }
+                 ],
+                 "",
+                 "519b6c5c1db1fab3e8513ad18b419082c81844ef66b24f850f9ab7366f7efc34"
+               )
+    end
+
+    test "unstake_tokens - catches gateway_api_url not being found in configuration" do
+      Application.put_env(:radixir, Radixir.Config, test: "hello")
+
+      assert {:error, "gateway_api_url not found in configuration"} =
+               Gateway.unstake_tokens(
+                 [
+                   %{
+                     from_validator_address: "",
+                     to_address: "",
+                     token_rri: "",
+                     amount: ""
+                   }
+                 ],
+                 "",
+                 "519b6c5c1db1fab3e8513ad18b419082c81844ef66b24f850f9ab7366f7efc34"
+               )
+    end
+
+    test "mint_tokens - catches no configuration parameters found when looking for url" do
+      Application.delete_env(:radixir, Radixir.Config)
+
+      assert {:error, "no configuration parameters found"} =
+               Gateway.mint_tokens(
+                 [
+                   %{
+                     to_address: "",
+                     token_rri: "",
+                     amount: ""
+                   }
+                 ],
+                 "",
+                 "519b6c5c1db1fab3e8513ad18b419082c81844ef66b24f850f9ab7366f7efc34"
+               )
+    end
+
+    test "mint_tokens - catches gateway_api_url not being found in configuration" do
+      Application.put_env(:radixir, Radixir.Config, test: "hello")
+
+      assert {:error, "gateway_api_url not found in configuration"} =
+               Gateway.mint_tokens(
+                 [
+                   %{
+                     to_address: "",
+                     token_rri: "",
+                     amount: ""
+                   }
+                 ],
+                 "",
+                 "519b6c5c1db1fab3e8513ad18b419082c81844ef66b24f850f9ab7366f7efc34"
+               )
+    end
+
+    test "burn_tokens - catches no configuration parameters found when looking for url" do
+      Application.delete_env(:radixir, Radixir.Config)
+
+      assert {:error, "no configuration parameters found"} =
+               Gateway.burn_tokens(
+                 [
+                   %{
+                     from_address: "",
+                     token_rri: "",
+                     amount: ""
+                   }
+                 ],
+                 "",
+                 "519b6c5c1db1fab3e8513ad18b419082c81844ef66b24f850f9ab7366f7efc34"
+               )
+    end
+
+    test "burn_tokens - catches gateway_api_url not being found in configuration" do
+      Application.put_env(:radixir, Radixir.Config, test: "hello")
+
+      assert {:error, "gateway_api_url not found in configuration"} =
+               Gateway.burn_tokens(
+                 [
+                   %{
+                     from_address: "",
+                     token_rri: "",
+                     amount: ""
+                   }
+                 ],
+                 "",
+                 "519b6c5c1db1fab3e8513ad18b419082c81844ef66b24f850f9ab7366f7efc34"
+               )
+    end
+
+    test "register_validator - catches no configuration parameters found when looking for url" do
+      Application.delete_env(:radixir, Radixir.Config)
+
+      assert {:error, "no configuration parameters found"} =
+               Gateway.register_validator(
+                 [
+                   ""
+                 ],
+                 "",
+                 "519b6c5c1db1fab3e8513ad18b419082c81844ef66b24f850f9ab7366f7efc34"
+               )
+    end
+
+    test "register_validator - catches gateway_api_url not being found in configuration" do
+      Application.put_env(:radixir, Radixir.Config, test: "hello")
+
+      assert {:error, "gateway_api_url not found in configuration"} =
+               Gateway.register_validator(
+                 [
+                   ""
+                 ],
+                 "",
+                 "519b6c5c1db1fab3e8513ad18b419082c81844ef66b24f850f9ab7366f7efc34"
+               )
+    end
+
+    test "unregister_validator - catches no configuration parameters found when looking for url" do
+      Application.delete_env(:radixir, Radixir.Config)
+
+      assert {:error, "no configuration parameters found"} =
+               Gateway.unregister_validator(
+                 [
+                   ""
+                 ],
+                 "",
+                 "519b6c5c1db1fab3e8513ad18b419082c81844ef66b24f850f9ab7366f7efc34"
+               )
+    end
+
+    test "unregister_validator - catches gateway_api_url not being found in configuration" do
+      Application.put_env(:radixir, Radixir.Config, test: "hello")
+
+      assert {:error, "gateway_api_url not found in configuration"} =
+               Gateway.unregister_validator(
+                 [
+                   ""
+                 ],
+                 "",
+                 "519b6c5c1db1fab3e8513ad18b419082c81844ef66b24f850f9ab7366f7efc34"
+               )
+    end
+  end
+
+  describe "derive_account_identifier/2" do
+    test "checks request body is correct - 1" do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url" == url
+        assert "/account/derive" == path
+
+        assert %{network_identifier: %{network: "stokenet"}, public_key: %{hex: "address here"}} =
+                 body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} = Gateway.derive_account_identifier("address here", api: [url: "url"])
+    end
+
+    test "checks request body is correct - 2" do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/account/derive" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 public_key: %{hex: "address here"}
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.derive_account_identifier("address here",
+                 api: [url: "url here"],
+                 network: "network here"
+               )
+    end
+  end
+
+  describe "get_account_balances/2" do
+    test "checks request body is correct - 1" do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/account/balances" == path
+
+        assert %{
+                 network_identifier: %{network: "stokenet"},
+                 account_identifier: %{address: "address here"}
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} = Gateway.get_account_balances("address here", api: [url: "url here"])
+    end
+
+    test "checks request body is correct - 2" do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/account/balances" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 account_identifier: %{address: "address here"}
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.get_account_balances("address here",
+                 api: [url: "url here"],
+                 network: "network here"
+               )
+    end
+
+    test "checks request body is correct - 3" do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/account/balances" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 account_identifier: %{address: "address here"},
+                 at_state_identifier: %{
+                   version: 9000,
+                   timestamp: "timestamp here",
+                   epoch: 9000,
+                   round: 9000
+                 }
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.get_account_balances("address here",
+                 api: [url: "url here"],
+                 network: "network here",
+                 version: 9000,
+                 timestamp: "timestamp here",
+                 epoch: 9000,
+                 round: 9000
+               )
+    end
+
+    test "checks request body is correct - 4" do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/account/balances" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 account_identifier: %{address: "address here"},
+                 at_state_identifier: %{
+                   epoch: 9000
+                 }
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.get_account_balances("address here",
+                 api: [url: "url here"],
+                 network: "network here",
+                 epoch: 9000
                )
     end
   end

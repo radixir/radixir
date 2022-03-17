@@ -4,7 +4,6 @@ defmodule Radixir.Gateway.API do
   # Submits requests to Gateway API.
   # """
   alias Radixir.Util
-  alias Radixir.HTTP
 
   @type body :: map
   @type options :: keyword
@@ -24,7 +23,7 @@ defmodule Radixir.Gateway.API do
   @spec get_info(options) :: {:ok, map} | {:error, map | error_message}
   def get_info(options \\ []) do
     with {:ok, url, options} <- Util.get_url_from_options(options, :gateway) do
-      HTTP.post(url, "/gateway", %{}, options)
+      impl().post(url, "/gateway", %{}, options)
     end
   end
 
@@ -43,7 +42,7 @@ defmodule Radixir.Gateway.API do
   @spec derive_account_identifier(body, options) :: {:ok, map} | {:error, map | error_message}
   def derive_account_identifier(body, options \\ []) do
     with {:ok, url, options} <- Util.get_url_from_options(options, :gateway) do
-      HTTP.post(url, "/account/derive", body, options)
+      impl().post(url, "/account/derive", body, options)
     end
   end
 
@@ -62,7 +61,7 @@ defmodule Radixir.Gateway.API do
   @spec get_account_balances(body, options) :: {:ok, map} | {:error, map | error_message}
   def get_account_balances(body, options \\ []) do
     with {:ok, url, options} <- Util.get_url_from_options(options, :gateway) do
-      HTTP.post(url, "/account/balances", body, options)
+      impl().post(url, "/account/balances", body, options)
     end
   end
 
@@ -81,7 +80,7 @@ defmodule Radixir.Gateway.API do
   @spec get_stake_positions(body, options) :: {:ok, map} | {:error, map | error_message}
   def get_stake_positions(body, options \\ []) do
     with {:ok, url, options} <- Util.get_url_from_options(options, :gateway) do
-      HTTP.post(url, "/account/stakes", body, options)
+      impl().post(url, "/account/stakes", body, options)
     end
   end
 
@@ -100,7 +99,7 @@ defmodule Radixir.Gateway.API do
   @spec get_unstake_positions(body, options) :: {:ok, map} | {:error, map | error_message}
   def get_unstake_positions(body, options \\ []) do
     with {:ok, url, options} <- Util.get_url_from_options(options, :gateway) do
-      HTTP.post(url, "/account/unstakes", body, options)
+      impl().post(url, "/account/unstakes", body, options)
     end
   end
 
@@ -119,7 +118,7 @@ defmodule Radixir.Gateway.API do
   @spec get_account_transactions(body, options) :: {:ok, map} | {:error, map | error_message}
   def get_account_transactions(body, options \\ []) do
     with {:ok, url, options} <- Util.get_url_from_options(options, :gateway) do
-      HTTP.post(url, "/account/transactions", body, options)
+      impl().post(url, "/account/transactions", body, options)
     end
   end
 
@@ -138,7 +137,7 @@ defmodule Radixir.Gateway.API do
   @spec get_native_token_info(body, options) :: {:ok, map} | {:error, map | error_message}
   def get_native_token_info(body, options \\ []) do
     with {:ok, url, options} <- Util.get_url_from_options(options, :gateway) do
-      HTTP.post(url, "/token/native", body, options)
+      impl().post(url, "/token/native", body, options)
     end
   end
 
@@ -157,7 +156,7 @@ defmodule Radixir.Gateway.API do
   @spec get_token_info(body, options) :: {:ok, map} | {:error, map | error_message}
   def get_token_info(body, options \\ []) do
     with {:ok, url, options} <- Util.get_url_from_options(options, :gateway) do
-      HTTP.post(url, "/token", body, options)
+      impl().post(url, "/token", body, options)
     end
   end
 
@@ -176,7 +175,7 @@ defmodule Radixir.Gateway.API do
   @spec derive_token_identifier(body, options) :: {:ok, map} | {:error, map | error_message}
   def derive_token_identifier(body, options \\ []) do
     with {:ok, url, options} <- Util.get_url_from_options(options, :gateway) do
-      HTTP.post(url, "/token/derive", body, options)
+      impl().post(url, "/token/derive", body, options)
     end
   end
 
@@ -195,7 +194,7 @@ defmodule Radixir.Gateway.API do
   @spec get_validator(body, options) :: {:ok, map} | {:error, map | error_message}
   def get_validator(body, options \\ []) do
     with {:ok, url, options} <- Util.get_url_from_options(options, :gateway) do
-      HTTP.post(url, "/validator", body, options)
+      impl().post(url, "/validator", body, options)
     end
   end
 
@@ -214,7 +213,7 @@ defmodule Radixir.Gateway.API do
   @spec derive_validator_identifier(body, options) :: {:ok, map} | {:error, map | error_message}
   def derive_validator_identifier(body, options \\ []) do
     with {:ok, url, options} <- Util.get_url_from_options(options, :gateway) do
-      HTTP.post(url, "/validator/derive", body, options)
+      impl().post(url, "/validator/derive", body, options)
     end
   end
 
@@ -233,7 +232,7 @@ defmodule Radixir.Gateway.API do
   @spec get_validators(body, options) :: {:ok, map} | {:error, map | error_message}
   def get_validators(body, options \\ []) do
     with {:ok, url, options} <- Util.get_url_from_options(options, :gateway) do
-      HTTP.post(url, "/validators", body, options)
+      impl().post(url, "/validators", body, options)
     end
   end
 
@@ -252,7 +251,7 @@ defmodule Radixir.Gateway.API do
   @spec get_validator_stakes(body, options) :: {:ok, map} | {:error, map | error_message}
   def get_validator_stakes(body, options \\ []) do
     with {:ok, url, options} <- Util.get_url_from_options(options, :gateway) do
-      HTTP.post(url, "/validator/stakes", body, options)
+      impl().post(url, "/validator/stakes", body, options)
     end
   end
 
@@ -271,7 +270,7 @@ defmodule Radixir.Gateway.API do
   @spec get_transaction_rules(body, options) :: {:ok, map} | {:error, map | error_message}
   def get_transaction_rules(body, options \\ []) do
     with {:ok, url, options} <- Util.get_url_from_options(options, :gateway) do
-      HTTP.post(url, "/transaction/rules", body, options)
+      impl().post(url, "/transaction/rules", body, options)
     end
   end
 
@@ -290,7 +289,7 @@ defmodule Radixir.Gateway.API do
   @spec build_transaction(body, options) :: {:ok, map} | {:error, map | error_message}
   def build_transaction(body, options \\ []) do
     with {:ok, url, options} <- Util.get_url_from_options(options, :gateway) do
-      HTTP.post(url, "/transaction/build", body, options)
+      impl().post(url, "/transaction/build", body, options)
     end
   end
 
@@ -309,7 +308,7 @@ defmodule Radixir.Gateway.API do
   @spec finalize_transaction(body, options) :: {:ok, map} | {:error, map | error_message}
   def finalize_transaction(body, options \\ []) do
     with {:ok, url, options} <- Util.get_url_from_options(options, :gateway) do
-      HTTP.post(url, "/transaction/finalize", body, options)
+      impl().post(url, "/transaction/finalize", body, options)
     end
   end
 
@@ -328,7 +327,7 @@ defmodule Radixir.Gateway.API do
   @spec submit_transaction(body, options) :: {:ok, map} | {:error, map | error_message}
   def submit_transaction(body, options \\ []) do
     with {:ok, url, options} <- Util.get_url_from_options(options, :gateway) do
-      HTTP.post(url, "/transaction/submit", body, options)
+      impl().post(url, "/transaction/submit", body, options)
     end
   end
 
@@ -347,7 +346,9 @@ defmodule Radixir.Gateway.API do
   @spec get_transaction_status(body, options) :: {:ok, map} | {:error, map | error_message}
   def get_transaction_status(body, options \\ []) do
     with {:ok, url, options} <- Util.get_url_from_options(options, :gateway) do
-      HTTP.post(url, "/transaction/status", body, options)
+      impl().post(url, "/transaction/status", body, options)
     end
   end
+
+  defp impl, do: Application.get_env(:radixir, :http, Radixir.HTTP)
 end

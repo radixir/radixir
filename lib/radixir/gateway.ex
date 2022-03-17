@@ -923,9 +923,7 @@ defmodule Radixir.Gateway do
       Enum.map(validator_addresses_list, fn x ->
         []
         |> Request.BuildTransaction.Action.RegisterValidator.type()
-        |> Request.BuildTransaction.Action.RegisterValidator.validator(
-          address: x.validator_address
-        )
+        |> Request.BuildTransaction.Action.RegisterValidator.validator(address: x)
         |> Util.stitch()
       end)
 
@@ -987,9 +985,7 @@ defmodule Radixir.Gateway do
       Enum.map(validator_addresses_list, fn x ->
         []
         |> Request.BuildTransaction.Action.UnregisterValidator.type()
-        |> Request.BuildTransaction.Action.UnregisterValidator.validator(
-          address: x.validator_address
-        )
+        |> Request.BuildTransaction.Action.UnregisterValidator.validator(address: x)
         |> Util.stitch()
       end)
 
