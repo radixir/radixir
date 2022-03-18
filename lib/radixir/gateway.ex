@@ -209,6 +209,8 @@ defmodule Radixir.Gateway do
       - `timestamp` (optional, string): Timestamp key in `at_state_identifier` map.
       - `epoch` (optional, integer): Epoch key in `at_state_identifier` map.
       - `round` (optional, integer): Round key in `at_state_identifier` map.
+      - `cursor` (optional, string): Cursor allows forward pagination, by providing the cursor from the previous request.
+      - `limit` (optional, integer): Page size requested. The maximum value is 30 at present.
   """
   @spec get_account_transactions(address, options) ::
           {:ok, map} | {:error, map | error_message}

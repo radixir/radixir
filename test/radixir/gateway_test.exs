@@ -828,4 +828,571 @@ defmodule Radixir.GatewayTest do
                )
     end
   end
+
+  describe "get_stake_positions/2" do
+    test "checks request body is correct - 1" do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/account/stakes" == path
+
+        assert %{
+                 network_identifier: %{network: "stokenet"},
+                 account_identifier: %{address: "address here"}
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} = Gateway.get_stake_positions("address here", api: [url: "url here"])
+    end
+
+    test "checks request body is correct - 2" do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/account/stakes" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 account_identifier: %{address: "address here"}
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.get_stake_positions("address here",
+                 api: [url: "url here"],
+                 network: "network here"
+               )
+    end
+
+    test "checks request body is correct - 3" do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/account/stakes" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 account_identifier: %{address: "address here"},
+                 at_state_identifier: %{
+                   version: 9000,
+                   timestamp: "timestamp here",
+                   epoch: 9000,
+                   round: 9000
+                 }
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.get_stake_positions("address here",
+                 api: [url: "url here"],
+                 network: "network here",
+                 version: 9000,
+                 timestamp: "timestamp here",
+                 epoch: 9000,
+                 round: 9000
+               )
+    end
+
+    test "checks request body is correct - 4" do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/account/stakes" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 account_identifier: %{address: "address here"},
+                 at_state_identifier: %{
+                   epoch: 9000
+                 }
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.get_stake_positions("address here",
+                 api: [url: "url here"],
+                 network: "network here",
+                 epoch: 9000
+               )
+    end
+  end
+
+  describe "get_unstake_positions/2" do
+    test "checks request body is correct - 1" do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/account/unstakes" == path
+
+        assert %{
+                 network_identifier: %{network: "stokenet"},
+                 account_identifier: %{address: "address here"}
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} = Gateway.get_unstake_positions("address here", api: [url: "url here"])
+    end
+
+    test "checks request body is correct - 2" do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/account/unstakes" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 account_identifier: %{address: "address here"}
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.get_unstake_positions("address here",
+                 api: [url: "url here"],
+                 network: "network here"
+               )
+    end
+
+    test "checks request body is correct - 3" do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/account/unstakes" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 account_identifier: %{address: "address here"},
+                 at_state_identifier: %{
+                   version: 9000,
+                   timestamp: "timestamp here",
+                   epoch: 9000,
+                   round: 9000
+                 }
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.get_unstake_positions("address here",
+                 api: [url: "url here"],
+                 network: "network here",
+                 version: 9000,
+                 timestamp: "timestamp here",
+                 epoch: 9000,
+                 round: 9000
+               )
+    end
+
+    test "checks request body is correct - 4" do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/account/unstakes" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 account_identifier: %{address: "address here"},
+                 at_state_identifier: %{
+                   epoch: 9000
+                 }
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.get_unstake_positions("address here",
+                 api: [url: "url here"],
+                 network: "network here",
+                 epoch: 9000
+               )
+    end
+  end
+
+  describe "get_account_transactions/2" do
+    test "checks request body is correct - 1" do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/account/transactions" == path
+
+        assert %{
+                 network_identifier: %{network: "stokenet"},
+                 account_identifier: %{address: "address here"}
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} = Gateway.get_account_transactions("address here", api: [url: "url here"])
+    end
+
+    test "checks request body is correct - 2" do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/account/transactions" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 account_identifier: %{address: "address here"}
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.get_account_transactions("address here",
+                 api: [url: "url here"],
+                 network: "network here"
+               )
+    end
+
+    test "checks request body is correct - 3" do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/account/transactions" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 account_identifier: %{address: "address here"},
+                 at_state_identifier: %{
+                   version: 9000,
+                   timestamp: "timestamp here",
+                   epoch: 9000,
+                   round: 9000
+                 }
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.get_account_transactions("address here",
+                 api: [url: "url here"],
+                 network: "network here",
+                 version: 9000,
+                 timestamp: "timestamp here",
+                 epoch: 9000,
+                 round: 9000
+               )
+    end
+
+    test "checks request body is correct - 4" do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/account/transactions" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 account_identifier: %{address: "address here"},
+                 at_state_identifier: %{
+                   epoch: 9000
+                 }
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.get_account_transactions("address here",
+                 api: [url: "url here"],
+                 network: "network here",
+                 epoch: 9000
+               )
+    end
+
+    test "checks request body is correct - 5" do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/account/transactions" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 account_identifier: %{address: "address here"},
+                 at_state_identifier: %{
+                   epoch: 9000
+                 },
+                 cursor: "cursor here"
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.get_account_transactions("address here",
+                 api: [url: "url here"],
+                 network: "network here",
+                 epoch: 9000,
+                 cursor: "cursor here"
+               )
+    end
+
+    test "checks request body is correct - 6" do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/account/transactions" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 account_identifier: %{address: "address here"},
+                 at_state_identifier: %{
+                   epoch: 9000
+                 },
+                 cursor: "cursor here",
+                 limit: 9000
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.get_account_transactions("address here",
+                 api: [url: "url here"],
+                 network: "network here",
+                 epoch: 9000,
+                 cursor: "cursor here",
+                 limit: 9000
+               )
+    end
+
+    test "checks request body is correct - 7" do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/account/transactions" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 account_identifier: %{address: "address here"},
+                 at_state_identifier: %{
+                   version: 9000,
+                   timestamp: "timestamp here",
+                   epoch: 9000,
+                   round: 9000
+                 },
+                 cursor: "cursor here",
+                 limit: 9000
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.get_account_transactions("address here",
+                 api: [url: "url here"],
+                 network: "network here",
+                 version: 9000,
+                 timestamp: "timestamp here",
+                 epoch: 9000,
+                 round: 9000,
+                 cursor: "cursor here",
+                 limit: 9000
+               )
+    end
+  end
+
+  describe "get_native_token_info/2" do
+    test "checks request body is correct - 1" do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/token/native" == path
+
+        assert %{
+                 network_identifier: %{network: "stokenet"}
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} = Gateway.get_native_token_info(api: [url: "url here"])
+    end
+
+    test "checks request body is correct - 2" do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/token/native" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"}
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.get_native_token_info(
+                 api: [url: "url here"],
+                 network: "network here"
+               )
+    end
+
+    test "checks request body is correct - 3" do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/token/native" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 at_state_identifier: %{
+                   version: 9000,
+                   timestamp: "timestamp here",
+                   epoch: 9000,
+                   round: 9000
+                 }
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.get_native_token_info(
+                 api: [url: "url here"],
+                 network: "network here",
+                 version: 9000,
+                 timestamp: "timestamp here",
+                 epoch: 9000,
+                 round: 9000
+               )
+    end
+
+    test "checks request body is correct - 4" do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/token/native" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 at_state_identifier: %{
+                   epoch: 9000
+                 }
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.get_native_token_info(
+                 api: [url: "url here"],
+                 network: "network here",
+                 epoch: 9000
+               )
+    end
+  end
+
+  describe "get_token_info/2" do
+    test "checks request body is correct - 1" do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/token" == path
+
+        assert %{
+                 network_identifier: %{network: "stokenet"},
+                 token_identifier: %{rri: "token rri here"}
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} = Gateway.get_token_info("token rri here", api: [url: "url here"])
+    end
+
+    test "checks request body is correct - 2" do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/token" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 token_identifier: %{rri: "token rri here"}
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.get_token_info("token rri here",
+                 api: [url: "url here"],
+                 network: "network here"
+               )
+    end
+
+    test "checks request body is correct - 3" do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/token" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 token_identifier: %{rri: "token rri here"},
+                 at_state_identifier: %{
+                   version: 9000,
+                   timestamp: "timestamp here",
+                   epoch: 9000,
+                   round: 9000
+                 }
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.get_token_info("token rri here",
+                 api: [url: "url here"],
+                 network: "network here",
+                 version: 9000,
+                 timestamp: "timestamp here",
+                 epoch: 9000,
+                 round: 9000
+               )
+    end
+
+    test "checks request body is correct - 4" do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/token" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 token_identifier: %{rri: "token rri here"},
+                 at_state_identifier: %{
+                   epoch: 9000
+                 }
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.get_token_info("token rri here",
+                 api: [url: "url here"],
+                 network: "network here",
+                 epoch: 9000
+               )
+    end
+  end
 end
