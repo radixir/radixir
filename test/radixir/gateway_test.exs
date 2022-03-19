@@ -2289,4 +2289,231 @@ defmodule Radixir.GatewayTest do
                )
     end
   end
+
+  describe "build_create_token_transaction/2" do
+    setup do
+      {:ok,
+       create_token_params: %{
+         name: "token name",
+         description: "token description",
+         icon_url: "token icon url",
+         url: "token url",
+         symbol: "token symbol",
+         is_supply_mutable: true,
+         granularity: "token granularity",
+         owner_address: "token owner address",
+         token_supply: "token supply",
+         token_rri: "token rri",
+         to_account_address: "to account address"
+       }}
+    end
+
+    test "checks request body is correct - 1", %{create_token_params: create_token_params} do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/transaction/build" == path
+
+        assert %{
+                 network_identifier: %{network: "stokenet"},
+                 actions: [
+                   %{
+                     type: "CreateTokenDefinition",
+                     token_properties: %{
+                       name: "token name",
+                       description: "token description",
+                       icon_url: "token icon url",
+                       url: "token url",
+                       symbol: "token symbol",
+                       is_supply_mutable: true,
+                       granularity: "token granularity",
+                       owner: %{address: "token owner address"}
+                     },
+                     token_supply: %{value: "token supply", token_identifier: %{rri: "token rri"}},
+                     to_account: %{address: "to account address"}
+                   }
+                 ],
+                 fee_payer: %{address: "fee payer address"}
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.build_create_token_transaction([create_token_params], "fee payer address",
+                 api: [url: "url here"]
+               )
+    end
+
+    test "checks request body is correct - 2", %{create_token_params: create_token_params} do
+      Application.put_env(:radixir, Radixir.Config, gateway_api_url: "hello url here")
+
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "hello url here" == url
+        assert "/transaction/build" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 actions: [
+                   %{
+                     type: "CreateTokenDefinition",
+                     token_properties: %{
+                       name: "token name",
+                       description: "token description",
+                       icon_url: "token icon url",
+                       url: "token url",
+                       symbol: "token symbol",
+                       is_supply_mutable: true,
+                       granularity: "token granularity",
+                       owner: %{address: "token owner address"}
+                     },
+                     token_supply: %{value: "token supply", token_identifier: %{rri: "token rri"}},
+                     to_account: %{address: "to account address"}
+                   }
+                 ],
+                 fee_payer: %{address: "fee payer address"}
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.build_create_token_transaction([create_token_params], "fee payer address",
+                 network: "network here"
+               )
+    end
+
+    test "checks request body is correct - 3", %{create_token_params: create_token_params} do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/transaction/build" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 at_state_identifier: %{
+                   version: 9000,
+                   timestamp: "timestamp here",
+                   epoch: 9000,
+                   round: 9000
+                 },
+                 actions: [
+                   %{
+                     type: "CreateTokenDefinition",
+                     token_properties: %{
+                       name: "token name",
+                       description: "token description",
+                       icon_url: "token icon url",
+                       url: "token url",
+                       symbol: "token symbol",
+                       is_supply_mutable: true,
+                       granularity: "token granularity",
+                       owner: %{address: "token owner address"}
+                     },
+                     token_supply: %{value: "token supply", token_identifier: %{rri: "token rri"}},
+                     to_account: %{address: "to account address"}
+                   }
+                 ],
+                 fee_payer: %{address: "fee payer address"}
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.build_create_token_transaction([create_token_params], "fee payer address",
+                 api: [url: "url here"],
+                 network: "network here",
+                 version: 9000,
+                 timestamp: "timestamp here",
+                 epoch: 9000,
+                 round: 9000
+               )
+    end
+
+    test "checks request body is correct - 4", %{create_token_params: create_token_params} do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/transaction/build" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 at_state_identifier: %{
+                   epoch: 9000
+                 },
+                 actions: [
+                   %{
+                     type: "CreateTokenDefinition",
+                     token_properties: %{
+                       name: "token name",
+                       description: "token description",
+                       icon_url: "token icon url",
+                       url: "token url",
+                       symbol: "token symbol",
+                       is_supply_mutable: true,
+                       granularity: "token granularity",
+                       owner: %{address: "token owner address"}
+                     },
+                     token_supply: %{value: "token supply", token_identifier: %{rri: "token rri"}},
+                     to_account: %{address: "to account address"}
+                   }
+                 ],
+                 fee_payer: %{address: "fee payer address"}
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.build_create_token_transaction([create_token_params], "fee payer address",
+                 api: [url: "url here"],
+                 network: "network here",
+                 epoch: 9000
+               )
+    end
+
+    test "checks request body is correct - 5", %{create_token_params: create_token_params} do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/transaction/build" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 actions: [
+                   %{
+                     type: "CreateTokenDefinition",
+                     token_properties: %{
+                       name: "token name",
+                       description: "token description",
+                       icon_url: "token icon url",
+                       url: "token url",
+                       symbol: "token symbol",
+                       is_supply_mutable: true,
+                       granularity: "token granularity",
+                       owner: %{address: "token owner address"}
+                     },
+                     token_supply: %{value: "token supply", token_identifier: %{rri: "token rri"}},
+                     to_account: %{address: "to account address"}
+                   }
+                 ],
+                 fee_payer: %{address: "fee payer address"},
+                 message: "hello hello",
+                 disable_token_mint_and_burn: true
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.build_create_token_transaction([create_token_params], "fee payer address",
+                 api: [url: "url here"],
+                 network: "network here",
+                 message: "hello hello",
+                 disable_token_mint_and_burn: true
+               )
+    end
+  end
 end
