@@ -50,7 +50,7 @@ defmodule Radixir.Gateway do
   @type unstake_tokens_params :: %{
           from_validator_address: String.t(),
           to_address: String.t(),
-          token_rri: String.t()
+          options: [amount: String.t(), token_rri: String.t()] | [unstake_percentage: integer]
         }
   @type mint_tokens_params :: %{
           to_address: String.t(),
@@ -696,8 +696,6 @@ defmodule Radixir.Gateway do
       - `round` (optional, integer): Round key in `at_state_identifier` map.
       - `message` (optional, string): Message to be included in transaction.
       - `disable_token_mint_and_burn` (optional, boolean): Disable Token Mint and Burn.
-      - `amount` (optional, string): Amount to unstake.
-      - `unstake_percentage` (optional, integer): Percentage of currently staked XRD to unstake.
   """
   @spec build_unstake_tokens_transaction(
           list(unstake_tokens_params),
@@ -711,18 +709,16 @@ defmodule Radixir.Gateway do
         options \\ []
       ) do
     network = Keyword.take(options, [:network])
-
     at_state_identifier = Keyword.take(options, [:version, :timestamp, :epoch, :round])
-
     message = Keyword.take(options, [:message])
-
-    amount = Keyword.take(options, [:amount])
-    unstake_percentage = Keyword.take(options, [:unstake_percentage])
-
     disable_token_mint_and_burn = Keyword.take(options, [:disable_token_mint_and_burn])
 
     actions =
       Enum.map(unstake_tokens_params_list, fn x ->
+        amount = Keyword.take(x.options, [:amount])
+        token_identifier = Keyword.take(x.options, [:token_rri]) |> format_token_rri()
+        unstake_percentage = Keyword.take(x.options, [:unstake_percentage])
+
         []
         |> Request.BuildTransaction.Action.UnstakeTokens.type()
         |> Request.BuildTransaction.Action.UnstakeTokens.from_validator(
@@ -733,7 +729,10 @@ defmodule Radixir.Gateway do
           amount,
           &Request.BuildTransaction.Action.UnstakeTokens.amount/2
         )
-        |> Request.BuildTransaction.Action.UnstakeTokens.token_identifier(rri: x.token_rri)
+        |> Util.maybe_create_stitch_plan(
+          token_identifier,
+          &Request.BuildTransaction.Action.UnstakeTokens.token_identifier/2
+        )
         |> Util.maybe_create_stitch_plan(
           unstake_percentage,
           &Request.BuildTransaction.Action.UnstakeTokens.unstake_percentage/2
@@ -1480,4 +1479,7 @@ defmodule Radixir.Gateway do
       end
     end
   end
+
+  defp format_token_rri([]), do: []
+  defp format_token_rri(value), do: [rri: Keyword.get(value, :token_rri)]
 end

@@ -281,7 +281,7 @@ defmodule Radixir.GatewayTest do
 
       assert {:error, "no configuration parameters found"} =
                Gateway.build_unstake_tokens_transaction(
-                 [%{from_validator_address: "", to_address: "", token_rri: ""}],
+                 [%{from_validator_address: "", to_address: "", options: []}],
                  ""
                )
     end
@@ -291,7 +291,7 @@ defmodule Radixir.GatewayTest do
 
       assert {:error, "gateway_api_url not found in configuration"} =
                Gateway.build_unstake_tokens_transaction(
-                 [%{from_validator_address: "", to_address: "", token_rri: ""}],
+                 [%{from_validator_address: "", to_address: "", options: []}],
                  ""
                )
     end
@@ -547,8 +547,7 @@ defmodule Radixir.GatewayTest do
                    %{
                      from_validator_address: "",
                      to_address: "",
-                     token_rri: "",
-                     amount: ""
+                     options: []
                    }
                  ],
                  "",
@@ -565,8 +564,7 @@ defmodule Radixir.GatewayTest do
                    %{
                      from_validator_address: "",
                      to_address: "",
-                     token_rri: "",
-                     amount: ""
+                     options: []
                    }
                  ],
                  "",
@@ -2513,6 +2511,1610 @@ defmodule Radixir.GatewayTest do
                  network: "network here",
                  message: "hello hello",
                  disable_token_mint_and_burn: true
+               )
+    end
+  end
+
+  describe "build_transfer_tokens_transaction/2" do
+    setup do
+      {:ok,
+       transfer_tokens_params: %{
+         amount: "transfer amount",
+         from_address: "from address",
+         token_rri: "token rri",
+         to_address: "to address"
+       }}
+    end
+
+    test "checks request body is correct - 1", %{transfer_tokens_params: transfer_tokens_params} do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/transaction/build" == path
+
+        assert %{
+                 network_identifier: %{network: "stokenet"},
+                 actions: [
+                   %{
+                     type: "TransferTokens",
+                     from_account: %{address: "from address"},
+                     to_account: %{address: "to address"},
+                     amount: %{value: "transfer amount", token_identifier: %{rri: "token rri"}}
+                   }
+                 ],
+                 fee_payer: %{address: "fee payer address"}
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.build_transfer_tokens_transaction(
+                 [transfer_tokens_params],
+                 "fee payer address",
+                 api: [url: "url here"]
+               )
+    end
+
+    test "checks request body is correct - 2", %{transfer_tokens_params: transfer_tokens_params} do
+      Application.put_env(:radixir, Radixir.Config, gateway_api_url: "hello url here")
+
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "hello url here" == url
+        assert "/transaction/build" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 actions: [
+                   %{
+                     type: "TransferTokens",
+                     from_account: %{address: "from address"},
+                     to_account: %{address: "to address"},
+                     amount: %{value: "transfer amount", token_identifier: %{rri: "token rri"}}
+                   }
+                 ],
+                 fee_payer: %{address: "fee payer address"}
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.build_transfer_tokens_transaction(
+                 [transfer_tokens_params],
+                 "fee payer address",
+                 network: "network here"
+               )
+    end
+
+    test "checks request body is correct - 3", %{transfer_tokens_params: transfer_tokens_params} do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/transaction/build" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 at_state_identifier: %{
+                   version: 9000,
+                   timestamp: "timestamp here",
+                   epoch: 9000,
+                   round: 9000
+                 },
+                 actions: [
+                   %{
+                     type: "TransferTokens",
+                     from_account: %{address: "from address"},
+                     to_account: %{address: "to address"},
+                     amount: %{value: "transfer amount", token_identifier: %{rri: "token rri"}}
+                   }
+                 ],
+                 fee_payer: %{address: "fee payer address"}
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.build_transfer_tokens_transaction(
+                 [transfer_tokens_params],
+                 "fee payer address",
+                 api: [url: "url here"],
+                 network: "network here",
+                 version: 9000,
+                 timestamp: "timestamp here",
+                 epoch: 9000,
+                 round: 9000
+               )
+    end
+
+    test "checks request body is correct - 4", %{transfer_tokens_params: transfer_tokens_params} do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/transaction/build" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 at_state_identifier: %{
+                   epoch: 9000
+                 },
+                 actions: [
+                   %{
+                     type: "TransferTokens",
+                     from_account: %{address: "from address"},
+                     to_account: %{address: "to address"},
+                     amount: %{value: "transfer amount", token_identifier: %{rri: "token rri"}}
+                   }
+                 ],
+                 fee_payer: %{address: "fee payer address"}
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.build_transfer_tokens_transaction(
+                 [transfer_tokens_params],
+                 "fee payer address",
+                 api: [url: "url here"],
+                 network: "network here",
+                 epoch: 9000
+               )
+    end
+
+    test "checks request body is correct - 5", %{transfer_tokens_params: transfer_tokens_params} do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/transaction/build" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 actions: [
+                   %{
+                     type: "TransferTokens",
+                     from_account: %{address: "from address"},
+                     to_account: %{address: "to address"},
+                     amount: %{value: "transfer amount", token_identifier: %{rri: "token rri"}}
+                   }
+                 ],
+                 fee_payer: %{address: "fee payer address"},
+                 message: "hello hello",
+                 disable_token_mint_and_burn: true
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.build_transfer_tokens_transaction(
+                 [transfer_tokens_params],
+                 "fee payer address",
+                 api: [url: "url here"],
+                 network: "network here",
+                 message: "hello hello",
+                 disable_token_mint_and_burn: true
+               )
+    end
+  end
+
+  describe "build_stake_tokens_transaction/2" do
+    setup do
+      {:ok,
+       stake_tokens_params: %{
+         amount: "transfer amount",
+         from_address: "from address",
+         token_rri: "token rri",
+         to_validator_address: "to address"
+       }}
+    end
+
+    test "checks request body is correct - 1", %{stake_tokens_params: stake_tokens_params} do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/transaction/build" == path
+
+        assert %{
+                 network_identifier: %{network: "stokenet"},
+                 actions: [
+                   %{
+                     type: "StakeTokens",
+                     from_account: %{address: "from address"},
+                     to_validator: %{address: "to address"},
+                     amount: %{value: "transfer amount", token_identifier: %{rri: "token rri"}}
+                   }
+                 ],
+                 fee_payer: %{address: "fee payer address"}
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.build_stake_tokens_transaction(
+                 [stake_tokens_params],
+                 "fee payer address",
+                 api: [url: "url here"]
+               )
+    end
+
+    test "checks request body is correct - 2", %{stake_tokens_params: stake_tokens_params} do
+      Application.put_env(:radixir, Radixir.Config, gateway_api_url: "hello url here")
+
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "hello url here" == url
+        assert "/transaction/build" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 actions: [
+                   %{
+                     type: "StakeTokens",
+                     from_account: %{address: "from address"},
+                     to_validator: %{address: "to address"},
+                     amount: %{value: "transfer amount", token_identifier: %{rri: "token rri"}}
+                   }
+                 ],
+                 fee_payer: %{address: "fee payer address"}
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.build_stake_tokens_transaction(
+                 [stake_tokens_params],
+                 "fee payer address",
+                 network: "network here"
+               )
+    end
+
+    test "checks request body is correct - 3", %{stake_tokens_params: stake_tokens_params} do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/transaction/build" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 at_state_identifier: %{
+                   version: 9000,
+                   timestamp: "timestamp here",
+                   epoch: 9000,
+                   round: 9000
+                 },
+                 actions: [
+                   %{
+                     type: "StakeTokens",
+                     from_account: %{address: "from address"},
+                     to_validator: %{address: "to address"},
+                     amount: %{value: "transfer amount", token_identifier: %{rri: "token rri"}}
+                   }
+                 ],
+                 fee_payer: %{address: "fee payer address"}
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.build_stake_tokens_transaction(
+                 [stake_tokens_params],
+                 "fee payer address",
+                 api: [url: "url here"],
+                 network: "network here",
+                 version: 9000,
+                 timestamp: "timestamp here",
+                 epoch: 9000,
+                 round: 9000
+               )
+    end
+
+    test "checks request body is correct - 4", %{stake_tokens_params: stake_tokens_params} do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/transaction/build" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 at_state_identifier: %{
+                   epoch: 9000
+                 },
+                 actions: [
+                   %{
+                     type: "StakeTokens",
+                     from_account: %{address: "from address"},
+                     to_validator: %{address: "to address"},
+                     amount: %{value: "transfer amount", token_identifier: %{rri: "token rri"}}
+                   }
+                 ],
+                 fee_payer: %{address: "fee payer address"}
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.build_stake_tokens_transaction(
+                 [stake_tokens_params],
+                 "fee payer address",
+                 api: [url: "url here"],
+                 network: "network here",
+                 epoch: 9000
+               )
+    end
+
+    test "checks request body is correct - 5", %{stake_tokens_params: stake_tokens_params} do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/transaction/build" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 actions: [
+                   %{
+                     type: "StakeTokens",
+                     from_account: %{address: "from address"},
+                     to_validator: %{address: "to address"},
+                     amount: %{value: "transfer amount", token_identifier: %{rri: "token rri"}}
+                   }
+                 ],
+                 fee_payer: %{address: "fee payer address"},
+                 message: "hello hello",
+                 disable_token_mint_and_burn: true
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.build_stake_tokens_transaction(
+                 [stake_tokens_params],
+                 "fee payer address",
+                 api: [url: "url here"],
+                 network: "network here",
+                 message: "hello hello",
+                 disable_token_mint_and_burn: true
+               )
+    end
+  end
+
+  describe "build_unstake_tokens_transaction/2" do
+    setup do
+      {:ok,
+       unstake_tokens_params: %{
+         from_validator_address: "from address",
+         to_address: "to address"
+       }}
+    end
+
+    test "checks request body is correct - 1", %{unstake_tokens_params: unstake_tokens_params} do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/transaction/build" == path
+
+        assert %{
+                 network_identifier: %{network: "stokenet"},
+                 actions: [
+                   %{
+                     type: "UnstakeTokens",
+                     from_validator: %{address: "from address"},
+                     to_account: %{address: "to address"},
+                     amount: %{value: "transfer amount", token_identifier: %{rri: "token rri"}}
+                   }
+                 ],
+                 fee_payer: %{address: "fee payer address"}
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      unstake_tokens_params_options = [amount: "transfer amount", token_rri: "token rri"]
+
+      unstake_tokens_params =
+        Map.put(unstake_tokens_params, :options, unstake_tokens_params_options)
+
+      assert {:ok, _} =
+               Gateway.build_unstake_tokens_transaction(
+                 [unstake_tokens_params],
+                 "fee payer address",
+                 api: [url: "url here"]
+               )
+    end
+
+    test "checks request body is correct - 2", %{unstake_tokens_params: unstake_tokens_params} do
+      Application.put_env(:radixir, Radixir.Config, gateway_api_url: "hello url here")
+
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "hello url here" == url
+        assert "/transaction/build" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 actions: [
+                   %{
+                     type: "UnstakeTokens",
+                     from_validator: %{address: "from address"},
+                     to_account: %{address: "to address"},
+                     unstake_percentage: 100
+                   }
+                 ],
+                 fee_payer: %{address: "fee payer address"}
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      unstake_tokens_params_options = [unstake_percentage: 100]
+
+      unstake_tokens_params =
+        Map.put(unstake_tokens_params, :options, unstake_tokens_params_options)
+
+      assert {:ok, _} =
+               Gateway.build_unstake_tokens_transaction(
+                 [unstake_tokens_params],
+                 "fee payer address",
+                 network: "network here"
+               )
+    end
+
+    test "checks request body is correct - 3", %{unstake_tokens_params: unstake_tokens_params} do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/transaction/build" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 at_state_identifier: %{
+                   version: 9000,
+                   timestamp: "timestamp here",
+                   epoch: 9000,
+                   round: 9000
+                 },
+                 actions: [
+                   %{
+                     type: "UnstakeTokens",
+                     from_validator: %{address: "from address"},
+                     to_account: %{address: "to address"},
+                     amount: %{value: "transfer amount", token_identifier: %{rri: "token rri"}}
+                   }
+                 ],
+                 fee_payer: %{address: "fee payer address"}
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      unstake_tokens_params_options = [amount: "transfer amount", token_rri: "token rri"]
+
+      unstake_tokens_params =
+        Map.put(unstake_tokens_params, :options, unstake_tokens_params_options)
+
+      assert {:ok, _} =
+               Gateway.build_unstake_tokens_transaction(
+                 [unstake_tokens_params],
+                 "fee payer address",
+                 api: [url: "url here"],
+                 network: "network here",
+                 version: 9000,
+                 timestamp: "timestamp here",
+                 epoch: 9000,
+                 round: 9000
+               )
+    end
+
+    test "checks request body is correct - 4", %{unstake_tokens_params: unstake_tokens_params} do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/transaction/build" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 at_state_identifier: %{
+                   epoch: 9000
+                 },
+                 actions: [
+                   %{
+                     type: "UnstakeTokens",
+                     from_validator: %{address: "from address"},
+                     to_account: %{address: "to address"},
+                     amount: %{value: "transfer amount", token_identifier: %{rri: "token rri"}}
+                   }
+                 ],
+                 fee_payer: %{address: "fee payer address"}
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      unstake_tokens_params_options = [amount: "transfer amount", token_rri: "token rri"]
+
+      unstake_tokens_params =
+        Map.put(unstake_tokens_params, :options, unstake_tokens_params_options)
+
+      assert {:ok, _} =
+               Gateway.build_unstake_tokens_transaction(
+                 [unstake_tokens_params],
+                 "fee payer address",
+                 api: [url: "url here"],
+                 network: "network here",
+                 epoch: 9000
+               )
+    end
+
+    test "checks request body is correct - 5", %{unstake_tokens_params: unstake_tokens_params} do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/transaction/build" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 actions: [
+                   %{
+                     type: "UnstakeTokens",
+                     from_validator: %{address: "from address"},
+                     to_account: %{address: "to address"},
+                     amount: %{value: "transfer amount", token_identifier: %{rri: "token rri"}}
+                   }
+                 ],
+                 fee_payer: %{address: "fee payer address"},
+                 message: "hello hello",
+                 disable_token_mint_and_burn: true
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      unstake_tokens_params_options = [amount: "transfer amount", token_rri: "token rri"]
+
+      unstake_tokens_params =
+        Map.put(unstake_tokens_params, :options, unstake_tokens_params_options)
+
+      assert {:ok, _} =
+               Gateway.build_unstake_tokens_transaction(
+                 [unstake_tokens_params],
+                 "fee payer address",
+                 api: [url: "url here"],
+                 network: "network here",
+                 message: "hello hello",
+                 disable_token_mint_and_burn: true
+               )
+    end
+  end
+
+  describe "build_mint_tokens_transaction/2" do
+    setup do
+      {:ok,
+       mint_tokens_params: %{
+         amount: "transfer amount",
+         token_rri: "token rri",
+         to_address: "to address"
+       }}
+    end
+
+    test "checks request body is correct - 1", %{mint_tokens_params: mint_tokens_params} do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/transaction/build" == path
+
+        assert %{
+                 network_identifier: %{network: "stokenet"},
+                 actions: [
+                   %{
+                     type: "MintTokens",
+                     to_account: %{address: "to address"},
+                     amount: %{value: "transfer amount", token_identifier: %{rri: "token rri"}}
+                   }
+                 ],
+                 fee_payer: %{address: "fee payer address"}
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.build_mint_tokens_transaction(
+                 [mint_tokens_params],
+                 "fee payer address",
+                 api: [url: "url here"]
+               )
+    end
+
+    test "checks request body is correct - 2", %{mint_tokens_params: mint_tokens_params} do
+      Application.put_env(:radixir, Radixir.Config, gateway_api_url: "hello url here")
+
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "hello url here" == url
+        assert "/transaction/build" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 actions: [
+                   %{
+                     type: "MintTokens",
+                     to_account: %{address: "to address"},
+                     amount: %{value: "transfer amount", token_identifier: %{rri: "token rri"}}
+                   }
+                 ],
+                 fee_payer: %{address: "fee payer address"}
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.build_mint_tokens_transaction(
+                 [mint_tokens_params],
+                 "fee payer address",
+                 network: "network here"
+               )
+    end
+
+    test "checks request body is correct - 3", %{mint_tokens_params: mint_tokens_params} do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/transaction/build" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 at_state_identifier: %{
+                   version: 9000,
+                   timestamp: "timestamp here",
+                   epoch: 9000,
+                   round: 9000
+                 },
+                 actions: [
+                   %{
+                     type: "MintTokens",
+                     to_account: %{address: "to address"},
+                     amount: %{value: "transfer amount", token_identifier: %{rri: "token rri"}}
+                   }
+                 ],
+                 fee_payer: %{address: "fee payer address"}
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.build_mint_tokens_transaction(
+                 [mint_tokens_params],
+                 "fee payer address",
+                 api: [url: "url here"],
+                 network: "network here",
+                 version: 9000,
+                 timestamp: "timestamp here",
+                 epoch: 9000,
+                 round: 9000
+               )
+    end
+
+    test "checks request body is correct - 4", %{mint_tokens_params: mint_tokens_params} do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/transaction/build" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 at_state_identifier: %{
+                   epoch: 9000
+                 },
+                 actions: [
+                   %{
+                     type: "MintTokens",
+                     to_account: %{address: "to address"},
+                     amount: %{value: "transfer amount", token_identifier: %{rri: "token rri"}}
+                   }
+                 ],
+                 fee_payer: %{address: "fee payer address"}
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.build_mint_tokens_transaction(
+                 [mint_tokens_params],
+                 "fee payer address",
+                 api: [url: "url here"],
+                 network: "network here",
+                 epoch: 9000
+               )
+    end
+
+    test "checks request body is correct - 5", %{mint_tokens_params: mint_tokens_params} do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/transaction/build" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 actions: [
+                   %{
+                     type: "MintTokens",
+                     to_account: %{address: "to address"},
+                     amount: %{value: "transfer amount", token_identifier: %{rri: "token rri"}}
+                   }
+                 ],
+                 fee_payer: %{address: "fee payer address"},
+                 message: "hello hello",
+                 disable_token_mint_and_burn: true
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.build_mint_tokens_transaction(
+                 [mint_tokens_params],
+                 "fee payer address",
+                 api: [url: "url here"],
+                 network: "network here",
+                 message: "hello hello",
+                 disable_token_mint_and_burn: true
+               )
+    end
+  end
+
+  describe "build_burn_tokens_transaction/2" do
+    setup do
+      {:ok,
+       transfer_tokens_params: %{
+         amount: "transfer amount",
+         from_address: "from address",
+         token_rri: "token rri"
+       }}
+    end
+
+    test "checks request body is correct - 1", %{transfer_tokens_params: transfer_tokens_params} do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/transaction/build" == path
+
+        assert %{
+                 network_identifier: %{network: "stokenet"},
+                 actions: [
+                   %{
+                     type: "BurnTokens",
+                     from_account: %{address: "from address"},
+                     amount: %{value: "transfer amount", token_identifier: %{rri: "token rri"}}
+                   }
+                 ],
+                 fee_payer: %{address: "fee payer address"}
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.build_burn_tokens_transaction(
+                 [transfer_tokens_params],
+                 "fee payer address",
+                 api: [url: "url here"]
+               )
+    end
+
+    test "checks request body is correct - 2", %{transfer_tokens_params: transfer_tokens_params} do
+      Application.put_env(:radixir, Radixir.Config, gateway_api_url: "hello url here")
+
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "hello url here" == url
+        assert "/transaction/build" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 actions: [
+                   %{
+                     type: "BurnTokens",
+                     from_account: %{address: "from address"},
+                     amount: %{value: "transfer amount", token_identifier: %{rri: "token rri"}}
+                   }
+                 ],
+                 fee_payer: %{address: "fee payer address"}
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.build_burn_tokens_transaction(
+                 [transfer_tokens_params],
+                 "fee payer address",
+                 network: "network here"
+               )
+    end
+
+    test "checks request body is correct - 3", %{transfer_tokens_params: transfer_tokens_params} do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/transaction/build" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 at_state_identifier: %{
+                   version: 9000,
+                   timestamp: "timestamp here",
+                   epoch: 9000,
+                   round: 9000
+                 },
+                 actions: [
+                   %{
+                     type: "BurnTokens",
+                     from_account: %{address: "from address"},
+                     amount: %{value: "transfer amount", token_identifier: %{rri: "token rri"}}
+                   }
+                 ],
+                 fee_payer: %{address: "fee payer address"}
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.build_burn_tokens_transaction(
+                 [transfer_tokens_params],
+                 "fee payer address",
+                 api: [url: "url here"],
+                 network: "network here",
+                 version: 9000,
+                 timestamp: "timestamp here",
+                 epoch: 9000,
+                 round: 9000
+               )
+    end
+
+    test "checks request body is correct - 4", %{transfer_tokens_params: transfer_tokens_params} do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/transaction/build" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 at_state_identifier: %{
+                   epoch: 9000
+                 },
+                 actions: [
+                   %{
+                     type: "BurnTokens",
+                     from_account: %{address: "from address"},
+                     amount: %{value: "transfer amount", token_identifier: %{rri: "token rri"}}
+                   }
+                 ],
+                 fee_payer: %{address: "fee payer address"}
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.build_burn_tokens_transaction(
+                 [transfer_tokens_params],
+                 "fee payer address",
+                 api: [url: "url here"],
+                 network: "network here",
+                 epoch: 9000
+               )
+    end
+
+    test "checks request body is correct - 5", %{transfer_tokens_params: transfer_tokens_params} do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/transaction/build" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 actions: [
+                   %{
+                     type: "BurnTokens",
+                     from_account: %{address: "from address"},
+                     amount: %{value: "transfer amount", token_identifier: %{rri: "token rri"}}
+                   }
+                 ],
+                 fee_payer: %{address: "fee payer address"},
+                 message: "hello hello",
+                 disable_token_mint_and_burn: true
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.build_burn_tokens_transaction(
+                 [transfer_tokens_params],
+                 "fee payer address",
+                 api: [url: "url here"],
+                 network: "network here",
+                 message: "hello hello",
+                 disable_token_mint_and_burn: true
+               )
+    end
+  end
+
+  describe "build_register_validator_transaction/2" do
+    setup do
+      {:ok, register_validator_params: ["address here"]}
+    end
+
+    test "checks request body is correct - 1", %{
+      register_validator_params: register_validator_params
+    } do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/transaction/build" == path
+
+        assert %{
+                 network_identifier: %{network: "stokenet"},
+                 actions: [
+                   %{
+                     type: "RegisterValidator",
+                     validator: %{address: "address here"}
+                   }
+                 ],
+                 fee_payer: %{address: "fee payer address"}
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.build_register_validator_transaction(
+                 register_validator_params,
+                 "fee payer address",
+                 api: [url: "url here"]
+               )
+    end
+
+    test "checks request body is correct - 2", %{
+      register_validator_params: register_validator_params
+    } do
+      Application.put_env(:radixir, Radixir.Config, gateway_api_url: "hello url here")
+
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "hello url here" == url
+        assert "/transaction/build" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 actions: [
+                   %{
+                     type: "RegisterValidator",
+                     validator: %{address: "address here"}
+                   }
+                 ],
+                 fee_payer: %{address: "fee payer address"}
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.build_register_validator_transaction(
+                 register_validator_params,
+                 "fee payer address",
+                 network: "network here"
+               )
+    end
+
+    test "checks request body is correct - 3", %{
+      register_validator_params: register_validator_params
+    } do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/transaction/build" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 at_state_identifier: %{
+                   version: 9000,
+                   timestamp: "timestamp here",
+                   epoch: 9000,
+                   round: 9000
+                 },
+                 actions: [
+                   %{
+                     type: "RegisterValidator",
+                     validator: %{address: "address here"}
+                   }
+                 ],
+                 fee_payer: %{address: "fee payer address"}
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.build_register_validator_transaction(
+                 register_validator_params,
+                 "fee payer address",
+                 api: [url: "url here"],
+                 network: "network here",
+                 version: 9000,
+                 timestamp: "timestamp here",
+                 epoch: 9000,
+                 round: 9000
+               )
+    end
+
+    test "checks request body is correct - 4", %{
+      register_validator_params: register_validator_params
+    } do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/transaction/build" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 at_state_identifier: %{
+                   epoch: 9000
+                 },
+                 actions: [
+                   %{
+                     type: "RegisterValidator",
+                     validator: %{address: "address here"}
+                   }
+                 ],
+                 fee_payer: %{address: "fee payer address"}
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.build_register_validator_transaction(
+                 register_validator_params,
+                 "fee payer address",
+                 api: [url: "url here"],
+                 network: "network here",
+                 epoch: 9000
+               )
+    end
+
+    test "checks request body is correct - 5", %{
+      register_validator_params: register_validator_params
+    } do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/transaction/build" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 actions: [
+                   %{
+                     type: "RegisterValidator",
+                     validator: %{address: "address here"}
+                   }
+                 ],
+                 fee_payer: %{address: "fee payer address"},
+                 message: "hello hello",
+                 disable_token_mint_and_burn: true
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.build_register_validator_transaction(
+                 register_validator_params,
+                 "fee payer address",
+                 api: [url: "url here"],
+                 network: "network here",
+                 message: "hello hello",
+                 disable_token_mint_and_burn: true
+               )
+    end
+  end
+
+  describe "build_unregister_validator_transaction/2" do
+    setup do
+      {:ok, register_validator_params: ["address here"]}
+    end
+
+    test "checks request body is correct - 1", %{
+      register_validator_params: register_validator_params
+    } do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/transaction/build" == path
+
+        assert %{
+                 network_identifier: %{network: "stokenet"},
+                 actions: [
+                   %{
+                     type: "UnregisterValidator",
+                     validator: %{address: "address here"}
+                   }
+                 ],
+                 fee_payer: %{address: "fee payer address"}
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.build_unregister_validator_transaction(
+                 register_validator_params,
+                 "fee payer address",
+                 api: [url: "url here"]
+               )
+    end
+
+    test "checks request body is correct - 2", %{
+      register_validator_params: register_validator_params
+    } do
+      Application.put_env(:radixir, Radixir.Config, gateway_api_url: "hello url here")
+
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "hello url here" == url
+        assert "/transaction/build" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 actions: [
+                   %{
+                     type: "UnregisterValidator",
+                     validator: %{address: "address here"}
+                   }
+                 ],
+                 fee_payer: %{address: "fee payer address"}
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.build_unregister_validator_transaction(
+                 register_validator_params,
+                 "fee payer address",
+                 network: "network here"
+               )
+    end
+
+    test "checks request body is correct - 3", %{
+      register_validator_params: register_validator_params
+    } do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/transaction/build" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 at_state_identifier: %{
+                   version: 9000,
+                   timestamp: "timestamp here",
+                   epoch: 9000,
+                   round: 9000
+                 },
+                 actions: [
+                   %{
+                     type: "UnregisterValidator",
+                     validator: %{address: "address here"}
+                   }
+                 ],
+                 fee_payer: %{address: "fee payer address"}
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.build_unregister_validator_transaction(
+                 register_validator_params,
+                 "fee payer address",
+                 api: [url: "url here"],
+                 network: "network here",
+                 version: 9000,
+                 timestamp: "timestamp here",
+                 epoch: 9000,
+                 round: 9000
+               )
+    end
+
+    test "checks request body is correct - 4", %{
+      register_validator_params: register_validator_params
+    } do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/transaction/build" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 at_state_identifier: %{
+                   epoch: 9000
+                 },
+                 actions: [
+                   %{
+                     type: "UnregisterValidator",
+                     validator: %{address: "address here"}
+                   }
+                 ],
+                 fee_payer: %{address: "fee payer address"}
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.build_unregister_validator_transaction(
+                 register_validator_params,
+                 "fee payer address",
+                 api: [url: "url here"],
+                 network: "network here",
+                 epoch: 9000
+               )
+    end
+
+    test "checks request body is correct - 5", %{
+      register_validator_params: register_validator_params
+    } do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/transaction/build" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 actions: [
+                   %{
+                     type: "UnregisterValidator",
+                     validator: %{address: "address here"}
+                   }
+                 ],
+                 fee_payer: %{address: "fee payer address"},
+                 message: "hello hello",
+                 disable_token_mint_and_burn: true
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.build_unregister_validator_transaction(
+                 register_validator_params,
+                 "fee payer address",
+                 api: [url: "url here"],
+                 network: "network here",
+                 message: "hello hello",
+                 disable_token_mint_and_burn: true
+               )
+    end
+  end
+
+  describe "finalize_transaction/4" do
+    test "checks request body is correct - 1" do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url" == url
+        assert "/transaction/finalize" == path
+
+        assert %{
+                 network_identifier: %{network: "stokenet"},
+                 unsigned_transaction: "unsigned transaction",
+                 signature: %{
+                   public_key: %{hex: "signature public key"},
+                   bytes: "signature bytes"
+                 }
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.finalize_transaction(
+                 "unsigned transaction",
+                 "signature public key",
+                 "signature bytes",
+                 api: [url: "url"]
+               )
+    end
+
+    test "checks request body is correct - 2" do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/transaction/finalize" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 unsigned_transaction: "unsigned transaction",
+                 signature: %{
+                   public_key: %{hex: "signature public key"},
+                   bytes: "signature bytes"
+                 }
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.finalize_transaction(
+                 "unsigned transaction",
+                 "signature public key",
+                 "signature bytes",
+                 api: [url: "url here"],
+                 network: "network here"
+               )
+    end
+
+    test "checks request body is correct - 3" do
+      Application.put_env(:radixir, Radixir.Config, gateway_api_url: "hello url here")
+
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "hello url here" == url
+        assert "/transaction/finalize" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 unsigned_transaction: "unsigned transaction",
+                 signature: %{
+                   public_key: %{hex: "signature public key"},
+                   bytes: "signature bytes"
+                 }
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.finalize_transaction(
+                 "unsigned transaction",
+                 "signature public key",
+                 "signature bytes",
+                 network: "network here"
+               )
+    end
+
+    test "checks request body is correct - 4" do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/transaction/finalize" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 unsigned_transaction: "unsigned transaction",
+                 signature: %{
+                   public_key: %{hex: "signature public key"},
+                   bytes: "signature bytes"
+                 },
+                 submit: true
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.finalize_transaction(
+                 "unsigned transaction",
+                 "signature public key",
+                 "signature bytes",
+                 api: [url: "url here"],
+                 network: "network here",
+                 submit: true
+               )
+    end
+  end
+
+  describe "submit_transaction/2" do
+    test "checks request body is correct - 1" do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url" == url
+        assert "/transaction/submit" == path
+
+        assert %{
+                 network_identifier: %{network: "stokenet"},
+                 signed_transaction: "signed transaction"
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.submit_transaction(
+                 "signed transaction",
+                 api: [url: "url"]
+               )
+    end
+
+    test "checks request body is correct - 2" do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/transaction/submit" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 signed_transaction: "signed transaction"
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.submit_transaction(
+                 "signed transaction",
+                 api: [url: "url here"],
+                 network: "network here"
+               )
+    end
+
+    test "checks request body is correct - 3" do
+      Application.put_env(:radixir, Radixir.Config, gateway_api_url: "hello url here")
+
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "hello url here" == url
+        assert "/transaction/submit" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 signed_transaction: "signed transaction"
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.submit_transaction(
+                 "signed transaction",
+                 network: "network here"
+               )
+    end
+  end
+
+  describe "get_transaction_status/2" do
+    test "checks request body is correct - 1" do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/transaction/status" == path
+
+        assert %{
+                 network_identifier: %{network: "stokenet"},
+                 transaction_identifier: %{hash: "transaction hash"}
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} = Gateway.get_transaction_status("transaction hash", api: [url: "url here"])
+    end
+
+    test "checks request body is correct - 2" do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/transaction/status" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 transaction_identifier: %{hash: "transaction hash"}
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.get_transaction_status(
+                 "transaction hash",
+                 api: [url: "url here"],
+                 network: "network here"
+               )
+    end
+
+    test "checks request body is correct - 3" do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/transaction/status" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 transaction_identifier: %{hash: "transaction hash"},
+                 at_state_identifier: %{
+                   version: 9000,
+                   timestamp: "timestamp here",
+                   epoch: 9000,
+                   round: 9000
+                 }
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.get_transaction_status(
+                 "transaction hash",
+                 api: [url: "url here"],
+                 network: "network here",
+                 version: 9000,
+                 timestamp: "timestamp here",
+                 epoch: 9000,
+                 round: 9000
+               )
+    end
+
+    test "checks request body is correct - 4" do
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "url here" == url
+        assert "/transaction/status" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 transaction_identifier: %{hash: "transaction hash"},
+                 at_state_identifier: %{
+                   epoch: 9000
+                 }
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.get_transaction_status(
+                 "transaction hash",
+                 api: [url: "url here"],
+                 network: "network here",
+                 epoch: 9000
+               )
+    end
+
+    test "checks request body is correct - 5" do
+      Application.put_env(:radixir, Radixir.Config, gateway_api_url: "hello url here")
+
+      Radixir.MockHTTP
+      |> expect(:post, fn url, path, body, _options ->
+        assert "hello url here" == url
+        assert "/transaction/status" == path
+
+        assert %{
+                 network_identifier: %{network: "network here"},
+                 transaction_identifier: %{hash: "transaction hash"},
+                 at_state_identifier: %{
+                   epoch: 9000
+                 }
+               } = body
+
+        {:ok, %{}}
+      end)
+
+      assert {:ok, _} =
+               Gateway.get_transaction_status(
+                 "transaction hash",
+                 network: "network here",
+                 epoch: 9000
                )
     end
   end

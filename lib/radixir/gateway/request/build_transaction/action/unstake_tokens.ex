@@ -16,7 +16,7 @@ defmodule Radixir.Gateway.Request.BuildTransaction.Action.UnstakeTokens do
   """
   @spec type(stitch_plans) :: stitch_plans
   def type(stitch_plans) do
-    StitchPlan.type(stitch_plans, type: "UntakeTokens")
+    StitchPlan.type(stitch_plans, type: "UnstakeTokens")
   end
 
   @doc """
