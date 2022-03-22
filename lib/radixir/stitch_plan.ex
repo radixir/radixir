@@ -1237,17 +1237,17 @@ defmodule Radixir.StitchPlan do
   @spec validator(stitch_plans, params, prefix_keys) :: stitch_plans
   def validator(stitch_plans, params, prefix_keys \\ []) do
     schema = [
-      validator_address: [
+      address: [
         type: :string,
         required: true
       ]
     ]
 
-    validator_address =
+    address =
       NimbleOptions.validate!(params, schema)
-      |> Keyword.get(:validator_address)
+      |> Keyword.get(:address)
 
-    stitch_plan = [[keys: prefix_keys ++ [:validator, :address], value: validator_address]]
+    stitch_plan = [[keys: prefix_keys ++ [:validator, :address], value: address]]
 
     stitch_plan ++ stitch_plans
   end
