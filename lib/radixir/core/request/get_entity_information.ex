@@ -42,6 +42,6 @@ defmodule Radixir.Core.Request.GetEntityInformation do
   """
   @spec sub_entity(stitch_plans, params) :: stitch_plans
   def sub_entity(stitch_plans, params) do
-    StitchPlan.sub_entity(stitch_plans, params, [:entity_identifer])
+    StitchPlan.sub_entity(stitch_plans, params, [:entity_identifier])
   end
 end
