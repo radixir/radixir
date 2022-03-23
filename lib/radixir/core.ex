@@ -893,6 +893,7 @@ defmodule Radixir.Core do
   def build_operation_data_validator_metadata(action, name, url) do
     []
     |> Request.BuildTransaction.Operation.data(action: action)
+    |> Request.BuildTransaction.Operation.DataObject.ValidatorMetadata.type()
     |> Request.BuildTransaction.Operation.DataObject.ValidatorMetadata.name(name: name)
     |> Request.BuildTransaction.Operation.DataObject.ValidatorMetadata.url(url: url)
     |> Util.stitch()
@@ -911,6 +912,7 @@ defmodule Radixir.Core do
   def build_operation_data_validator_bft_data(action, proposals_completed, proposals_missed) do
     []
     |> Request.BuildTransaction.Operation.data(action: action)
+    |> Request.BuildTransaction.Operation.DataObject.ValidatorBFTdata.type()
     |> Request.BuildTransaction.Operation.DataObject.ValidatorBFTdata.proposals_completed(
       proposals_completed: proposals_completed
     )
@@ -932,6 +934,7 @@ defmodule Radixir.Core do
   def build_operation_data_validator_allow_delegation(action, allow_delegation) do
     []
     |> Request.BuildTransaction.Operation.data(action: action)
+    |> Request.BuildTransaction.Operation.DataObject.ValidatorAllowDelegation.type()
     |> Request.BuildTransaction.Operation.DataObject.ValidatorAllowDelegation.allow_delegation(
       allow_delegation: allow_delegation
     )
@@ -951,9 +954,9 @@ defmodule Radixir.Core do
       - `validator_address` (optional, string): Validator address.
       - `epoch_unlock` (optional, integer): Epoch unlock.
   """
-  @spec build_operation_data_prepared_validator_data(action, address, registered, fee, options) ::
+  @spec build_operation_data_validator_data(action, address, registered, fee, options) ::
           map
-  def build_operation_data_prepared_validator_data(
+  def build_operation_data_validator_data(
         action,
         address,
         registered,
@@ -989,6 +992,7 @@ defmodule Radixir.Core do
   def build_operation_data_validator_system_metadata(action, data) do
     []
     |> Request.BuildTransaction.Operation.data(action: action)
+    |> Request.BuildTransaction.Operation.DataObject.ValidatorSystemMetadata.type()
     |> Request.BuildTransaction.Operation.DataObject.ValidatorSystemMetadata.data(data: data)
     |> Util.stitch()
   end

@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.0.4 (03.23.2022)
+
+- Added tests
+- Added high level methods of interacting with system / core / gateway apis via core.ex, gateway.ex and core.ex
+- Added mnemonic support
+
 ## 0.0.3 (02.21.2022)
 
 - Added new endpoints from [Gateway API V1.1.1](https://github.com/radixdlt/radixdlt-network-gateway/releases/tag/1.1.1)

@@ -1,5 +1,5 @@
 defmodule Radixir.UtilTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case, async: false
   doctest Radixir.Util
 
   alias Radixir.Util

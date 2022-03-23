@@ -81,7 +81,7 @@ defmodule Radixir.Core.Request.BuildTransaction.Operation.DataObject.TokenMetaDa
   """
   @spec url(stitch_plans, params) :: stitch_plans
   def url(stitch_plans, params) do
-    StitchPlan.type(stitch_plans, params, [:data, :data_object])
+    StitchPlan.url(stitch_plans, params, [:data, :data_object])
   end
 
   @doc """

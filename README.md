@@ -9,7 +9,7 @@ The package can be installed by adding `radixir` to your list of dependencies in
 ```elixir
 def deps do
   [
-    {:radixir, "~> 0.0.3"}
+    {:radixir, "~> 0.0.4"}
   ]
 end
 ```
@@ -37,7 +37,7 @@ config :radixir, Radixir.Config,
 
 ```
 
-The following will need to be set in `config.exs` or `runtime.exs`;
+The following will need to be set in `config.exs` or `runtime.exs`:
 
 ```
 config :block_keys, :ec_module, :libsecp256k1

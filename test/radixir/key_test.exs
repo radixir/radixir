@@ -1,5 +1,5 @@
 defmodule Radixir.KeyTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case, async: false
   doctest Radixir.Key
 
   alias Radixir.Key

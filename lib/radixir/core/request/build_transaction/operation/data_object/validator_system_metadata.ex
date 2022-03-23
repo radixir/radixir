@@ -40,7 +40,7 @@ defmodule Radixir.Core.Request.BuildTransaction.Operation.DataObject.ValidatorSy
       NimbleOptions.validate!(params, schema)
       |> Keyword.get(:data)
 
-    stitch_plan = [[keys: [:data, :data_object, :date], value: data]]
+    stitch_plan = [[keys: [:data, :data_object, :data], value: data]]
 
     stitch_plan ++ stitch_plans
   end

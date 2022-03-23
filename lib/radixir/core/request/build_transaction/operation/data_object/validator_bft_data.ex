@@ -16,7 +16,7 @@ defmodule Radixir.Core.Request.BuildTransaction.Operation.DataObject.ValidatorBF
   """
   @spec type(stitch_plans) :: stitch_plans
   def type(stitch_plans) do
-    StitchPlan.type(stitch_plans, [type: "ValidatorBFTdata"], [:data, :data_object])
+    StitchPlan.type(stitch_plans, [type: "ValidatorBFTData"], [:data, :data_object])
   end
 
   @doc """

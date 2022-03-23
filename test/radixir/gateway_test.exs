@@ -1,5 +1,5 @@
 defmodule Radixir.GatewayTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case, async: false
 
   import Mox
 
