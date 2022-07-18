@@ -767,7 +767,7 @@ defmodule Radixir.Util do
     shared_secret_bytes = :binary.encode_unsigned(shared_secret_integer, :big)
     nonce_bytes = :crypto.strong_rand_bytes(12)
     salt_bytes = :crypto.hash(:sha256, nonce_bytes)
-    key_bytes = :scrypt.scrypt(shared_secret_bytes, salt_bytes, 32, 8192, 8, 32)
+    key_bytes = :scrypt.scrypt(shared_secret_bytes, salt_bytes, 8192, 8, 1, 32)
     {key_bytes, ephemeral_public_key_bytes, nonce_bytes}
   end
 
@@ -786,7 +786,7 @@ defmodule Radixir.Util do
       shared_secret_integer = shared_secret_point.x
       shared_secret_bytes = :binary.encode_unsigned(shared_secret_integer, :big)
       salt_bytes = :crypto.hash(:sha256, nonce_bytes)
-      key_bytes = :scrypt.scrypt(shared_secret_bytes, salt_bytes, 32, 8192, 8, 32)
+      key_bytes = :scrypt.scrypt(shared_secret_bytes, salt_bytes, 8192, 8, 1, 32)
       {key_bytes, ephemeral_public_key_bytes, nonce_bytes, cipher_text_bytes, cipher_tag_bytes}
     end
   end
