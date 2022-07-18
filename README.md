@@ -9,7 +9,7 @@ The package can be installed by adding `radixir` to your list of dependencies in
 ```elixir
 def deps do
   [
-    {:radixir, "~> 0.0.4"}
+    {:radixir, "~> 0.0.5"}
   ]
 end
 ```

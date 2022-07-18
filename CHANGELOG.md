@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.5 (07.18.2022)
+
+- Fixed scrypt parameters - https://github.com/radixir/radixir/pull/2
+
 ## 0.0.4 (03.23.2022)
 
 - Added tests
